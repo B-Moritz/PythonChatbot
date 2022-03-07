@@ -10,7 +10,7 @@ import pandas
 import time
 import json
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 
 class wetherAPI:
     
@@ -66,7 +66,8 @@ class wetherAPI:
             self.httpRequest()
             
         expirationTime = datetime.strptime(self.jsonObj["Expires"], "%a, %d %b %Y %H:%M:%S %Z")
-        curTime = datetime.now()
+        expirationTime.replace(tzinfo=timezone.utc)
+        curTime = datetime.now(timezone.utc)
         if expirationTime < curTime:
             self.httpRequest()
         
@@ -76,11 +77,11 @@ class wetherAPI:
     
     def readExistingData(self):
         with open(self.cachePath, "r") as file:
-            self.jsonObj = json.loads(file.read())
+            self.jsonObj = json.load(file)
             
     def writeToCache(self):
         with open(self.cachePath, "w") as file:
-            file.write(self.jsonObj.__str__())
+            file.write(self.jsonObj.__str__().replace("\'", "\""))
 
 if __name__=="__main__":
         
@@ -90,6 +91,7 @@ if __name__=="__main__":
         
     print(time.time()-startTime)
     print(testAPI.curData.values())
+    
 
 
 
