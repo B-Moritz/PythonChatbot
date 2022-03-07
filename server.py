@@ -24,7 +24,7 @@ class HostBot:
         if self.convInitiators[-1] == '':
             self.convInitiators.pop()
         
-        print(self.convInitiators)
+        self.setCurInit()
         
     
     def getCurMsg(self):
@@ -38,56 +38,85 @@ class HostBot:
         
 
 class ClientThread(threading.Thread):
-    def __init__(self, clientSocket, src, hostbot):
+    endOfMsg = "::EOMsg::"
+    def __init__(self, clientSocket, src, sendQueues, event):
         self.Thread.__init__()
         self.clientSocket = clientSocket
         self.src = src
-        self.hostbot
+        self.rcv_msg = ""
+        self.sendQueues = sendQueues
+        self.cliQueue = sendQueues[self.src]
+        self.event = event
+        
         
     def run(self):
-        msg = self.hostbot.getCurMsg()
-        self.sendToClient(msg)
+        
+        while not self.event.is_set() or self.rcv_msg != "":
+            
+            while not self.cliQueue.empty():
+                self.sendToClient(self.cliQueue.get())
+                
+            self.recFromClient()
+        
+        self.clientSocket.close()
+        
         
     def sendToClient(self, msg):
         #Code from https://docs.python.org/3/howto/sockets.html
-        msg = msg.encode()
+        msg = (msg + self.endOfLine).encode()
         msgLen = len(msg)
         sent = 0
+        logging.info(f"Sending messages to {self.src}")
         while sent < msgLen:
             curSent = self.clientSocket.send(msg[sent:])
             if curSent == 0:
-                logging.error(f"The connection with client {self.src} is broken.")
+                logging.error(f"The connection with client {self.src} is broken. No data was sent.")
                 raise ConnectionError(f"The connection with client {self.src} is broken.")
                 
             sent = sent + curSent
             
     def recFromClient(self):
-        while not curRec == 0:
-            rcv_msg = self.clientSocket.recv()
+        patern = re.compile(self.endOfMsg)
+        logging.info(f"Receiving data from {self.src}")
+        while True:
+            cur_rcv_msg = self.clientSocket.recv(1024).decode()
+            self.rcv_msg = self.rcv_msg + cur_rcv_msg
+            if bool(patern.search(self.rcv_msg)):
+                #End of message
+                msgList = self.rcv_msg.split(self.endOfMsg)
+                self.rcv_msg = msgList.pop()
+                for msg in msgList:
+                    for key in self.sendQueues.keys():
+                        if key != self.src:        
+                            self.sendQueue[key].put(msg)
+                break
+            elif len(cur_rcv_msg) == 0:
+                logging.warning(f"Server is not receiving from {self.src}. Connection is closing!")
+                self.event.set()
+                break
             
-    
-            
-        
-    
 
 class SimpleChatServer:
+    event = threading.Event()
     
     def __init__(self, port):
         if type(port)!=int or port < 0 or port > 65535:
             raise ValueError(f"The provided port {port} is not valid." \
                              " Please provide a decimal number between 0 and 65535")
         
-        self.port
+        self.port = port
         self.isRunning = False
-        self.responseQueues = {}
+        self.sendQueues = {}
         
         
     def startService(self):
         self.serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.serverSocket.bin((socket.gethostname(), self.port))
+        self.serverSocket.bind((socket.gethostname(), self.port))
         self.serverSocket.listen(5)
         
-        print("Service is listening to incomming connections on port {self.port}. \n")
+        logging.info("Service is listening to incomming connections on port %s.", str(self.port))
+        
+        print("Service is listening to incomming connections on port {}. \n".format(str(self.port)))
         self.isRunning = True
         
         mainThread = threading.Thread(target=self.mainThread, daemon=True)
@@ -97,19 +126,32 @@ class SimpleChatServer:
             cmd = input("Please type \"exit\" to stop the service: \n")
             if cmd == "exit" or cmd == "Exit":
                 print("Service is shuting down.")
+                logging.info("The service is stoping due to user interaction.")
+                self.event.set()
                 break
         
         self.serverSocket.close()
         self.isRunning = False
         
     def mainThread(self):
+        self.hostbot = HostBot()
+        hostbotThread = threading.Thread(target=self.hostbotThread)
         
-        while not self.event.is_set():
+        while True:
             client, src = self.serverSocket.accept()
-            self.responseQueues[src] = Queue()
-            self.hostbot = HostBot()
+            logging.info(f"New client connection accepted for source {src}.")
+            self.sendQueues[src] = Queue()
             
-            curThread = threading()
+            curThread = ClientThread(client, src, self.sendQueues, self.event)
+            curThread.start()
+            
+    def hostbotThread(self):
+        while not self.event.is_set():
+            logging.info("A new message is sent from host")
+            msg = self.hostbot.getCurMsg()
+            for queue in self.sendQueues.values():
+                queue.put(msg)
+            time.sleep(90)
             
             
             
@@ -124,10 +166,13 @@ if __name__=="__main__":
     parser = argparse.ArgumentParser(description="This program starts a sigle threaded chat service.")
     parser.add_argument('-p', '--Port', nargs='?', const=2020, metavar="PORT",
                         type=int, help="The port number associated with the service")
-    parser.parse_args()
+    args = parser.parse_args()
     
     logging.basicConfig(format='%(levelname)s: %(asctime)s: %(message)s', 
-                        filename="./httpServer.log", level=logging.INFO)
+                        filename="./chatServer.log", level=logging.INFO)
+    
+    server = SimpleChatServer(args.Port)
+    server.startService()
     
                 
             
