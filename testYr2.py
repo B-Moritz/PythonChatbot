@@ -42,7 +42,7 @@ class wetherAPI:
         
     def httpRequest(self):
         httpsString = f'https://api.met.no/weatherapi/locationforecast/2.0/compact?lat={self.lat}&lon={self.long}'
-        headers = {'user-agent': 'PythonChatbot/1.0 s341528@oslomet.no'}
+        headers = {'user-agent': 'PythonChatbot/1.0 s341528@oslomet.no', }
 
         resp = requests.get(httpsString, headers=headers)
         

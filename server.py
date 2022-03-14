@@ -87,7 +87,7 @@ class ClientThread(threading.Thread):
             sent = sent + curSent
             
     def recFromClient(self):
-        pdb.set_trace()
+        #pdb.set_trace()
         patern = re.compile(self.endOfMsg)
         logging.info(f"Receiving data from {self.src}")
         flag = True
