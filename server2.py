@@ -43,7 +43,7 @@ class SimpleChatServer:
     history = []
     endOfMsg = "::EOMsg::"
     maxRcv = 100
-    botnamePattern = re.compile("^(.*):^[:]")
+    botnamePattern = re.compile("^(.*): ")
     
     def __init__(self, port):
         if type(port)!=int or port < 0 or port > 65535:
@@ -170,8 +170,15 @@ class SimpleChatServer:
         data_recv = clientList[1]
         cur_recv = ""
         
-        while not bool(pattern.search(data_recv)) and len(data_recv) < self.maxRcv:            
-            cur_recv = cliSock.recv(1024).decode()
+        while not bool(pattern.search(data_recv)) and len(data_recv) < self.maxRcv: 
+            
+            try:
+                cur_recv = cliSock.recv(1024).decode()
+            except ConnectionResetError as E:
+                logging.warning(f"The connection to the server has ended: {E}")
+                self.closeNext.append(cliSock)
+                return
+                
             #pdb.set_trace()
             if len(cur_recv) == 0:
                 logging.warning(f"Server is not receiving from {cliSock.getpeername()}. Connection is closing!")
@@ -202,7 +209,7 @@ class SimpleChatServer:
     def removeClient(self, cliSock):
         logging.info(f"The connection to {cliSock.getpeername()} is closing.")
         uname = self.sendQueues[cliSock.getpeername()][2]
-        self.populateSendQues(f"User {uname} left the chat. \n Good bye from {uname}", cliSock)
+        self.populateSendQues(f"{uname}: Good bye.\nUser {uname} left the chat.\n", cliSock)
         self.sendQueues.pop(cliSock.getpeername())
         cliSock.close()
         self.checkError.remove(cliSock)

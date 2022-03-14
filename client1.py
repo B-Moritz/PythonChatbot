@@ -13,7 +13,7 @@ import threading
 from queue import Queue
 import time
 import pdb
-#import select
+import select
 
 
 class ChatBot(threading.Thread):
@@ -22,6 +22,7 @@ class ChatBot(threading.Thread):
     event = threading.Event()
     endOfMsg = "::EOMsg::"
     botName = "Userchat"
+    data_recv = ""
     
     def __init__(self, dest, port):
         threading.Thread.__init__(self)
@@ -40,39 +41,49 @@ class ChatBot(threading.Thread):
         
     def run(self):
         self.cliSock.connect((self.dest, self.port))
-        
-        recvThread = threading.Thread(target=self.receiveFromServer, args=(self.cliSock, ))
-        recvThread.start()
-        
-        sendThread = threading.Thread(target=self.sendToServer, args=(self.cliSock, ))
-        sendThread.start()
+        socketList = [self.cliSock]
+        threadList = []
         
         outputThread = threading.Thread(target=self.generateOutput)
         outputThread.start()
         
         while not self.event.is_set():
             
+            readable, writable, error = select.select(socketList, socketList, socketList, 10) 
+            
+            if len(readable) > 0:
+                recvThread = threading.Thread(target=self.receiveFromServer, args=(readable[0], ))
+                recvThread.start()
+                threadList.append(recvThread)
+                
+            if len(writable) > 0 and self.sendQueue.qsize():
+                sendThread = threading.Thread(target=self.sendToServer, args=(writable[0], ))
+                sendThread.start()
+                threadList.append(sendThread)
+            else:
+                time.sleep(1)
+                
+            for thread in threadList:
+                thread.join()
+                
             for i in range(self.recvQueue.qsize()):
                 print("\n" + self.recvQueue.get().replace(self.endOfMsg, "\n"))
+                
+            if len(error) > 0:
+                print("Error with the connection to the server. The connection is closing.")
+                self.event.is_set()
             
-            time.sleep(1)
+        
         
         self.cliSock.close()
-        print("Socket closed")
         outputThread.join()
-        print("outputThread has finished!")
-        recvThread.join()
-        print("recvThread has finished!")
-        sendThread.join()
-        print("sendThread has finished!")
-        print("returning")
         return
         
     def generateOutput(self):
         pattern = re.compile(f"^{self.botName}: \/exit")
         while not self.event.is_set():
             msg = f"{self.botName}: " + input()
-            pdb.start()
+            #pdb.set_trace()
             if bool(pattern.search(msg)):
                 print(f"\n{self.botName} is disconnecting from chat\n")
                 self.event.set()
@@ -83,40 +94,46 @@ class ChatBot(threading.Thread):
         
     def receiveFromServer(self, cliSock):
         pattern = re.compile(self.endOfMsg)
-        data_recv = ""
         cur_recv = ""
-        while not self.event.is_set():
-            cur_recv = cliSock.recv(1024).decode()
-            data_recv += cur_recv
+        while not bool(pattern.search(self.data_recv)):
+            try:
+                cur_recv = cliSock.recv(1024).decode()
+            except ConnectionResetError:
+                print("The server stopped the connection.")
+                self.initiateClosure()
+                return
+                
+            self.data_recv += cur_recv
             
             if len(cur_recv) == 0:
                 print(f"Connection to {cliSock.getpeername()} is corrupted.")
-                self.event.set()
+                self.initiateClosure()
                 return
-            elif bool(pattern.search(data_recv)):
-                msgList = data_recv.split(self.endOfMsg)
-                data_recv = msgList.pop()
-                for msg in msgList:
-                    self.recvQueue.put(msg)
+        
+        msgList = self.data_recv.split(self.endOfMsg)
+        self.data_recv = msgList.pop()
+        for msg in msgList:
+            self.recvQueue.put(msg)
                     
             
     def sendToServer(self, cliSock):
-        
-        while not self.event.is_set():
-            dataSent = 0
-            for i in range(self.sendQueue.qsize()):
-                curMsg = self.sendQueue.get().encode()
-                
-                while dataSent < len(curMsg):
-                    cur_sent = cliSock.send(curMsg[dataSent:])
-                    
-                    if cur_sent == 0:
-                        print(f"Connection to {cliSock.getpeername()} is corrupted.")
-                        self.event.set()
-                        return
-                    dataSent += cur_sent
+        dataSent = 0
+        for i in range(self.sendQueue.qsize()):
+            curMsg = self.sendQueue.get().encode()
             
-            time.sleep(2)
+            while dataSent < len(curMsg):
+                cur_sent = cliSock.send(curMsg[dataSent:])
+                
+                if cur_sent == 0:
+                    print(f"Connection to {cliSock.getpeername()} is corrupted.")
+                    self.initiateClosure()
+                    return
+                dataSent += cur_sent
+    
+    def initiateClosure(self):
+        self.event.set()
+        print("Please press enter to stop the program!")
+        
         
         
 
