@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sat Mar  5 17:11:58 2022
+Created on Sun Mar 13 00:50:00 2022
 
-@author: Bernt Olsen (s341528)   student ad OsloMet
+@author: b-mor
 """
 
 import socket
@@ -13,7 +13,9 @@ import re
 from queue import Queue 
 import random
 import time
-import pdb
+#import pdb
+from select import select
+import datetime
 
 class HostBot:
     
@@ -33,88 +35,15 @@ class HostBot:
         return self.curInit
     
     def setCurInit(self):
-        self.curInit = self.convInitiators[random.randint(0, len(self.convInitiators)-1)]
+        self.curInit = "Host: " + self.convInitiators[random.randint(0, len(self.convInitiators)-1)]
         self.startExpir = time.time()
-        
-
-class ClientThread(threading.Thread):
-    endOfMsg = "::EOMsg::"
-    def __init__(self, clientSocket, src, sendQueues, event, history):
-        threading.Thread.__init__(self)
-        self.clientSocket = clientSocket
-        self.src = src
-        self.rcv_msg = ""
-        self.sendQueues = sendQueues
-        self.cliQueue = sendQueues[self.src]
-        self.event = event
-        self.history = history
-        
-        
-    def run(self):
-        
-        while not self.event.is_set():
-            #pdb.set_trace()
-            logging.info(f"Before send while loop. Size of queue: {self.cliQueue.qsize()}")
-            for i in range(self.cliQueue.qsize()):
-                try: 
-                    self.sendToClient(self.cliQueue.get())
-                except Exception as E:
-                    logging.error(f"Error while trying to send: {str(E)}")
-                    raise
-                    
-            try:    
-                self.recFromClient()
-            except Exception as E:
-                logging.error(f"Error while trying to receive: {str(E)}")
-                raise
-                
-        logging.info(f"Connection to {self.src} is closed")
-        self.clientSocket.close()
-        
-        
-    def sendToClient(self, msg):
-        #Code from https://docs.python.org/3/howto/sockets.html
-        msg = (msg + self.endOfMsg).encode()
-        msgLen = len(msg)
-        sent = 0
-        logging.info(f"Sending messages to {self.src}")
-        while sent < msgLen:
-            curSent = self.clientSocket.send(msg[sent:])
-            if curSent == 0:
-                logging.error(f"The connection with client {self.src} is broken. No data was sent.")
-                raise ConnectionError(f"The connection with client {self.src} is broken.")
-                
-            sent = sent + curSent
-            
-    def recFromClient(self):
-        #pdb.set_trace()
-        patern = re.compile(self.endOfMsg)
-        logging.info(f"Receiving data from {self.src}")
-        flag = True
-        while flag:
-            cur_rcv_msg = self.clientSocket.recv(1024).decode()
-            self.rcv_msg = self.rcv_msg + cur_rcv_msg
-            if bool(patern.search(self.rcv_msg)):
-                #End of message
-                msgList = self.rcv_msg.split(self.endOfMsg)
-                self.rcv_msg = msgList.pop()
-                
-                for msg in msgList:
-                    self.history.append(msg)
-                    for key in self.sendQueues.keys():
-                        if key != self.src:        
-                            self.sendQueue[key].put(msg)
-                flag = False
-            elif len(cur_rcv_msg) == 0:
-                logging.warning(f"Server is not receiving from {self.src}. Connection is closing!")
-                self.event.set()
-                flag = False
-            logging.info("Loop receiveing: {len(cur_rcv_msg)}")
-            
 
 class SimpleChatServer:
     event = threading.Event()
     history = []
+    endOfMsg = "::EOMsg::"
+    maxRcv = 100
+    botnamePattern = re.compile("^(.*): ")
     
     def __init__(self, port):
         if type(port)!=int or port < 0 or port > 65535:
@@ -124,12 +53,19 @@ class SimpleChatServer:
         self.port = port
         self.isRunning = False
         self.sendQueues = {}
+        self.checkReadable = []
+        self.checkWritable = []
+        self.checkError = []
+        self.recvRest = {}
+        self.closeNext = []
+        self.activeThreads = Queue()
         
         
     def startService(self):
         self.serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.serverSocket.bind((socket.gethostname(), self.port))
         self.serverSocket.listen(5)
+        self.checkReadable.insert(0, self.serverSocket) 
         
         logging.info("Service is listening to incomming connections on port %s.", str(self.port))
         
@@ -147,6 +83,7 @@ class SimpleChatServer:
                 self.event.set()
                 break
         
+        mainThread.join(15)
         self.serverSocket.close()
         self.isRunning = False
         
@@ -155,17 +92,38 @@ class SimpleChatServer:
         hostbotThread = threading.Thread(target=self.hostbotThread)
         hostbotThread.start()
         
-        while True:
-            client, src = self.serverSocket.accept()
-            logging.info(f"New client connection accepted for source {src}.")
-            curQueue = Queue()
-            for i in range(len(self.history)):
-                curQueue.put(self.history[i])
-                
-            self.sendQueues[src] = curQueue
+        #pdb.set_trace()
+        
+        while not self.event.is_set():
+            readable, writable, err = select(self.checkReadable, self.checkWritable, self.checkError, 10)
             
-            curThread = ClientThread(client, src, self.sendQueues, self.event, self.history)
-            curThread.start()
+            for client in readable:
+                if client is self.serverSocket:
+                    curThread = threading.Thread(target=self.acceptConnection)
+                    curThread.start()
+                    self.activeThreads.put(curThread)
+                else:
+                    curThread = threading.Thread(target=self.recvFromClient, args=(client, ))
+                    curThread.start()
+                    self.activeThreads.put(curThread)
+                    
+            for client in writable:
+                curThread = threading.Thread(target=self.sendToClient, args=(client, ))
+                curThread.start()
+                self.activeThreads.put(curThread)
+           
+            
+            while not self.activeThreads.empty():
+                self.activeThreads.get().join()
+                
+            while len(err) != 0:
+                self.removeClient(err.pop())
+                
+                
+            while len(self.closeNext) != 0:
+                self.removeClient(self.closeNext.pop())
+        
+        hostbotThread.join()
             
     def hostbotThread(self):
         while not self.event.is_set():
@@ -173,26 +131,110 @@ class SimpleChatServer:
             msg = self.hostbot.getCurMsg()
             self.history.append(msg)
             for queue in self.sendQueues.values():
-                queue.put(msg)
+                queue[0].put(msg)
             time.sleep(90)
+            
+    def acceptConnection(self):
+        client, src = self.serverSocket.accept()
+        logging.info(f"New client connection accepted for source {src}.")
+        curQueue = Queue()
+        for i in range(len(self.history)):
+            curQueue.put(self.history[i])
+            
+        self.sendQueues[client.getpeername()] = [curQueue, "", ""]
+        
+        self.checkReadable.append(client)
+        self.checkWritable.append(client)
+        self.checkError.append(client)
+    
+    def sendToClient(self, cliSock):
+        
+        sendQueue = self.sendQueues[cliSock.getpeername()][0]
+        
+        for i in range(sendQueue.qsize()):
+            logging.info(f"Sending message to {cliSock.getpeername()}")
+            msg = (sendQueue.get() + self.endOfMsg).encode()
+            msgLen = len(msg)
+            sentBytes = 0
+            while sentBytes < msgLen:    
+                curSent = cliSock.send(msg[sentBytes:])
+                sentBytes += curSent
+                if curSent == 0:
+                    logging.error(f"The connection with client {self.src} is broken. No data was sent.")
+                    self.closeNext.append(cliSock)
+                
+    def recvFromClient(self, cliSock):
+        logging.info(f"Receiving from client {cliSock.getpeername()}")
+        pattern = re.compile(self.endOfMsg)
+        clientList = self.sendQueues[cliSock.getpeername()]
+        data_recv = clientList[1]
+        cur_recv = ""
+        
+        while not bool(pattern.search(data_recv)) and len(data_recv) < self.maxRcv: 
+            
+            try:
+                cur_recv = cliSock.recv(1024).decode()
+            except ConnectionResetError as E:
+                logging.warning(f"The connection to the server has ended: {E}")
+                self.closeNext.append(cliSock)
+                return
+                
+            #pdb.set_trace()
+            if len(cur_recv) == 0:
+                logging.warning(f"Server is not receiving from {cliSock.getpeername()}. Connection is closing!")
+                # The data that was sent before an EOMsg was found will be dropped
+                self.closeNext.append(cliSock)
+                return
+            
+            data_recv = data_recv + cur_recv
+        
+        if clientList[2] == "":
+            regexResult = self.botnamePattern.search(data_recv)
+            if bool(regexResult):
+                clientList[2] = regexResult.groups()[0] 
+        
+        logging.info(f"Data received: {data_recv}")
+        msgList = data_recv.replace("\n", "").split(self.endOfMsg)
+        self.sendQueues[cliSock.getpeername()][1] = msgList.pop()
+        
+        for msg in msgList:
+            self.populateSendQues(msg, cliSock)
+    
+    def populateSendQues(self, msg, cliSock):
+        self.history.append(msg)
+        for key in self.sendQueues.keys():
+            if key != cliSock.getpeername():        
+                self.sendQueues[key][0].put(msg)
+                
+    def removeClient(self, cliSock):
+        logging.info(f"The connection to {cliSock.getpeername()} is closing.")
+        uname = self.sendQueues[cliSock.getpeername()][2]
+        self.populateSendQues(f"{uname}: Good bye.\nUser {uname} left the chat.\n", cliSock)
+        self.sendQueues.pop(cliSock.getpeername())
+        cliSock.close()
+        self.checkError.remove(cliSock)
+        self.checkReadable.remove(cliSock)
+        self.checkWritable.remove(cliSock)
+        
+        
+        
+        
+            
 
 
 if __name__=="__main__":
     
-    #Handle command line argument 
+    #Handle command line argument
     parser = argparse.ArgumentParser(description="This program starts a sigle threaded chat service.")
     parser.add_argument('-p', '--Port', nargs='?', const=2020, metavar="PORT",
                         type=int, help="The port number associated with the service")
     args = parser.parse_args()
     
+    logDay = f"{datetime.datetime.now().date().__str__()}"
     logging.basicConfig(format='%(levelname)s: %(asctime)s: %(message)s', 
-                        filename="./chatServer.log", level=logging.INFO)
+                        filename=f"./Logs/chatServer_{logDay}.log", level=logging.INFO)
     
     server = SimpleChatServer(args.Port)
     server.startService()
     
-                
-            
-                
-            
-
+    
