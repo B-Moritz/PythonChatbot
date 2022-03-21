@@ -12,31 +12,27 @@ import json
 import os
 from datetime import datetime, timezone
 
-class wetherAPI:
+class weatherAPI:
     
     worldCitiesPath = ".\\simplemaps_worldcities_basicv1.74\\worldcities.csv"
-    cachePath = ".\\wetherDataCache.json"
+    cachePath = ".\\wetherDataCache_{}.json"
     
-    def __init__(self, city):
-        
-        if (type(city) != str):
-            raise TypeError("The city name must be a string")
-        self.city = city
-        
+    def __init__(self):       
         try:
             self.cityData = pandas.read_csv(self.worldCitiesPath)
         except FileNotFoundError:
             raise FileNotFoundError("The worldcities was not found in the programfiles: " \
                                     ".\\simplemaps_worldcities_basicv1.74\\worldcities.csv")
                 
-        
-    def getCoordinates(self):
         self.cityList = self.cityData.loc[:, "city"]
-
+                
+        
+    def getCoordinates(self, city):
+        
         for i in range(len(self.cityList)):
-            if self.city == self.cityList[i]:
+            if city == self.cityList[i]:
                 self.long, self.lat = self.cityData.loc[i, ["lng", "lat"]]
-                return
+                return True
         
         raise ValueError(f"The provided city name, {self.city}, was not found.")
         
@@ -55,10 +51,18 @@ class wetherAPI:
         
         self.writeToCache()
         
-    def getCurrentWetherData(self):
-        self.getCoordinates()
+    def getCurrentWeatherData(self, city):
         
-        if os.path.isfile(self.cachePath):
+        if (type(city) != str):
+            raise TypeError("The city name must be a string")
+        self.city = city
+        
+        try:
+            self.getCoordinates(self.city)
+        except ValueError:
+            raise
+            
+        if os.path.isfile(self.cachePath.format(self.city)):
             self.readExistingData()
             if self.jsonObj["City"] != self.city:
                 self.httpRequest()
@@ -66,28 +70,64 @@ class wetherAPI:
             self.httpRequest()
             
         expirationTime = datetime.strptime(self.jsonObj["Expires"], "%a, %d %b %Y %H:%M:%S %Z")
-        expirationTime.replace(tzinfo=timezone.utc)
+        expirationTime = expirationTime.replace(tzinfo=timezone.utc)
         curTime = datetime.now(timezone.utc)
         if expirationTime < curTime:
             self.httpRequest()
         
         tempData = self.jsonObj["properties"]["timeseries"][0]["data"]["instant"]["details"]
-        self.curData = {"Air temperature" : tempData["air_temperature"], "Clouds_percent" : tempData["cloud_area_fraction"]}
-            
+        self.curData = {"Air temperature" : tempData["air_temperature"], 
+                        "Clouds_percent" : tempData["cloud_area_fraction"]}
     
     def readExistingData(self):
-        with open(self.cachePath, "r") as file:
+        with open(self.cachePath.format(self.city), "r") as file:
             self.jsonObj = json.load(file)
             
     def writeToCache(self):
-        with open(self.cachePath, "w") as file:
+        with open(self.cachePath.format(self.city), "w") as file:
             file.write(self.jsonObj.__str__().replace("\'", "\""))
+            
+    def classifyCloadArea(self):
+        if self.curData["Clouds_percent"]:
+            ratio = self.curData["Clouds_percent"]
+        else:
+            raise Exception("No cloud percentage was found. \
+                            Did you forget to run 'getCurrentWeatherData'?")
+                            
+        if ratio < 0.5:
+            if ratio < 0.25:
+                return "wery cloudy"
+            else:
+                return "cloudy"
+        else:
+            if ratio < 0.75:
+                return "partially cloudy"
+            else:
+                return "Sunny"
+    
+    def classsifyTemperature(self):
+        if self.curData["Air temperature"]:
+            temp = self.curData["Air temperature"]
+        else:
+            raise Exception("No air temperature data was found. \
+                            Did you forget to run 'getCurrentWeatherData'?")
+        
+        if temp > 10:
+            if temp > 20:
+                return "hot"
+            else:
+                return "not cold"
+        else:
+            if temp < 0:
+                return "wery cold"
+            else:
+                return "cold"
 
 if __name__=="__main__":
         
     startTime = time.time()
-    testAPI = wetherAPI("Oslo")
-    testAPI.getCurrentWetherData()
+    testAPI = weatherAPI()
+    testAPI.getCurrentWeatherData("Oslo")
         
     print(time.time()-startTime)
     print(testAPI.curData.values())

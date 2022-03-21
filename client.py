@@ -2,7 +2,14 @@
 """
 Created on Sun Mar 13 16:38:50 2022
 
-@author: b-mor
+@author: Bernt Moritz Schmid Olsen (s341528)   student at OsloMet
+
+This module, client, is part of the solution to the individual 
+portofolio assignment in the course DATA2410 - Datanetverk og 
+skytjenester. This module contians classes used to connect chat 
+users and bots to a single thread chat, hosted on a server.
+
+If this file, client.py, is executed with  
 """
 
 import socket
@@ -14,61 +21,138 @@ import time
 import select
 import enum
 import random
+import pdb
+import YrInterface as yr
 
 class Tags(enum.Enum):
+    """
+    This class is a python enum class consisting of the different 
+    tags that a message, provided to an MsgAnalysis object, can be taged with.
+    """
     #If a message is classified as question, it could contain one of the question words.
     question = 1
     #If the message is not a question, it is treated as a statement.
     statement = 2
     #If the message contains the word temperature it is classified as temperature message
     temperature = 3
-    #If the message contains the word wether
-    wether = 4
+    #If the message contains the word weather
+    weather = 4
     #If the message asks for a location (question classification is required)
     location = 5
     #If the message is a question and contains words that requests an opinion
     opinion = 6
+    #If the message contains a city
+    city = 7
+    #If the message is a join message
+    join = 8
     
 
 class MsgAnalysis:
-    punctuationDetection = re.compile("([\.\?\!\:])")
+    """
+    This class contians functions for analysing messages received 
+    through the chat client. The ChatUser class and its subclasses 
+    (chatbots) are dependant on this class. It is used to 
+    classify/tag messages received.
+    
+    The object has two interesting attributes which describes the 
+    message: 
+        tags - type: python list - Contains tags from the Tags enum class 
+                                   that describe the content of the message.
+        
+        location - type: string - This variable contians a location which 
+                                  was identified in the message. If there are 
+                                  multiple locations, the first mentioned 
+                                  location is picked.
+                                  
+    The object has one method:
+        classifyMsg() - This message tests the message against some 
+                        regular expressions which are defined as constants 
+                        and are connected to a certain tag.
+    """
+    
+    complicationDetection = re.compile("[\.\?\!\:][A-Za-z0-9\s]+")
     questionWords = re.compile("([Ww]hat)|([Ww]here)|([Ww]hen)|([Ww]hy)|([Ww]hich) \
-                               |([Ww]ho)|([Hh]ow)|([Ww]hose)|([cC]an you)|([cC]ould you)")
+                               |([Ww]ho)|([Hh]ow)|([Ww]hose)|([cC]an you)|([cC]ould you)|([Ii]s it)")
 
+    knownSubjects = {"temperature" : Tags.temperature, "weather" : Tags.weather, "hot" : Tags.temperature, 
+                     "cold" : Tags.temperature, "sunny" : Tags.weather, }
+    opinions = ["do you like", "can you rate", "please rate", "do you think"]
+    
+    locationReg = "{} (.*)[\s\!\.\?\,]|{} (.*)$"
+    locationWords = ["[iI]n", "[aA]t", "[fF]or"]
+    
+    regJoinCase = re.compile("User .* has joined the chat!")
+    
     tags = []
-    knownSubjects = {"temperature" : Tags.temperature, "wether" : Tags.wether}
-    opinion = ["like", "rate"] 
+    location = ""
     
     def __init__(self, msg):
-        self.punctation = self.punctationDetection.findall(msg)
-        if type(msg) != str and len(self.punctation) > 1:
+        
+        # input validation
+        if type(msg) != str:
+            # Verify that the argument given to the method is of the right type
+            raise TypeError(f"The argument msg provided to the method was of type {type(msg)}. \
+                            Please provide a string as argument!")
+                            
+        if bool(self.complicationDetection.search(msg)):
+            # Verify that the message is not too complicated
             raise ValueError("The provided message is too complicated.\n \
                              Class MsgAnalysis can only process one simple sentence.")
-                             
+           
         self.msg = msg
         
     def classifyMsg(self):
-        self.msgList = self.msg.split(" ")
-        self.questionWordsDetected = self.questionWords.findall(self.msg)
+        """
+        This method classifies the message that was stored in the object. 
+
+        Returns
+        -------
+        None.
+
+        """
+        # It is first checked if the message is an introduction message 
+        # which is received when a new user joined the chat.
+        if bool(self.regJoinCase.search(self.msg)):
+            # The message is only taged with the join tag if it is an 
+            # introduction.
+            self.tags.append(Tags.join)
+            # The metod ends to avoid that other tags can be added
+            return
         
-        if (self.questionWordDetected) > 0:
-            self.tags += Tags.question
+        # The message is splitt into a list of words
+        self.msgList = self.msg.split(" ")
+        # The findall() method of the re module is used to identify question words 
+        # in the message.
+        self.questionWordsDetected = self.questionWords.findall(self.msg)
+        # If there are question words in the 
+        if len(self.questionWordsDetected) > 0:
+            self.tags.append(Tags.question)
             if "where" in self.questionWordsDetected or "where" in self.questionWordsDetected:
-                self.tags += Tags.location
+                self.tags.append(Tags.location)
         else:
-            self.tags += Tags.statement
+            self.tags.append(Tags.statement)
             
         #Find known subjects
         subjects = self.knownSubjects.keys()
         for word in self.msgList:
             word = word.lower()
             if word in subjects:
-                self.tags += self.knownSubjects[word]
+                self.tags.append(self.knownSubjects[word])
             
-        
-            
-        
-            
+        # Check if the message askes for an opinion
+        for opi in self.opinions:
+            curPat = re.compile(opi)
+            if bool(curPat.search(self.msg)):
+                self.tags.append(Tags.opinion)
+                
+        # Check for a location
+        for word in self.locationWords:
+            curPat = re.compile(self.locationReg.format(word, word))
+            result = curPat.search(self.msg)
+            if result:
+                self.tags.append(Tags.location)
+                self.location = result.groups()[1]
+                
 
 class ChatUser(threading.Thread):
     sendQueue = Queue()
@@ -93,10 +177,17 @@ class ChatUser(threading.Thread):
         self.dest = dest
         self.port = port
         
+        
+    def sendInitialMessage(self, user):
+        self.sendQueue.put(f"\nUser {user} has joined the chat!\n")
+        print(f"\nUser {user} has joined the chat!\n")
+        
     def run(self):
         self.cliSock.connect((self.dest, self.port))
         socketList = [self.cliSock]
         threadList = []
+        
+        self.sendInitialMessage(self.botName)
         
         outputThread = threading.Thread(target=self.generateOutput)
         outputThread.start()
@@ -139,11 +230,11 @@ class ChatUser(threading.Thread):
             msg = input()
             #pdb.set_trace()
             if bool(pattern.search(msg)):
-                print(f"\n{self.botName} is disconnecting from chat\n")
+                print(f"\n{self.botName} is disconnecting from the chat\n")
                 self.event.set()
-            
-            print(f"\n{self.botName}: " + msg + "\n")
-            self.sendQueue.put(msg)
+            else:
+                print(f"\n{self.botName}: " + msg + "\n")
+                self.sendQueue.put(msg)
         
         
     def receiveFromServer(self, cliSock):
@@ -200,22 +291,28 @@ class ChatBot(ChatUser, threading.Thread):
                           "I did not know that.", 
                           "How can you say something like that."]
     
-    wetherResponse = ["I do not want to talk about the wether. It is boring and always depressing!", 
+    weatherResponse = ["I do not want to talk about the weather. It is boring and always depressing!", 
                       "I have the same question.", 
-                      "If you want to talk about the wether, you have to talk to someone else."]
+                      "If you want to talk about the weather, you have to talk to someone else."]
     
-    locationResponse = ["I am not an expert in geography unfortunatly, maybe some one else can help with this?"]
+    locationResponse = ["I am not an expert in geography unfortunatly, \
+                        maybe some one else can help with this?"]
     
     generalResponse = ["I am not sure if I understand your message.\n Could you please clarify?",
-                       "Plesae write in english so I can understand you!"]
+                       "Please write in english, so I can understand you!"]
+    
+    greetings =["Hi", "Hello", "Welcome!"]
+    
     
     def __init__(self, dest, port):
         ChatUser.__init__(self, dest, port)
-        threading.Thread.__init__(self)
         
     def run(self):
-        self.cliSock.connect((self.dest, self.port))
         
+        self.cliSock.connect((self.dest, self.port))
+        self.sendInitialMessage(self.botName)
+        self.sendToServer(self.cliSock)
+        #pdb.set_trace()
         while not self.event.is_set():
             self.receiveFromServer(self.cliSock)
             self.generateResponse()
@@ -224,33 +321,136 @@ class ChatBot(ChatUser, threading.Thread):
     def initiateClosure(self):
         self.event.set()
         print(f"{self.botName} is disconnected!")
+        
+    def sendInitialMessage(self, user):
+        self.sendQueue.put(f"\nUser {user} has joined the chat!\n")
             
     def generateResponse(self):
         
-        while not self.recvQueue.empty():
-            curMsg = self.recvQueue.get()
-            if len(self.unamePattern.search(curMsg).groups()) > 0:
-                #Do not respond to bots
-                continue
-            else: 
+        while self.recvQueue.qsize() > 1:
+            # If the receive queue contains more than one message, 
+            # then all messages are dropped except one (the latest)
+            self.recvQueue.get()
+        
+        
+        curMsg = self.recvQueue.get()
+        if not bool(self.unamePattern.search(curMsg)):
+            # if the message is not from a bot
+            try:
                 msgObj = MsgAnalysis(curMsg)
-                
-                if Tags.question in msgObj.tags:
-                    
-                    if Tags.opinion in msgObj.tags:
-                        self.sendQueue.put(random.choice(self.opinionResponses))
-                    elif Tags.temperature in msgObj.tags or Tags.wether in msgObj.tags:
-                        self.sendQueue.put(random.choice(self.wetherResponse))
-                    elif Tags.location in msgObj.tags:
-                        self.sendQueue.put(random.choice(self.locationResponse))
-                        
-                elif Tags.statement in msgObj.tags:
-                    self.sendQueue.put(random.choice(self.statementResponses))
+            except ValueError as E:
+                self.sendQueue(E)
+                return
             
-                else:
-                    self.sendQueue.put(random.choice(self.generalResponse))
+            msgObj.classifyMsg()
+            
+            if Tags.join in msgObj.tags:
+                self.sendQueue.put(random.choice(self.greetings))
+                return
+            
+            if Tags.question in msgObj.tags:
+                
+                if Tags.opinion in msgObj.tags:
+                    self.sendQueue.put(random.choice(self.opinionResponses))
+                elif Tags.temperature in msgObj.tags or Tags.weather in msgObj.tags:
+                    self.sendQueue.put(random.choice(self.weatherResponse))
+                elif Tags.location in msgObj.tags:
+                    self.sendQueue.put(random.choice(self.locationResponse))
                     
-
+            elif Tags.statement in msgObj.tags:
+                self.sendQueue.put(random.choice(self.statementResponses))
+        
+            else:
+                self.sendQueue.put(random.choice(self.generalResponse))
+                
+                
+class WeatherBot(ChatBot):
+    botName = "Weather_Bot"
+    
+    unknownLocation = ["Please name a known city!", "What city are you refering too?"]
+    
+    
+    def __init__(self, dest, port):
+        ChatBot.__init__(self, dest, port)
+        self.YrObj = yr.weatherAPI()
+        
+                
+    def generateResponse(self):
+        while self.recvQueue.qsize() > 1:
+            # If the receive queue contains more than one message, 
+            # then all messages are dropped except one (the latest)
+            self.recvQueue.get()
+        # The last message is set as the message to be handled by the bot    
+        curMsg = self.recvQueue.get()
+        
+        if not bool(self.unamePattern.search(curMsg)):
+            # if the message is not from a bot
+            
+            # The message is analyzed by instantiating an analysis object 
+            # and running the classification method 
+            try:
+                msgObj = MsgAnalysis(curMsg)
+            except ValueError as E:
+                self.sendQueue(E)
+                return
+            msgObj.classifyMsg()
+            
+            if Tags.join in msgObj.tags:
+                self.sendQueue.put(random.choice(self.greetings))
+                return
+            
+            if Tags.question in msgObj.tags:
+                # Is the message a question?
+                if Tags.opinion in msgObj.tags:
+                    # Is the message asking for an opinion?
+                    if Tags.weather in msgObj.tags and Tags.location in msgObj.tags:
+                        try:
+                            self.YrObj.getCurrentWeatherData(msgObj.location)
+                            self.sendQueue.put(f"The weather in {msgObj.location} is \
+                                               {self.YrObj.classifyCloadArea()} and \
+                                               {self.YrObj.classifyTemperature()}!")
+                        except ValueError:
+                            # The location was not identified as a city.
+                            self.sendQueue.put(random.choice(self.unknownLocation))
+                    else:
+                        # The location was not identified.
+                        self.sendQueue.put(random.choice(self.unknownLocation))
+                        
+                elif Tags.temperature in msgObj.tags:
+                    # Is the message about the temperature?
+                    if Tags.location in msgObj.tags:
+                        try:
+                            self.YrObj.getCurrentWeatherData(msgObj.location)
+                            self.sendQueue.put(f"The temperature in {msgObj.location} \
+                                               is {self.YrObj.curData['Air temperature']} degree celcius! \
+                                               Based on data from MET Norway.")
+                        except ValueError:
+                            # The location was not identified as a city.
+                            self.sendQueue.put(random.choice(self.unknownLocation))
+                    else:
+                        # The location was not identified.
+                        self.sendQueue.put(random.choice(self.unknownLocation))
+                        
+                elif Tags.weather in msgObj.tags:
+                    # Is the message askin about the wether?
+                    if Tags.location in msgObj.tags:
+                        try:
+                             self.YrObj.getCurrentWeatherData(msgObj.location)
+                             self.sendQueue.put(f"The temperature in {msgObj.location} \
+                                                is {self.YrObj.curData['Air temperature']} \
+                                                degree celcius! The sky is {self.YrObj.classifyCloadArea()}. \
+                                                Based on data from MET Norway.")
+                                                
+                        except ValueError:
+                            # The location was not identified as a city.
+                            self.sendQueue.put(random.choice(self.unknownLocation))
+                             
+            elif Tags.statement in msgObj.tags:
+                self.sendQueue.put(random.choice(self.statementResponses))
+        
+            else:
+                self.sendQueue.put(random.choice(self.generalResponse))
+                            
             
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="This program starts all chatbots defined and connects \
@@ -263,13 +463,20 @@ if __name__ == "__main__":
     argParsed = parser.parse_args()
     
     testChat = ChatUser(argParsed.Dest, argParsed.Port)
-    testChat.run()
+    testChat.start()
     
+    time.sleep(4)
     testBot = ChatBot(argParsed.Dest, argParsed.Port)
-    testBot.run()
+    testBot.start()
+    
+    #time.sleep(2)
+    #weatherBot = WeatherBot(argParsed.Dest, argParsed.Port)
+    #weatherBot.start()
     
     testChat.join()
-    testBot.event.set()
+    testBot.initiateClosure()
+    #weatherBot.initiateClosure()
     testBot.join()
+    #weatherBot.join()
     
     

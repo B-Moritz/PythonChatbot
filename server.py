@@ -157,10 +157,16 @@ class SimpleChatServer:
             msgLen = len(msg)
             sentBytes = 0
             while sentBytes < msgLen:    
-                curSent = cliSock.send(msg[sentBytes:])
+                try:
+                    curSent = cliSock.send(msg[sentBytes:])
+                except (ConnectionAbortedError, ConnectionResetError) as E:
+                    logging.warning(f"The connection with the client {cliSock.getpeername()} has ended: {E}")
+                    self.closeNext.append(cliSock)
+                    return
+                
                 sentBytes += curSent
                 if curSent == 0:
-                    logging.error(f"The connection with client {self.src} is broken. No data was sent.")
+                    logging.error(f"The connection with client {cliSock.getpeername()} is broken. No data was sent.")
                     self.closeNext.append(cliSock)
                 
     def recvFromClient(self, cliSock):
@@ -174,8 +180,8 @@ class SimpleChatServer:
             
             try:
                 cur_recv = cliSock.recv(1024).decode()
-            except ConnectionResetError as E:
-                logging.warning(f"The connection to the server has ended: {E}")
+            except (ConnectionAbortedError, ConnectionResetError) as E:
+                logging.warning(f"The connection with the client {cliSock.getpeername()} has ended: {E}")
                 self.closeNext.append(cliSock)
                 return
                 
