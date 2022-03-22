@@ -18,7 +18,7 @@ class testClientModule(unittest.TestCase):
         '''
         # Stage one: the initialization of an MsgAnalysis object is tested
         
-        # case: The argument is the wrong type
+        # Case: The argument is the wrong type
         arg = 10
         with self.assertRaises(TypeError):
             MsgAnalysis(arg)
@@ -29,17 +29,17 @@ class testClientModule(unittest.TestCase):
         
         # Stage two: the classification (classifyMsg() method) of the message is tested
         
-        # case: The message contains a join message
+        # Case: The message contains a join message
         joinMessage = "User Testuser has joined the chat!"
         joinObj = MsgAnalysis(joinMessage)
         joinObj.classifyMsg()
         
         # Assert that the message only has one tag
-        self.assertEquals(len(joinObj.tags), 1)
+        self.assertEqual(len(joinObj.tags), 1)
         # Assert that the join tag is the first tag
-        self.assertEquals(joinObj.tags[0], Tags.join)
+        self.assertEqual(joinObj.tags[0], Tags.join)
 
-        # case: The message is a question
+        # Case: The message is a question
         questionMessage = "How is the weather in Berlin?"
         questionObj = MsgAnalysis(questionMessage)
         questionObj.classifyMsg()
@@ -47,6 +47,35 @@ class testClientModule(unittest.TestCase):
         self.assertTrue(Tags.weather in questionObj.tags)
         # Assert that the questionObject has added the question tag
         self.assertTrue(Tags.question in questionObj.tags)
+        # Assert that the location has been identified:
+        self.assertEqual(questionObj.location, "Berlin", "The location was not identified")
+        # Assert that the message is not taged as join
+        self.assertFalse(Tags.join in questionObj.tags, "The join tag should not be added for questions.") 
+        
+        # Case: The message is a statement/suggestion
+        statement = "It is cold today!"
+        statObj = MsgAnalysis(statement)
+        statObj.classifyMsg()
+        # Assert that the message is taged as a statement:
+        self.assertTrue(Tags.statement in statObj.tags)
+        # Assert that the message is not taged as question
+        self.assertFalse(Tags.question in statObj.tags)
+        # Assert that the message is taged with temperature
+        self.assertTrue(Tags.temperature in statObj.tags)
+        # Assert that the message is not taged with location
+        self.assertFalse(Tags.location in statObj.tags)
+        
+        # Case: The message asks for an opinion
+        opinion = "How would you rate the weather today?"
+        opiObj = MsgAnalysis(opinion)
+        opiObj.classifyMsg()
+        # Assert that the message is classified as opinion
+        self.assertTrue(Tags.opinion in opiObj.tags, "The message should be taged as opinion.")
+        self.assertTrue(Tags.weather in opiObj.tags, "The message should be taged with subject weather!")
+        self.assertTrue(Tags.question in opiObj.tags, "The message should be taged as a question!")
+        self.assertEqual(opiObj.location, "", "No location should be identified!")
+        
+    
         
 if __name__=='__main__':
     unittest.main()

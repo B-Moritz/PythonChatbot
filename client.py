@@ -76,16 +76,13 @@ class MsgAnalysis:
 
     knownSubjects = {"temperature" : Tags.temperature, "weather" : Tags.weather, "hot" : Tags.temperature, 
                      "cold" : Tags.temperature, "sunny" : Tags.weather, }
-    opinions = ["do you like", "can you rate", "please rate", "do you think"]
+    opinions = ["[Dd]o you like", "[Cc]an you rate", "[Pp]lease rate", "[Dd]o you think", "[Hh]ow would you rate"]
     
     locationReg = "{} (.*)[\s\!\.\?\,]|{} (.*)$"
-    locationWords = ["[iI]n", "[aA]t", "[fF]or"]
+    locationWords = ["[iI]n", "[aA]t"]
     
     regJoinCase = re.compile("User .* has joined the chat!")
-    
-    tags = []
-    location = ""
-    
+        
     def __init__(self, msg):
         
         # input validation
@@ -100,10 +97,17 @@ class MsgAnalysis:
                              Class MsgAnalysis can only process one simple sentence.")
            
         self.msg = msg
+        # The message is splitt into a list of words
+        self.msgList = self.msg.split(" ")
+        
+        self.tags = []
+        self.location = ""
         
     def classifyMsg(self):
         """
-        This method classifies the message that was stored in the object. 
+        This method classifies the message that was stored in the object.
+        It adds tags to the tags attribute. The location attribute is 
+        set if a location is detected in the message.
 
         Returns
         -------
@@ -112,6 +116,7 @@ class MsgAnalysis:
         """
         # It is first checked if the message is an introduction message 
         # which is received when a new user joined the chat.
+        
         if bool(self.regJoinCase.search(self.msg)):
             # The message is only taged with the join tag if it is an 
             # introduction.
@@ -119,24 +124,28 @@ class MsgAnalysis:
             # The metod ends to avoid that other tags can be added
             return
         
-        # The message is splitt into a list of words
-        self.msgList = self.msg.split(" ")
         # The findall() method of the re module is used to identify question words 
         # in the message.
         self.questionWordsDetected = self.questionWords.findall(self.msg)
-        # If there are question words in the 
+        
         if len(self.questionWordsDetected) > 0:
+            # Tag the message as question if it contians question words
             self.tags.append(Tags.question)
-            if "where" in self.questionWordsDetected or "where" in self.questionWordsDetected:
-                self.tags.append(Tags.location)
         else:
+            # If the message was not detected as a question, it is classified 
+            # as a statement/suggestion
             self.tags.append(Tags.statement)
             
-        #Find known subjects
+            
+        # Find known subjects
         subjects = self.knownSubjects.keys()
         for word in self.msgList:
+            # For each word in the message, check if it is in the list of 
+            # known subject (subjecs)
             word = word.lower()
             if word in subjects:
+                # If the word is a key in the subjects dictionary 
+                #  -> add the coresponding tag 
                 self.tags.append(self.knownSubjects[word])
             
         # Check if the message askes for an opinion
@@ -147,14 +156,19 @@ class MsgAnalysis:
                 
         # Check for a location
         for word in self.locationWords:
+            # For each word in the 
             curPat = re.compile(self.locationReg.format(word, word))
             result = curPat.search(self.msg)
             if result:
                 self.tags.append(Tags.location)
-                self.location = result.groups()[1]
+                self.location = result.groups()[0]
                 
 
 class ChatUser(threading.Thread):
+    """
+    This class contians method used to connect, send and receive message with 
+    the chat service provided by the server.py module.
+    """
     sendQueue = Queue()
     recvQueue = Queue()
     event = threading.Event()

@@ -2,7 +2,18 @@
 """
 Created on Sun Mar 13 00:50:00 2022
 
-@author: b-mor
+@author: Bernt Moritz Schmid Olsen (s341528)   student at OsloMet
+
+The module server is part of the solution to the individual 
+portfolio assignemnt in the course DATA2410 - Datanetwerk 
+og skytjenester. The module contains the classes used to 
+host the single threaded chat service. This includes handeling 
+TCP connections from users, receiving messages from users and 
+forwarding them to all other users.
+
+The module consists of two classes. One is the HostBot class. This 
+class simulates the host user which is initiating conversations 
+periodically. 
 """
 
 import socket
@@ -18,37 +29,92 @@ from select import select
 import datetime
 
 class HostBot:
-    
+    """
+    This class represents the host which is initiating conversations 
+    in the chat thread. The method hostThread in the SimpleChatServer
+    class is dependant on this class.
+    The messages which are sent from the host are saved in the 
+    conversationInitiators.txt in the same forlder as the server.py 
+    file.
+    """
+    # The contstant defining the period a message should be active (seconds)
+    MESSAGE_LIFETIME = 60
     def __init__(self):
-        with open(".\\conversationInitiators.txt", "r") as file:
-            self.convInitiators = file.read().split("\n")
+        # The messages that could be sent by the host, are read from file 
+        try:
+            with open(".\\conversationInitiators.txt", "r") as file:
+                self.conversationInitiators = file.read().split("\n")
+            
+            # Empty lines are removed
+            while self.conversationInitiators[-1] == '':
+                # While there is an empty string at the end of the list
+                # -> remove the empty string
+                self.conversationInitiators.pop()
+            
+            if len(self.conversationInitiators) == 0:
+                raise RuntimeError
+        except (FileNotFoundError, RuntimeError):
+            # If the file was not found or has no content
+            # -> write error to the log and add a default message to conversationInitiators
+            logging.error("The file, conversationInitiators.txt, was not found!")
+            self.conversationInitiators = ["What is the temperature in Oslo?"]
         
-        if self.convInitiators[-1] == '':
-            self.convInitiators.pop()
-        
+        # A message is set as the current message to be sent
         self.setCurInit()
         
     
     def getCurMsg(self):
-        if time.time()-self.startExpir > 60:
+        """
+        This method returns the message that should be sent from the host 
+        at the given time. A new message is set if the MESSAGE_LIFETIME 
+        has been reached for the current message. 
+
+        Returns
+        -------
+        String
+            The current message the host should send.
+
+        """
+        if time.time()-self.msgStartTime > self.MESSAGE_LIFETIME:
+            # If the current message has been active for longer than the 
+            # value given by MESSAGE_LIFETIME, then a new message is set.
             self.setCurInit()
+            # The current message is returned
         return self.curInit
     
     def setCurInit(self):
-        self.curInit = "Host: " + self.convInitiators[random.randint(0, len(self.convInitiators)-1)]
-        self.startExpir = time.time()
+        """
+        This method sets the current message and stores the start time of 
+        the message.
+
+        Returns
+        -------
+        None.
+
+        """
+        # A new message is set
+        self.curInit = random.choice(self.conversationInitiators)
+        # The start time of the message is captured
+        self.msgStartTime = time.time()
 
 class SimpleChatServer:
+    """
+    
+    """
     event = threading.Event()
     history = []
     endOfMsg = "::EOMsg::"
-    maxRcv = 100
+    # The maximal number of bytes received per receive sycle 
+    MAX_RCV = 100
     botnamePattern = re.compile("^(.*): ")
+    HOSTBOT_UNAME = "Host"
+    # The time between host messages (seconds)
+    HOST_PERIOD = 90
     
     def __init__(self, port):
         if type(port)!=int or port < 0 or port > 65535:
-            raise ValueError(f"The provided port {port} is not valid." \
-                             " Please provide a decimal number between 0 and 65535")
+            raise ValueError(f"The provided port {port} is not valid. \
+                             Please provide a decimal number between 0 and 65535")
         
         self.port = port
         self.isRunning = False
@@ -88,7 +154,7 @@ class SimpleChatServer:
         self.isRunning = False
         
     def mainThread(self):
-        self.hostbot = HostBot()
+        
         hostbotThread = threading.Thread(target=self.hostbotThread)
         hostbotThread.start()
         
@@ -126,13 +192,35 @@ class SimpleChatServer:
         hostbotThread.join()
             
     def hostbotThread(self):
+        """
+        This method is the target of the hostThread object from the main thread 
+        and contains the routin which is run by the hostThread. The routine 
+        instantiates a HostBot object, gets the message set by the HostBot 
+        and sends puts it in each send queue. This is repeated in a cycle with 
+        the length given by the HOST_PERIOD constant. The thread ends when the 
+        event flag is set.
+        
+        Returns
+        -------
+        None.
+
+        """
+        # An HostBot object is instantiated
+        self.hostbot = HostBot()
+        
         while not self.event.is_set():
+            # While the event flag is not set
             logging.info("A new message is sent from host")
-            msg = self.hostbot.getCurMsg()
+            # Get the current message set by the HostBot object
+            msg = f"{self.HOSTBOT_UNAME}: {self.hostbot.getCurMsg()}"
+            # Add the message to the thread cache
             self.history.append(msg)
+
             for queue in self.sendQueues.values():
+                # Add the message to each send queue
                 queue[0].put(msg)
-            time.sleep(90)
+            # Put the thread in idle for the given amount of seconds (HOST_PERIOD)
+            time.sleep(self.HOST_PERIOD)
             
     def acceptConnection(self):
         client, src = self.serverSocket.accept()
@@ -141,6 +229,9 @@ class SimpleChatServer:
         for i in range(len(self.history)):
             curQueue.put(self.history[i])
             
+        # sendQueues is a dictionary that contains variables for each connected 
+        # user socket. Format:
+        # {client.getpeername() : [curQueue, rest_from_last_receive, "username"]}
         self.sendQueues[client.getpeername()] = [curQueue, "", ""]
         
         self.checkReadable.append(client)
@@ -170,46 +261,85 @@ class SimpleChatServer:
                     self.closeNext.append(cliSock)
                 
     def recvFromClient(self, cliSock):
+        """
+        This method reads the content of the receive buffer of the given client socket.
+        A reference to the client socket must be provided as argument to this method.
+
+        Parameters
+        ----------
+        cliSock : Socket
+            Client socket which has a non empty receive buffer.
+
+        Returns
+        -------
+        None.
+
+        """
         logging.info(f"Receiving from client {cliSock.getpeername()}")
+        # Compiling a pattern for matching end of message
         pattern = re.compile(self.endOfMsg)
-        clientList = self.sendQueues[cliSock.getpeername()]
-        data_recv = clientList[1]
+        # Gets an address to the list of important variables for the given socket 
+        clientVariables = self.sendQueues[cliSock.getpeername()]
+        # Extracts the rest of the previous reception. This variable contains 
+        # a non empty string whenever the previous reception received a portion of the next message 
+        # in the same process.
+        data_recv = clientVariables[1]
+        # Definition of a variable for the new data
         cur_recv = ""
         
-        while not bool(pattern.search(data_recv)) and len(data_recv) < self.maxRcv: 
-            
+        while not bool(pattern.search(data_recv)) and len(data_recv) < self.MAX_RCV: 
+            # While the received data does not contain the end of message code
+            # or the received data does not exceed the maximal size, continue 
+            # reading from buffer.
             try:
+                # Read from the buffer of the client socket
                 cur_recv = cliSock.recv(1024).decode()
             except (ConnectionAbortedError, ConnectionResetError) as E:
                 logging.warning(f"The connection with the client {cliSock.getpeername()} has ended: {E}")
+                # Queue the socket for termination and end the receive thread.
                 self.closeNext.append(cliSock)
                 return
                 
-            #pdb.set_trace()
             if len(cur_recv) == 0:
-                logging.warning(f"Server is not receiving from {cliSock.getpeername()}. Connection is closing!")
+                # If the recv method returned nothing, then the connection is closed.
                 # The data that was sent before an EOMsg was found will be dropped
+                logging.warning(f"Server is not receiving from {cliSock.getpeername()}. Connection is closing!")
+                # Queue the socket for termination and end the receive thread.
                 self.closeNext.append(cliSock)
                 return
             
+            # The received data is added to the data from the previous receive cycle
             data_recv = data_recv + cur_recv
         
-        if clientList[2] == "":
+        if clientVariables[2] == "":
             regexResult = self.botnamePattern.search(data_recv)
             if bool(regexResult):
-                clientList[2] = regexResult.groups()[0] 
+                clientVariables[2] = regexResult.groups()[0] 
         
         logging.info(f"Data received: {data_recv}")
+        # Cleaning up the received data and create a list of all messages 
+        # contained in the received message 
         msgList = data_recv.replace("\n", "").split(self.endOfMsg)
+        # The last message in the list is stored ('' if the last messsage is complete)
         self.sendQueues[cliSock.getpeername()][1] = msgList.pop()
         
         for msg in msgList:
+            # All messages are forwarded to the other sockets
             self.populateSendQues(msg, cliSock)
     
     def populateSendQues(self, msg, cliSock):
+        """
+        This method is adding a message to the send queues of each client socket, 
+        except the socket given as argument to this method (cliSock). The message 
+        is also provided as argument (msg).
+        """
+        # Add the message to the chat history
         self.history.append(msg)
         for key in self.sendQueues.keys():
-            if key != cliSock.getpeername():        
+            # For each send client socket check that the socket is not the socket 
+            # provided as argument to this method.
+            if key != cliSock.getpeername():     
+                # Add the message in the send queue
                 self.sendQueues[key][0].put(msg)
                 
     def removeClient(self, cliSock):
