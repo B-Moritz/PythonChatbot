@@ -77,7 +77,7 @@ class weatherAPI:
         
         tempData = self.jsonObj["properties"]["timeseries"][0]["data"]["instant"]["details"]
         self.curData = {"Air temperature" : tempData["air_temperature"], 
-                        "Clouds_percent" : tempData["cloud_area_fraction"]}
+                        "Cloud_percent" : tempData["cloud_area_fraction"]}
     
     def readExistingData(self):
         with open(self.cachePath.format(self.city), "r") as file:
@@ -87,9 +87,9 @@ class weatherAPI:
         with open(self.cachePath.format(self.city), "w") as file:
             file.write(self.jsonObj.__str__().replace("\'", "\""))
             
-    def classifyCloadArea(self):
-        if self.curData["Clouds_percent"]:
-            ratio = self.curData["Clouds_percent"]
+    def classifyCloudArea(self):
+        if self.curData["Cloud_percent"]:
+            ratio = self.curData["Cloud_percent"]
         else:
             raise Exception("No cloud percentage was found. \
                             Did you forget to run 'getCurrentWeatherData'?")

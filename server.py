@@ -24,7 +24,7 @@ import re
 from queue import Queue 
 import random
 import time
-#import pdb
+import pdb
 from select import select
 import datetime
 
@@ -103,7 +103,8 @@ class SimpleChatServer:
     """
     event = threading.Event()
     history = []
-    endOfMsg = "::EOMsg::"
+    # End of message code used to identify the end of each message sent between the server and the user
+    END_OF_MSG = "::EOMsg::"
     # The maximal number of bytes received per receive sycle 
     MAX_RCV = 100
     botnamePattern = re.compile("^(.*): ")
@@ -129,7 +130,7 @@ class SimpleChatServer:
         
     def startService(self):
         self.serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.serverSocket.bind((socket.gethostname(), self.port))
+        self.serverSocket.bind(('', self.port))
         self.serverSocket.listen(5)
         self.checkReadable.insert(0, self.serverSocket) 
         
@@ -157,8 +158,7 @@ class SimpleChatServer:
         
         hostbotThread = threading.Thread(target=self.hostbotThread)
         hostbotThread.start()
-        
-        #pdb.set_trace()
+
         
         while not self.event.is_set():
             readable, writable, err = select(self.checkReadable, self.checkWritable, self.checkError, 10)
@@ -244,7 +244,7 @@ class SimpleChatServer:
         
         for i in range(sendQueue.qsize()):
             logging.info(f"Sending message to {cliSock.getpeername()}")
-            msg = (sendQueue.get() + self.endOfMsg).encode()
+            msg = (sendQueue.get() + self.END_OF_MSG).encode()
             msgLen = len(msg)
             sentBytes = 0
             while sentBytes < msgLen:    
@@ -277,7 +277,7 @@ class SimpleChatServer:
         """
         logging.info(f"Receiving from client {cliSock.getpeername()}")
         # Compiling a pattern for matching end of message
-        pattern = re.compile(self.endOfMsg)
+        pattern = re.compile(self.END_OF_MSG)
         # Gets an address to the list of important variables for the given socket 
         clientVariables = self.sendQueues[cliSock.getpeername()]
         # Extracts the rest of the previous reception. This variable contains 
@@ -311,21 +311,29 @@ class SimpleChatServer:
             # The received data is added to the data from the previous receive cycle
             data_recv = data_recv + cur_recv
         
-        if clientVariables[2] == "":
-            regexResult = self.botnamePattern.search(data_recv)
-            if bool(regexResult):
-                clientVariables[2] = regexResult.groups()[0] 
-        
         logging.info(f"Data received: {data_recv}")
         # Cleaning up the received data and create a list of all messages 
         # contained in the received message 
-        msgList = data_recv.replace("\n", "").split(self.endOfMsg)
+        msgList = data_recv.replace("\n", "").split(self.END_OF_MSG)
         # The last message in the list is stored ('' if the last messsage is complete)
         self.sendQueues[cliSock.getpeername()][1] = msgList.pop()
         
-        for msg in msgList:
-            # All messages are forwarded to the other sockets
-            self.populateSendQues(msg, cliSock)
+        if clientVariables[2] == "":
+            #regexResult = self.botnamePattern.search(data_recv)
+            #if bool(regexResult):
+            #    clientVariables[2] = regexResult.groups()[0] 
+            
+            # If there is no username registered for the socket, then 
+            # the message must be the first message (connection message), 
+            # containing only the username
+            clientVariables[2] = msgList[0][msgList[0].find(":") + 2 : ]
+            # Send a join message to all clients
+            self.populateSendQues(f"\nUser {clientVariables[2]} has joined the chat!", cliSock)
+        else:
+            # The message is processed as a chat message if the username is set
+            for msg in msgList:
+                # All messages are forwarded to the other sockets
+                self.populateSendQues(msg, cliSock)
     
     def populateSendQues(self, msg, cliSock):
         """
@@ -345,7 +353,7 @@ class SimpleChatServer:
     def removeClient(self, cliSock):
         logging.info(f"The connection to {cliSock.getpeername()} is closing.")
         uname = self.sendQueues[cliSock.getpeername()][2]
-        self.populateSendQues(f"{uname}: Good bye.\nUser {uname} left the chat.\n", cliSock)
+        self.populateSendQues(f"{uname}: User {uname} left the chat.\n", cliSock)
         self.sendQueues.pop(cliSock.getpeername())
         cliSock.close()
         self.checkError.remove(cliSock)

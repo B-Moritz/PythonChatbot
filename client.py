@@ -70,9 +70,9 @@ class MsgAnalysis:
                         and are connected to a certain tag.
     """
     
-    complicationDetection = re.compile("[\.\?\!\:][A-Za-z0-9\s]+")
+    complicationDetection = re.compile(".*: .*[\.\?\!\:][A-Za-z0-9\s]+")
     questionWords = re.compile("([Ww]hat)|([Ww]here)|([Ww]hen)|([Ww]hy)|([Ww]hich) \
-                               |([Ww]ho)|([Hh]ow)|([Ww]hose)|([cC]an you)|([cC]ould you)|([Ii]s it)")
+                               |([Ww]ho)|([Hh]ow)|([Ww]hose)|([cC]an you)|([cC]ould you)|([Ii]s it)|([dD]o you)")
 
     knownSubjects = {"temperature" : Tags.temperature, "weather" : Tags.weather, "hot" : Tags.temperature, 
                      "cold" : Tags.temperature, "sunny" : Tags.weather, }
@@ -94,7 +94,7 @@ class MsgAnalysis:
         if bool(self.complicationDetection.search(msg)):
             # Verify that the message is not too complicated
             raise ValueError("The provided message is too complicated.\n \
-                             Class MsgAnalysis can only process one simple sentence.")
+                             I can only process one sentence sentence.")
            
         self.msg = msg
         # The message is splitt into a list of words
@@ -172,7 +172,8 @@ class ChatUser(threading.Thread):
     sendQueue = Queue()
     recvQueue = Queue()
     event = threading.Event()
-    endOfMsg = "::EOMsg::"
+    # End of message code used to identify the end of each message sent between the server and the user
+    END_OF_MSG = "::EOMsg::"
     botName = "Userchat"
     data_recv = ""
     
@@ -193,7 +194,7 @@ class ChatUser(threading.Thread):
         
         
     def sendInitialMessage(self, user):
-        self.sendQueue.put(f"\nUser {user} has joined the chat!\n")
+        self.sendQueue.put(f"{user}")
         print(f"\nUser {user} has joined the chat!\n")
         
     def run(self):
@@ -226,7 +227,7 @@ class ChatUser(threading.Thread):
                 thread.join()
                 
             for i in range(self.recvQueue.qsize()):
-                print("\n" + self.recvQueue.get().replace(self.endOfMsg, "\n"))
+                print("\n" + self.recvQueue.get().replace(self.END_OF_MSG, ""))
                 
             if len(error) > 0:
                 print("Error with the connection to the server. The connection is closing.")
@@ -244,15 +245,15 @@ class ChatUser(threading.Thread):
             msg = input()
             #pdb.set_trace()
             if bool(pattern.search(msg)):
-                print(f"\n{self.botName} is disconnecting from the chat\n")
+                print(f"{self.botName} is disconnecting from the chat.")
                 self.event.set()
             else:
-                print(f"\n{self.botName}: " + msg + "\n")
+                print(f"{self.botName}: " + msg)
                 self.sendQueue.put(msg)
         
         
     def receiveFromServer(self, cliSock):
-        pattern = re.compile(self.endOfMsg)
+        pattern = re.compile(self.END_OF_MSG)
         cur_recv = ""
         while not bool(pattern.search(self.data_recv)):
             try:
@@ -269,7 +270,7 @@ class ChatUser(threading.Thread):
                 self.initiateClosure()
                 return
         
-        msgList = self.data_recv.split(self.endOfMsg)
+        msgList = self.data_recv.split(self.END_OF_MSG)
         self.data_recv = msgList.pop()
         for msg in msgList:
             self.recvQueue.put(msg)
@@ -278,7 +279,7 @@ class ChatUser(threading.Thread):
     def sendToServer(self, cliSock):
         dataSent = 0
         for i in range(self.sendQueue.qsize()):
-            curMsg = (f"{self.botName}: " + self.sendQueue.get() + self.endOfMsg).encode()
+            curMsg = (f"{self.botName}: " + self.sendQueue.get() + self.END_OF_MSG).encode()
             
             while dataSent < len(curMsg):
                 cur_sent = cliSock.send(curMsg[dataSent:])
@@ -337,7 +338,7 @@ class ChatBot(ChatUser, threading.Thread):
         print(f"{self.botName} is disconnected!")
         
     def sendInitialMessage(self, user):
-        self.sendQueue.put(f"\nUser {user} has joined the chat!\n")
+        self.sendQueue.put(f"{user}")
             
     def generateResponse(self):
         
@@ -346,20 +347,20 @@ class ChatBot(ChatUser, threading.Thread):
             # then all messages are dropped except one (the latest)
             self.recvQueue.get()
         
-        
         curMsg = self.recvQueue.get()
         if not bool(self.unamePattern.search(curMsg)):
             # if the message is not from a bot
             try:
                 msgObj = MsgAnalysis(curMsg)
             except ValueError as E:
-                self.sendQueue(E)
+                self.sendQueue.put(str(E))
                 return
             
             msgObj.classifyMsg()
             
             if Tags.join in msgObj.tags:
                 self.sendQueue.put(random.choice(self.greetings))
+                print(f"Greeting because of: {curMsg}")
                 return
             
             if Tags.question in msgObj.tags:
@@ -383,7 +384,6 @@ class WeatherBot(ChatBot):
     
     unknownLocation = ["Please name a known city!", "What city are you refering too?"]
     
-    
     def __init__(self, dest, port):
         ChatBot.__init__(self, dest, port)
         self.YrObj = yr.weatherAPI()
@@ -405,12 +405,13 @@ class WeatherBot(ChatBot):
             try:
                 msgObj = MsgAnalysis(curMsg)
             except ValueError as E:
-                self.sendQueue(E)
+                self.sendQueue.put(str(E))
                 return
             msgObj.classifyMsg()
             
             if Tags.join in msgObj.tags:
                 self.sendQueue.put(random.choice(self.greetings))
+                print(f"Greeting because of: {curMsg}")
                 return
             
             if Tags.question in msgObj.tags:
@@ -421,7 +422,7 @@ class WeatherBot(ChatBot):
                         try:
                             self.YrObj.getCurrentWeatherData(msgObj.location)
                             self.sendQueue.put(f"The weather in {msgObj.location} is \
-                                               {self.YrObj.classifyCloadArea()} and \
+                                               {self.YrObj.classifycloudArea()} and \
                                                {self.YrObj.classifyTemperature()}!")
                         except ValueError:
                             # The location was not identified as a city.
@@ -452,7 +453,7 @@ class WeatherBot(ChatBot):
                              self.YrObj.getCurrentWeatherData(msgObj.location)
                              self.sendQueue.put(f"The temperature in {msgObj.location} \
                                                 is {self.YrObj.curData['Air temperature']} \
-                                                degree celcius! The sky is {self.YrObj.classifyCloadArea()}. \
+                                                degree celcius! The sky is {self.YrObj.classifyCloudArea()}. \
                                                 Based on data from MET Norway.")
                                                 
                         except ValueError:
@@ -483,14 +484,14 @@ if __name__ == "__main__":
     testBot = ChatBot(argParsed.Dest, argParsed.Port)
     testBot.start()
     
-    #time.sleep(2)
-    #weatherBot = WeatherBot(argParsed.Dest, argParsed.Port)
-    #weatherBot.start()
+    time.sleep(2)
+    weatherBot = WeatherBot(argParsed.Dest, argParsed.Port)
+    weatherBot.start()
     
     testChat.join()
     testBot.initiateClosure()
-    #weatherBot.initiateClosure()
+    weatherBot.initiateClosure()
     testBot.join()
-    #weatherBot.join()
+    weatherBot.join()
     
     
