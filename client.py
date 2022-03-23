@@ -386,7 +386,7 @@ class WeatherBot(ChatBot):
     
     def __init__(self, dest, port):
         ChatBot.__init__(self, dest, port)
-        self.YrObj = yr.weatherAPI()
+        self.YrObj = yr.WeatherApi()
         
                 
     def generateResponse(self):

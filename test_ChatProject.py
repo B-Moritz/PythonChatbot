@@ -83,6 +83,23 @@ class testClientModule(unittest.TestCase):
         self.assertTrue(Tags.question in questionObj.tags, "Should be a question, but was not taged.")
         self.assertEqual(questionObj.location, "Oslo", "The location was not identified.")
         self.assertTrue(Tags.weather in questionObj.tags, "Should have been taged as weather!")
+    
+    def test_YrInterface(self):
+        # Create a test object of the WatherApi class
+        testYr = yr.WeatherApi()
+        
+        # -- Test the getCoordinates method
+        # Assert that the city was found.
+        self.assertTrue(testYr.getCoordinates("Oslo"), "The city 'Oslo' should be in the list.")
+        # Assert that the coordinates are as expected (Oslo)
+        self.assertEqual(testYr.long, 10.7528, "The longitued was not correct for Oslo")
+        self.assertEqual(testYr.lat, 59.9111, "The  latitued was not correct for Oslo")
+        # Assert that the ValueError is thrown when the city is not in the list
+        with self.assertRaises(ValueError):
+            testYr.getCoordinates("test")
+            
+        # -- Test the httpRequest method
+        
         
         
 if __name__=='__main__':
