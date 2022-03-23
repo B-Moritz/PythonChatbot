@@ -453,7 +453,7 @@ class WeatherBot(ChatBot):
                              self.YrObj.getCurrentWeatherData(msgObj.location)
                              self.sendQueue.put(f"The temperature in {msgObj.location} \
                                                 is {self.YrObj.curData['Air temperature']} \
-                                                degree celcius! The sky is {self.YrObj.classifyCloudArea()}. \
+                                                degree celcius! The sky is {self.YrObj.convertCloudArea()}. \
                                                 Based on data from MET Norway.")
                                                 
                         except ValueError:

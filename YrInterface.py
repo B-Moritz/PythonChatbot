@@ -7,7 +7,7 @@ Created on Sat Mar  5 17:11:58 2022
 This module contains methods used to make http requests to the Met API:
     https://api.met.no/WeatherApi/locationforecast/2.0
     
-The methods handles the air temperature and cloud_area_percentage for a 
+The methods handles the air temperature and cloud_area_fraction for a 
 given location. The forecast is for now and the next hour.
 
 """
@@ -25,7 +25,7 @@ class WeatherApi:
     """
     
     WORLD_CITIES_PATH = ".\\simplemaps_worldcities_basicv1.74\\worldcities.csv"
-    CACHE_PATH = ".\\wetherDataCache_{}.json"
+    CACHE_PATH = ".\\WeatherCache\\wetherDataCache_{}.json"
     
     def __init__(self):  
         # Read the csv file containing data about cities
@@ -61,7 +61,6 @@ class WeatherApi:
             Returns true if coordinates were found.
 
         """
-        
         for i in range(len(self.cityList)):
             # For each city in the city list, check if it matches the given cityname.
             if city == self.cityList[i]:
@@ -73,24 +72,52 @@ class WeatherApi:
         raise ValueError(f"The provided city name, {city}, was not found.")
         
     def httpRequest(self):
-        httpsString = f'https://api.met.no/WeatherApi/locationforecast/2.0/compact?lat={self.lat}&lon={self.long}'
-        headers = {'user-agent': 'PythonChatbot/1.0 s341528@oslomet.no', }
+        """
+        This method sends the http request to the Met Api and structures the 
+        json response into a new json object with two new attributes 'Expires' 
+        and 'City'. The json object is then written to cache.
 
+        Raises
+        ------
+        Exception
+            If the http request was unsuccesfull, an exception is raised.
+
+        Returns
+        -------
+        None.
+
+        """
+        # The URL for the http request
+        httpsString = f'https://api.met.no/weatherapi/locationforecast/2.0/compact?lat={self.lat}&lon={self.long}'
+        # The following header is added so Met api can identify the program 
+        # that makes a request.
+        headers = {'user-agent': 'PythonChatbot/1.0 s341528@oslomet.no', }
+        # Executes the httprequest
         resp = requests.get(httpsString, headers=headers)
         
         if not resp.ok:
+            # If the request did not succeed, an exceptin is raised
             raise Exception(str(resp.status_code) + ":" + resp.reason)
             
+        # The response (json) is decoded and loaded into a json object
         self.jsonObj = json.loads(resp.content.decode())
+        # The expiration data is extracted from the header and added in 
+        # the json object.
         self.jsonObj["Expires"] = resp.headers["Expires"]
+        # The cityname is added in the json object
         self.jsonObj["City"] = self.city
-        
+        # The current json object is written to cache
         self.writeToCache()
         
     def getCurrentWeatherData(self, city):
         """
         This method initiates the process of sending a request and receive the response
-        from the Met api. 
+        from the Met api.
+        
+        Returns
+        -------
+        A tuple with air temperature and cloud_area_fraction for the specified 
+        location for the next hour.
         """
         if (type(city) != str):
             # Raise an exeption if the city argument provided is not a string.
@@ -110,69 +137,135 @@ class WeatherApi:
         if os.path.isfile(self.CACHE_PATH.format(self.city)):
             # If cache file exists for the specific city, read the existing data
             self.readExistingData()
-            if self.jsonObj["City"] != self.city:
+            # Control that the expiration time is not exceeded
+            expirationTime = datetime.strptime(self.jsonObj["Expires"], "%a, %d %b %Y %H:%M:%S %Z")
+            expirationTime = expirationTime.replace(tzinfo=timezone.utc)
+            curTime = datetime.now(timezone.utc)
+            if expirationTime < curTime:
+                # If the expirationTime is exceeded, make a new request
                 self.httpRequest()
         else:
+            # If no cache exists for the city -> make a new request
             self.httpRequest()
             
-        expirationTime = datetime.strptime(self.jsonObj["Expires"], "%a, %d %b %Y %H:%M:%S %Z")
-        expirationTime = expirationTime.replace(tzinfo=timezone.utc)
-        curTime = datetime.now(timezone.utc)
-        if expirationTime < curTime:
-            self.httpRequest()
-        
+        # Exctract the temperature and cloud area fraction of the next hour
         tempData = self.jsonObj["properties"]["timeseries"][0]["data"]["instant"]["details"]
+        # Store the data as the curent data
         self.curData = {"Air temperature" : tempData["air_temperature"], 
-                        "Cloud_percent" : tempData["cloud_area_fraction"]}
+                        "Cloud_area_fraction" : tempData["cloud_area_fraction"]}
+        
+        return (self.curData["Air temperature"], self.curData["Cloud_area_fraction"])
     
     def readExistingData(self):
         """
-        This method reads the existing weather data for the given location.
-
-        Returns
-        -------
-        None.
-
+        This method reads the existing weather data for the location given by 
+        the 'city' attribute. The data is loaded as a json object and added 
+        to the jsonObj attribute.
         """
         with open(self.CACHE_PATH.format(self.city), "r") as file:
+            # Load json from cache
             self.jsonObj = json.load(file)
             
     def writeToCache(self):
+        """
+        This method writes the curent json object to a file.
+        """
         with open(self.CACHE_PATH.format(self.city), "w") as file:
+            # The json object iw written to file
             file.write(self.jsonObj.__str__().replace("\'", "\""))
             
-    def classifyCloudArea(self):
-        if self.curData["Cloud_percent"]:
-            ratio = self.curData["Cloud_percent"]
-        else:
-            raise Exception("No cloud percentage was found. \
-                            Did you forget to run 'getCurrentWeatherData'?")
+    def convertCloudArea(self, cloudAreaFrac):
+        """
+        This method converts the cloud_area_fraction number into 
+        a word which describes how cloudy it is in the given city.
+
+        Parameters
+        ----------
+        cloudAreaFrac : float
+            This is the cloud_area_fraction found by the getCurrentWeatherData 
+            method.It must be a float in the interval [0, 1].
+
+        Raises
+        ------
+        TypeError
+            If the argument is not of type float.
+            
+        RuntimeError
+            If the argument is not a number between 0 and 1
+
+        Returns
+        -------
+        str
+            A word describing the amount of clouds in the sky.
+
+        """
+        if type(cloudAreaFrac) != float:
+            # If the argument is not a float, raise an exception
+            raise TypeError(f"The given argument cloudAreaFrac was of \
+                            type {type(cloudAreaFrac)} when it should have \
+                                been a string.")
+        if cloudAreaFrac < 0 or cloudAreaFrac > 1:
+            # The argument is invalid if it is not a number between 0 and 1 
+            raise RuntimeError("The cloud_area_fraction must be a number between 0 and 1!")
                             
-        if ratio < 0.5:
-            if ratio < 0.25:
+        if cloudAreaFrac < 0.5:
+            # if the cloud_area_fraction is less than 50%
+            # then check if it is less than 25%
+            if cloudAreaFrac < 0.25:
+                # It is wery cloudy if the fraction is less than 25%
                 return "wery cloudy"
             else:
+                # It is cloudy if the fracction is greater or equal to 
+                # 25% and less than 50% 
                 return "cloudy"
         else:
-            if ratio < 0.75:
+            if cloudAreaFrac < 0.75:
+                # If the fraction is less than 75% and greater or equal 
+                # to 50 %
                 return "partially cloudy"
             else:
+                # If  the fraction is greater or equal to 75%
                 return "Sunny"
     
-    def classsifyTemperature(self):
-        if self.curData["Air temperature"]:
-            temp = self.curData["Air temperature"]
-        else:
-            raise Exception("No air temperature data was found. \
-                            Did you forget to run 'getCurrentWeatherData'?")
+    def classsifyTemperature(self, airTemp):
+        """
+        This method converts the air temperature into a word which 
+        describes how hot or how cold it is.
+
+        Parameters
+        ----------
+        airTemp : float
+            This is the air_temperature found by the getCurrentWeatherData 
+            method. It must be a float and cannot be less than −273.15 
+            (absolute zero in celcius).
+            
+        Raises
+        ------
+        Exception
+            DESCRIPTION.
+
+        Returns
+        -------
+        str
+            DESCRIPTION.
+
+        """
+        # The input is validated
+        if type(airTemp) != float:
+            raise ValueError(f"The provided argument 'airTemp' was of type \
+                             {type(airTemp)}. The argument should be of type float")
         
-        if temp > 10:
-            if temp > 20:
+        if airTemp < −273.15:
+            raise ValueError("The argument 'airTemp' should not be less than -273.15 \
+                             degree celcius.")
+        
+        if airTemp > 10:
+            if airTemp > 20:
                 return "hot"
             else:
                 return "not cold"
         else:
-            if temp < 0:
+            if airTemp < 0:
                 return "wery cold"
             else:
                 return "cold"

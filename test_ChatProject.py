@@ -98,7 +98,35 @@ class testClientModule(unittest.TestCase):
         with self.assertRaises(ValueError):
             testYr.getCoordinates("test")
             
-        # -- Test the httpRequest method
+        # -- Test the getCurrentWeatherData method
+        testYr = yr.WeatherApi()
+        # Assert that the method raises TypeError if city is not a string
+        with self.assertRaises(TypeError):
+            testYr.getCurrentWeatherData(10)
+        # Asser that the method raises ValueError if the city is not known
+        with self.assertRaises(ValueError):
+            testYr.getCurrentWeatherData("test")
+            
+        d1, d2 = testYr.getCurrentWeatherData("Oslo")
+
+        self.assertTrue(type(d1) == float and type(d2) == float, 
+                        "Error in the return data of getCurrentWeatherData.")
+            
+        # -- Test the conversion methods
+        # Check that the input validation is working
+        with self.asserRaises(ValueError): 
+            testYr.convertCloudArea("test")
+        
+        with self.assertRaises(RuntimeError):
+            testYr.convertCloudArea(10)
+           
+        # Assert that the method returns the right word for different input fractions
+        self.assertEquals(testYr.convertCloudArea(0.1), "wery cloudy")
+        self.assertEquals(testYr.convertCloudArea(0.25), "cloudy")
+        self.assertEquals(testYr.convertCloudArea(0.5), "partially cloudy")
+        self.assertEquals(testYr.convertCloudArea(0.75), "sunny")
+        
+        
         
         
         
