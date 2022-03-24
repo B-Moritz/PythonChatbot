@@ -6,7 +6,7 @@ Created on Mon Mar 21 19:11:02 2022
 """
 
 import unittest
-from client import MsgAnalysis, Tags
+from client import MsgAnalysis, Tags, WeatherBot
 import server
 import YrInterface as yr
 
@@ -85,6 +85,9 @@ class testClientModule(unittest.TestCase):
         self.assertTrue(Tags.weather in questionObj.tags, "Should have been taged as weather!")
     
     def test_YrInterface(self):
+        """
+        This method tests the WeatherApi class.
+        """
         # Create a test object of the WatherApi class
         testYr = yr.WeatherApi()
         
@@ -114,17 +117,71 @@ class testClientModule(unittest.TestCase):
             
         # -- Test the conversion methods
         # Check that the input validation is working
-        with self.asserRaises(ValueError): 
+        with self.assertRaises(TypeError): 
             testYr.convertCloudArea("test")
         
         with self.assertRaises(RuntimeError):
-            testYr.convertCloudArea(10)
+            testYr.convertCloudArea(float(110))
            
         # Assert that the method returns the right word for different input fractions
-        self.assertEquals(testYr.convertCloudArea(0.1), "wery cloudy")
-        self.assertEquals(testYr.convertCloudArea(0.25), "cloudy")
-        self.assertEquals(testYr.convertCloudArea(0.5), "partially cloudy")
-        self.assertEquals(testYr.convertCloudArea(0.75), "sunny")
+        self.assertEqual(testYr.convertCloudArea(10.0), "wery cloudy")
+        self.assertEqual(testYr.convertCloudArea(25.0), "cloudy")
+        self.assertEqual(testYr.convertCloudArea(50.0), "partially cloudy")
+        self.assertEqual(testYr.convertCloudArea(75.0), "sunny")
+        self.assertTrue(type(testYr.convertCloudArea(d2)) == str, f"The fraction {d2} from \
+                        getCurrentTemperatureData could not be processed by convertCloudArea.")
+        
+        # test the convertTemperature() method
+        with self.assertRaises(TypeError):
+            testYr.convertTemperature("test")
+        
+        with self.assertRaises(ValueError):
+            testYr.convertTemperature(-300.0)
+        # Asser that the convert temperature method returns the correct word
+        self.assertEqual(testYr.convertTemperature(30.0), "hot")
+        self.assertEqual(testYr.convertTemperature(20.0), "not cold")
+        self.assertEqual(testYr.convertTemperature(10.0), "cold")
+        self.assertEqual(testYr.convertTemperature(-1.0), "wery cold")
+        self.assertTrue(type(testYr.convertTemperature(d1)) == str)
+    
+    def test_weatherBot(self):
+        """
+        This method tests the WeatherBot class. It is important that the 
+        MsgAnalysis class and WeatherApi class are working since the 
+        WeatherBot class is dependant those classes. 
+        """
+        # Get the weather data for Oslo
+        testYr = yr.WeatherApi()
+        airTemp, cloud = testYr.getCurrentWeatherData("Oslo")
+        # Create a test bot
+        bot = WeatherBot("192.168.56.1", 2020)
+        
+        # Test qustion about temperature -----
+        bot.recvQueue.put("\nHost: What is the temperature in Oslo?")
+        # Process the question
+        bot.generateResponse()
+        # The expected response from the bot
+        expectedResponse = ("The temperature in Oslo is " + str(airTemp) + 
+                            " degree celcius!\n Based on data from MET Norway.")
+        
+        realResponse = bot.sendQueue.get()
+        self.assertEqual(realResponse, expectedResponse)
+        
+        # Test question about the weather
+        bot.recvQueue.put("\nHost: How is the weather in Oslo?")
+        # Process the question.
+        bot.generateResponse()
+        # The expected response from the bot
+        expectedResponse = ("The temperature in " + "Oslo" + 
+                          " is " + str(airTemp) + " degree celcius! The sky is " + 
+                          testYr.convertCloudArea(cloud) + 
+                          ".\n Based on data from MET Norway.")
+        realResponse = bot.sendQueue.get()
+        self.assertEqual(realResponse, expectedResponse)
+        
+        
+        
+        
         
         
         

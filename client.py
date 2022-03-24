@@ -162,6 +162,7 @@ class MsgAnalysis:
             if result:
                 self.tags.append(Tags.location)
                 self.location = result.groups()[0]
+                break
                 
 
 class ChatUser(threading.Thread):
@@ -174,7 +175,7 @@ class ChatUser(threading.Thread):
     event = threading.Event()
     # End of message code used to identify the end of each message sent between the server and the user
     END_OF_MSG = "::EOMsg::"
-    botName = "Userchat"
+    username = "Userchat"
     data_recv = ""
     
     def __init__(self, dest, port):
@@ -202,7 +203,7 @@ class ChatUser(threading.Thread):
         socketList = [self.cliSock]
         threadList = []
         
-        self.sendInitialMessage(self.botName)
+        self.sendInitialMessage(self.username)
         
         outputThread = threading.Thread(target=self.generateOutput)
         outputThread.start()
@@ -245,10 +246,10 @@ class ChatUser(threading.Thread):
             msg = input()
             #pdb.set_trace()
             if bool(pattern.search(msg)):
-                print(f"{self.botName} is disconnecting from the chat.")
+                print(f"{self.username} is disconnecting from the chat.")
                 self.event.set()
             else:
-                print(f"{self.botName}: " + msg)
+                print(f"{self.username}: " + msg)
                 self.sendQueue.put(msg)
         
         
@@ -279,7 +280,7 @@ class ChatUser(threading.Thread):
     def sendToServer(self, cliSock):
         dataSent = 0
         for i in range(self.sendQueue.qsize()):
-            curMsg = (f"{self.botName}: " + self.sendQueue.get() + self.END_OF_MSG).encode()
+            curMsg = (f"{self.username}: " + self.sendQueue.get() + self.END_OF_MSG).encode()
             
             while dataSent < len(curMsg):
                 cur_sent = cliSock.send(curMsg[dataSent:])
@@ -296,7 +297,7 @@ class ChatUser(threading.Thread):
         
         
 class ChatBot(ChatUser, threading.Thread):
-    botName = "Simple_Chat_Bot"
+    username = "Simple_Chat_Bot"
     unamePattern = re.compile("^(.*[Bb]ot): ")
     opinionResponses = ["I think it is nice!", 
                         "I am not sure, try to ask someone else.", 
@@ -325,7 +326,7 @@ class ChatBot(ChatUser, threading.Thread):
     def run(self):
         
         self.cliSock.connect((self.dest, self.port))
-        self.sendInitialMessage(self.botName)
+        self.sendInitialMessage(self.username)
         self.sendToServer(self.cliSock)
         #pdb.set_trace()
         while not self.event.is_set():
@@ -335,7 +336,7 @@ class ChatBot(ChatUser, threading.Thread):
             
     def initiateClosure(self):
         self.event.set()
-        print(f"{self.botName} is disconnected!")
+        print(f"{self.username} is disconnected!")
         
     def sendInitialMessage(self, user):
         self.sendQueue.put(f"{user}")
@@ -380,7 +381,7 @@ class ChatBot(ChatUser, threading.Thread):
                 
                 
 class WeatherBot(ChatBot):
-    botName = "Weather_Bot"
+    username = "Weather_Bot"
     
     unknownLocation = ["Please name a known city!", "What city are you refering too?"]
     
@@ -405,66 +406,102 @@ class WeatherBot(ChatBot):
             try:
                 msgObj = MsgAnalysis(curMsg)
             except ValueError as E:
+                # If the messag cannot be handeled by the analysis class, 
+                # then send the exception message.
                 self.sendQueue.put(str(E))
                 return
+            # call the classify method to add tags to the message
             msgObj.classifyMsg()
             
+            print(msgObj.tags) # Used to debug
+            
             if Tags.join in msgObj.tags:
+                # If the message is taged as join message then add a 
+                # greeting and return.
                 self.sendQueue.put(random.choice(self.greetings))
-                print(f"Greeting because of: {curMsg}")
+                print(f"Greeting because of: {curMsg}") # Used for debug
                 return
             
             if Tags.question in msgObj.tags:
                 # Is the message a question?
+                print("Question identified") # Used for debug
                 if Tags.opinion in msgObj.tags:
                     # Is the message asking for an opinion?
+                    print("Opinion identified") #Used for Debug
+                    
                     if Tags.weather in msgObj.tags and Tags.location in msgObj.tags:
+                        # Does the message contain weather subjects and a location?
+                        print("Weather and location identified") # Used for debug
                         try:
+                            # Get weather data for the specified location
                             self.YrObj.getCurrentWeatherData(msgObj.location)
+                            # Add message about the weather for the given location
                             self.sendQueue.put(f"The weather in {msgObj.location} is \
-                                               {self.YrObj.classifycloudArea()} and \
-                                               {self.YrObj.classifyTemperature()}!")
+                                               {self.YrObj.convertCloudArea()} and \
+                                               {self.YrObj.convertTemperature()}!")
                         except ValueError:
+                            print("City not found in list") # Used for debug
                             # The location was not identified as a city.
                             self.sendQueue.put(random.choice(self.unknownLocation))
-                    else:
+                    elif Tags.weather in msgObj.tags:
+                        print("weather but no location was identified") # Used for debug
                         # The location was not identified.
                         self.sendQueue.put(random.choice(self.unknownLocation))
+                    else:
+                        print("general opinion response") # Used for debug
+                        # General response for opinion questions
+                        self.sendQueue.put(random.choice(self.opinionResponses))
                         
                 elif Tags.temperature in msgObj.tags:
                     # Is the message about the temperature?
+                    print("Temperature identified") # Used for debug
                     if Tags.location in msgObj.tags:
+                        # Is the message containing a location?
+                        print("Location identified") # Used for debug
                         try:
+                            # Get the weather data for the location
                             self.YrObj.getCurrentWeatherData(msgObj.location)
-                            self.sendQueue.put(f"The temperature in {msgObj.location} \
-                                               is {self.YrObj.curData['Air temperature']} degree celcius! \
-                                               Based on data from MET Norway.")
+                            # Send a message informing about the temperature for the next hour.
+                            self.sendQueue.put("The temperature in " + msgObj.location + 
+                                               " is " + str(self.YrObj.curData['Air temperature']) 
+                                               + " degree celcius!\n Based on data from MET Norway.")
                         except ValueError:
+                            print("City not found in list") # Used for debug
                             # The location was not identified as a city.
                             self.sendQueue.put(random.choice(self.unknownLocation))
                     else:
+                        print("weather but no location was identified") # Used for debug
                         # The location was not identified.
                         self.sendQueue.put(random.choice(self.unknownLocation))
                         
                 elif Tags.weather in msgObj.tags:
-                    # Is the message askin about the wether?
+                    print("weather was identified") # Used for debug
+                    # Is the message askin for the wether?
                     if Tags.location in msgObj.tags:
+                        print("Location identified") # Used for debug
                         try:
-                             self.YrObj.getCurrentWeatherData(msgObj.location)
-                             self.sendQueue.put(f"The temperature in {msgObj.location} \
-                                                is {self.YrObj.curData['Air temperature']} \
-                                                degree celcius! The sky is {self.YrObj.convertCloudArea()}. \
-                                                Based on data from MET Norway.")
-                                                
+                            # Get the weather data for the given location
+                            self.YrObj.getCurrentWeatherData(msgObj.location)
+                            # Send a message about the weather at the given location the next hour.
+                            self.sendQueue.put("The temperature in " + msgObj.location + 
+                                              " is " + str(self.YrObj.curData['Air temperature']) +
+                                              " degree celcius! The sky is " + 
+                                              str(self.YrObj.convertCloudArea(self.YrObj.curData['Cloud_area_fraction'])) + 
+                                              ".\n Based on data from MET Norway.")
+                                               
                         except ValueError:
+                            print("Location was not found in list") # Used for debug
                             # The location was not identified as a city.
                             self.sendQueue.put(random.choice(self.unknownLocation))
                              
             elif Tags.statement in msgObj.tags:
+                print("identified as statement/suggestion")
                 self.sendQueue.put(random.choice(self.statementResponses))
-        
             else:
+                
                 self.sendQueue.put(random.choice(self.generalResponse))
+                
+            print("-------- [ End response generation] -------------")
                             
             
 if __name__ == "__main__":

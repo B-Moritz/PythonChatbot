@@ -21,11 +21,12 @@ from datetime import datetime, timezone
 
 class WeatherApi:
     """
-    This class contains method to connect to the Met api. 
+    This class contains methods used to connect to the Met api and handle weather data. 
     """
     
     WORLD_CITIES_PATH = ".\\simplemaps_worldcities_basicv1.74\\worldcities.csv"
     CACHE_PATH = ".\\WeatherCache\\wetherDataCache_{}.json"
+    ABSOLUTE_ZERO = -273.15
     
     def __init__(self):  
         # Read the csv file containing data about cities
@@ -38,6 +39,7 @@ class WeatherApi:
         # Extract a list of all cities        
         self.cityList = self.cityData.loc[:, "city"]
                 
+        
         
     def getCoordinates(self, city):
         """
@@ -70,6 +72,8 @@ class WeatherApi:
         
         # Raise error if the cityname was not found in the list.
         raise ValueError(f"The provided city name, {city}, was not found.")
+        
+        
         
     def httpRequest(self):
         """
@@ -108,6 +112,8 @@ class WeatherApi:
         self.jsonObj["City"] = self.city
         # The current json object is written to cache
         self.writeToCache()
+        
+        
         
     def getCurrentWeatherData(self, city):
         """
@@ -183,7 +189,7 @@ class WeatherApi:
         ----------
         cloudAreaFrac : float
             This is the cloud_area_fraction found by the getCurrentWeatherData 
-            method.It must be a float in the interval [0, 1].
+            method. It must be a float in the interval [0, 100].
 
         Raises
         ------
@@ -191,7 +197,7 @@ class WeatherApi:
             If the argument is not of type float.
             
         RuntimeError
-            If the argument is not a number between 0 and 1
+            If the argument is not a number between 0 and 100
 
         Returns
         -------
@@ -203,15 +209,15 @@ class WeatherApi:
             # If the argument is not a float, raise an exception
             raise TypeError(f"The given argument cloudAreaFrac was of \
                             type {type(cloudAreaFrac)} when it should have \
-                                been a string.")
-        if cloudAreaFrac < 0 or cloudAreaFrac > 1:
-            # The argument is invalid if it is not a number between 0 and 1 
+                                been a float.")
+        if cloudAreaFrac < 0 or cloudAreaFrac > 100:
+            # The argument is invalid if it is not a number between 0 and 100
             raise RuntimeError("The cloud_area_fraction must be a number between 0 and 1!")
                             
-        if cloudAreaFrac < 0.5:
+        if cloudAreaFrac < 50:
             # if the cloud_area_fraction is less than 50%
             # then check if it is less than 25%
-            if cloudAreaFrac < 0.25:
+            if cloudAreaFrac < 25:
                 # It is wery cloudy if the fraction is less than 25%
                 return "wery cloudy"
             else:
@@ -219,15 +225,15 @@ class WeatherApi:
                 # 25% and less than 50% 
                 return "cloudy"
         else:
-            if cloudAreaFrac < 0.75:
+            if cloudAreaFrac < 75:
                 # If the fraction is less than 75% and greater or equal 
                 # to 50 %
                 return "partially cloudy"
             else:
                 # If  the fraction is greater or equal to 75%
-                return "Sunny"
+                return "sunny"
     
-    def classsifyTemperature(self, airTemp):
+    def convertTemperature(self, airTemp):
         """
         This method converts the air temperature into a word which 
         describes how hot or how cold it is.
@@ -241,33 +247,43 @@ class WeatherApi:
             
         Raises
         ------
-        Exception
-            DESCRIPTION.
-
+        ValueError
+            If the airTemp argument has a value 
+            less than absolute zero.
+            
+        TypeError
+            If the airTemp argument is not a float.
+            
         Returns
         -------
         str
-            DESCRIPTION.
+            A word that describes the air temperature.
 
         """
         # The input is validated
         if type(airTemp) != float:
-            raise ValueError(f"The provided argument 'airTemp' was of type \
+            raise TypeError(f"The provided argument 'airTemp' was of type \
                              {type(airTemp)}. The argument should be of type float")
         
-        if airTemp < −273.15:
+        if airTemp < self.ABSOLUTE_ZERO:
+            # Verify that the argument is a valid temperature
             raise ValueError("The argument 'airTemp' should not be less than -273.15 \
                              degree celcius.")
-        
+                             
+        # Convert the air temperature into a word which describes the temperature
         if airTemp > 10:
             if airTemp > 20:
+                # The temperature is over 20 degree celcius
                 return "hot"
             else:
+                # The temperature is over 10 and less than or equal to 20 degree celcius
                 return "not cold"
         else:
             if airTemp < 0:
+                # The temperature is less than 0 degree celcius
                 return "wery cold"
             else:
+                # The temperature is less or equal to 10 or greater than 0 degree celcius 
                 return "cold"
 
 if __name__=="__main__":
