@@ -1,0 +1,27 @@
+INFO: 2022-03-20 22:55:06,265: Service is listening to incomming connections on port 2020.
+INFO: 2022-03-20 22:55:06,281: A new message is sent from host
+INFO: 2022-03-20 22:55:29,190: New client connection accepted for source ('192.168.56.1', 60756).
+INFO: 2022-03-20 22:55:29,190: Receiving from client ('192.168.56.1', 60756)
+INFO: 2022-03-20 22:55:29,190: Sending message to ('192.168.56.1', 60756)
+INFO: 2022-03-20 22:55:29,190: Data received: Userchat: 
+User Userchat has joined the chat!
+::EOMsg::
+INFO: 2022-03-20 22:55:33,204: New client connection accepted for source ('192.168.56.1', 60757).
+INFO: 2022-03-20 22:55:33,241: Receiving from client ('192.168.56.1', 60757)
+INFO: 2022-03-20 22:55:33,242: Data received: Simple_Chat_Bot: 
+User Simple_Chat_Bot has joined the chat!
+::EOMsg::
+INFO: 2022-03-20 22:55:33,242: Sending message to ('192.168.56.1', 60756)
+INFO: 2022-03-20 22:55:33,242: Sending message to ('192.168.56.1', 60757)
+INFO: 2022-03-20 22:55:33,242: Sending message to ('192.168.56.1', 60757)
+INFO: 2022-03-20 22:55:33,242: Receiving from client ('192.168.56.1', 60757)
+INFO: 2022-03-20 22:55:33,242: Data received: Simple_Chat_Bot: How can you say something like that.::EOMsg::
+INFO: 2022-03-20 22:55:33,242: Sending message to ('192.168.56.1', 60756)
+INFO: 2022-03-20 22:56:02,319: Receiving from client ('192.168.56.1', 60756)
+WARNING: 2022-03-20 22:56:02,319: Server is not receiving from ('192.168.56.1', 60756). Connection is closing!
+INFO: 2022-03-20 22:56:02,319: The connection to ('192.168.56.1', 60756) is closing.
+INFO: 2022-03-20 22:56:02,355: Sending message to ('192.168.56.1', 60757)
+INFO: 2022-03-20 22:56:02,357: Receiving from client ('192.168.56.1', 60757)
+WARNING: 2022-03-20 22:56:02,357: Server is not receiving from ('192.168.56.1', 60757). Connection is closing!
+INFO: 2022-03-20 22:56:02,357: The connection to ('192.168.56.1', 60757) is closing.
+INFO: 2022-03-20 22:56:08,670: The service is stoping due to user interaction.

@@ -1,0 +1,620 @@
+INFO: 2022-03-22 19:15:43,749: Service is listening to incomming connections on port 2020.
+INFO: 2022-03-22 19:15:43,765: A new message is sent from host
+INFO: 2022-03-22 19:17:13,781: A new message is sent from host
+INFO: 2022-03-22 19:18:43,785: A new message is sent from host
+INFO: 2022-03-22 19:20:13,801: A new message is sent from host
+INFO: 2022-03-22 19:21:24,749: The service is stoping due to user interaction.
+INFO: 2022-03-22 19:21:43,581: Service is listening to incomming connections on port 2020.
+INFO: 2022-03-22 19:21:43,581: A new message is sent from host
+INFO: 2022-03-22 19:21:47,205: New client connection accepted for source ('127.0.0.1', 65506).
+INFO: 2022-03-22 19:21:47,213: Receiving from client ('127.0.0.1', 65506)
+INFO: 2022-03-22 19:21:47,213: Sending message to ('127.0.0.1', 65506)
+INFO: 2022-03-22 19:21:47,213: Data received: Userchat: Userchat::EOMsg::
+INFO: 2022-03-22 19:21:51,220: New client connection accepted for source ('127.0.0.1', 65508).
+INFO: 2022-03-22 19:21:51,220: Receiving from client ('127.0.0.1', 65508)
+INFO: 2022-03-22 19:21:51,220: Data received: Simple_Chat_Bot: 
+User Simple_Chat_Bot has joined the chat!
+::EOMsg::
+INFO: 2022-03-22 19:21:51,220: Sending message to ('127.0.0.1', 65506)
+INFO: 2022-03-22 19:21:51,220: Sending message to ('127.0.0.1', 65508)
+INFO: 2022-03-22 19:21:51,220: Sending message to ('127.0.0.1', 65508)
+INFO: 2022-03-22 19:22:42,525: Receiving from client ('127.0.0.1', 65506)
+WARNING: 2022-03-22 19:22:42,525: Server is not receiving from ('127.0.0.1', 65506). Connection is closing!
+INFO: 2022-03-22 19:22:42,525: The connection to ('127.0.0.1', 65506) is closing.
+INFO: 2022-03-22 19:22:42,525: Sending message to ('127.0.0.1', 65508)
+INFO: 2022-03-22 19:22:42,563: Receiving from client ('127.0.0.1', 65508)
+WARNING: 2022-03-22 19:22:42,563: The connection with the client ('127.0.0.1', 65508) has ended: [WinError 10054] En eksisterende tilkobling ble tvangslukket av den eksterne verten
+INFO: 2022-03-22 19:22:42,563: The connection to ('127.0.0.1', 65508) is closing.
+INFO: 2022-03-22 19:23:13,627: A new message is sent from host
+INFO: 2022-03-22 19:24:43,631: A new message is sent from host
+INFO: 2022-03-22 19:26:11,560: New client connection accepted for source ('127.0.0.1', 65534).
+INFO: 2022-03-22 19:26:11,560: Sending message to ('127.0.0.1', 65534)
+INFO: 2022-03-22 19:26:11,560: Sending message to ('127.0.0.1', 65534)
+INFO: 2022-03-22 19:26:11,560: Sending message to ('127.0.0.1', 65534)
+INFO: 2022-03-22 19:26:11,560: Sending message to ('127.0.0.1', 65534)
+INFO: 2022-03-22 19:26:11,560: Sending message to ('127.0.0.1', 65534)
+INFO: 2022-03-22 19:26:11,560: Sending message to ('127.0.0.1', 65534)
+INFO: 2022-03-22 19:26:11,560: Sending message to ('127.0.0.1', 65534)
+INFO: 2022-03-22 19:26:11,560: Receiving from client ('127.0.0.1', 65534)
+INFO: 2022-03-22 19:26:11,560: Data received: Userchat: Userchat::EOMsg::
+INFO: 2022-03-22 19:26:13,643: A new message is sent from host
+INFO: 2022-03-22 19:26:13,643: Sending message to ('127.0.0.1', 65534)
+INFO: 2022-03-22 19:26:15,563: New client connection accepted for source ('127.0.0.1', 49153).
+INFO: 2022-03-22 19:26:15,563: Receiving from client ('127.0.0.1', 49153)
+INFO: 2022-03-22 19:26:15,563: Data received: Simple_Chat_Bot: 
+User Simple_Chat_Bot has joined the chat!
+::EOMsg::
+INFO: 2022-03-22 19:26:15,563: Sending message to ('127.0.0.1', 49153)
+INFO: 2022-03-22 19:26:15,563: Sending message to ('127.0.0.1', 49153)
+INFO: 2022-03-22 19:26:15,563: Sending message to ('127.0.0.1', 49153)
+INFO: 2022-03-22 19:26:15,563: Sending message to ('127.0.0.1', 49153)
+INFO: 2022-03-22 19:26:15,563: Sending message to ('127.0.0.1', 49153)
+INFO: 2022-03-22 19:26:15,563: Sending message to ('127.0.0.1', 49153)
+INFO: 2022-03-22 19:26:15,563: Sending message to ('127.0.0.1', 49153)
+INFO: 2022-03-22 19:26:15,563: Sending message to ('127.0.0.1', 49153)
+INFO: 2022-03-22 19:26:15,563: Sending message to ('127.0.0.1', 49153)
+INFO: 2022-03-22 19:26:15,563: Sending message to ('127.0.0.1', 65534)
+INFO: 2022-03-22 19:27:43,647: A new message is sent from host
+INFO: 2022-03-22 19:27:43,647: Sending message to ('127.0.0.1', 49153)
+INFO: 2022-03-22 19:27:43,647: Sending message to ('127.0.0.1', 65534)
+INFO: 2022-03-22 19:28:37,144: Receiving from client ('127.0.0.1', 65534)
+WARNING: 2022-03-22 19:28:37,144: Server is not receiving from ('127.0.0.1', 65534). Connection is closing!
+INFO: 2022-03-22 19:28:37,144: The connection to ('127.0.0.1', 65534) is closing.
+INFO: 2022-03-22 19:28:37,144: Sending message to ('127.0.0.1', 49153)
+INFO: 2022-03-22 19:28:37,176: Receiving from client ('127.0.0.1', 49153)
+WARNING: 2022-03-22 19:28:37,176: The connection with the client ('127.0.0.1', 49153) has ended: [WinError 10054] En eksisterende tilkobling ble tvangslukket av den eksterne verten
+INFO: 2022-03-22 19:28:37,176: The connection to ('127.0.0.1', 49153) is closing.
+INFO: 2022-03-22 19:29:13,650: A new message is sent from host
+INFO: 2022-03-22 19:30:03,046: The service is stoping due to user interaction.
+INFO: 2022-03-22 19:30:52,746: Service is listening to incomming connections on port 2020.
+INFO: 2022-03-22 19:30:52,746: A new message is sent from host
+INFO: 2022-03-22 19:30:57,560: New client connection accepted for source ('127.0.0.1', 49178).
+INFO: 2022-03-22 19:30:57,560: Receiving from client ('127.0.0.1', 49178)
+INFO: 2022-03-22 19:30:57,560: Sending message to ('127.0.0.1', 49178)
+INFO: 2022-03-22 19:30:57,560: Data received: Userchat: Userchat::EOMsg::
+INFO: 2022-03-22 19:32:22,768: A new message is sent from host
+INFO: 2022-03-22 19:33:15,033: New client connection accepted for source ('127.0.0.1', 49179).
+INFO: 2022-03-22 19:33:15,033: Sending message to ('127.0.0.1', 49178)
+INFO: 2022-03-22 19:33:15,033: Receiving from client ('127.0.0.1', 49179)
+INFO: 2022-03-22 19:33:15,033: Data received: Simple_Chat_Bot: 
+User Simple_Chat_Bot has joined the chat!
+::EOMsg::
+INFO: 2022-03-22 19:33:15,033: Sending message to ('127.0.0.1', 49179)
+INFO: 2022-03-22 19:33:15,033: Sending message to ('127.0.0.1', 49179)
+INFO: 2022-03-22 19:33:16,785: The service is stoping due to user interaction.
+INFO: 2022-03-22 19:34:34,643: Service is listening to incomming connections on port 2020.
+INFO: 2022-03-22 19:34:34,643: A new message is sent from host
+INFO: 2022-03-22 19:34:39,526: New client connection accepted for source ('127.0.0.1', 49193).
+INFO: 2022-03-22 19:34:39,526: Receiving from client ('127.0.0.1', 49193)
+INFO: 2022-03-22 19:34:39,526: Sending message to ('127.0.0.1', 49193)
+INFO: 2022-03-22 19:34:39,526: Data received: Userchat: Userchat::EOMsg::
+INFO: 2022-03-22 19:34:54,520: The service is stoping due to user interaction.
+INFO: 2022-03-22 19:36:13,912: Service is listening to incomming connections on port 2020.
+INFO: 2022-03-22 19:36:13,928: A new message is sent from host
+INFO: 2022-03-22 19:36:18,074: New client connection accepted for source ('127.0.0.1', 49214).
+INFO: 2022-03-22 19:36:18,074: Receiving from client ('127.0.0.1', 49214)
+INFO: 2022-03-22 19:36:18,074: Sending message to ('127.0.0.1', 49214)
+INFO: 2022-03-22 19:36:18,074: Data received: Userchat: Userchat::EOMsg::
+INFO: 2022-03-22 19:36:22,078: New client connection accepted for source ('127.0.0.1', 49215).
+INFO: 2022-03-22 19:36:22,078: Receiving from client ('127.0.0.1', 49215)
+INFO: 2022-03-22 19:36:22,078: Data received: Simple_Chat_Bot: 
+User Simple_Chat_Bot has joined the chat!
+::EOMsg::
+INFO: 2022-03-22 19:36:22,078: Sending message to ('127.0.0.1', 49215)
+INFO: 2022-03-22 19:36:22,078: Sending message to ('127.0.0.1', 49215)
+INFO: 2022-03-22 19:36:22,078: Receiving from client ('127.0.0.1', 49215)
+INFO: 2022-03-22 19:36:22,078: Sending message to ('127.0.0.1', 49214)
+INFO: 2022-03-22 19:36:22,078: Data received: Simple_Chat_Bot: The provided message is too complicated.
+                              Class MsgAnalysis can only process one simple sentence.::EOMsg::Simple_Chat_Bot: The provided message is too complicated.
+                              Class MsgAnalysis can only process one simple sentence.::EOMsg::
+INFO: 2022-03-22 19:36:22,085: Sending message to ('127.0.0.1', 49214)
+INFO: 2022-03-22 19:36:22,085: Sending message to ('127.0.0.1', 49214)
+INFO: 2022-03-22 19:37:43,936: A new message is sent from host
+INFO: 2022-03-22 19:37:43,936: Sending message to ('127.0.0.1', 49215)
+INFO: 2022-03-22 19:37:43,936: Sending message to ('127.0.0.1', 49214)
+INFO: 2022-03-22 19:37:43,936: Receiving from client ('127.0.0.1', 49215)
+INFO: 2022-03-22 19:37:43,936: Data received: Simple_Chat_Bot: The provided message is too complicated.
+                              Class MsgAnalysis can only process one simple sentence.::EOMsg::
+INFO: 2022-03-22 19:37:43,936: Sending message to ('127.0.0.1', 49214)
+INFO: 2022-03-22 19:38:07,890: The service is stoping due to user interaction.
+INFO: 2022-03-22 19:41:49,606: Service is listening to incomming connections on port 2020.
+INFO: 2022-03-22 19:41:49,606: A new message is sent from host
+INFO: 2022-03-22 19:41:52,883: New client connection accepted for source ('127.0.0.1', 49246).
+INFO: 2022-03-22 19:41:52,883: Receiving from client ('127.0.0.1', 49246)
+INFO: 2022-03-22 19:41:52,883: Sending message to ('127.0.0.1', 49246)
+INFO: 2022-03-22 19:41:52,883: Data received: Userchat: Userchat::EOMsg::
+INFO: 2022-03-22 19:41:56,886: New client connection accepted for source ('127.0.0.1', 49247).
+INFO: 2022-03-22 19:41:56,887: Receiving from client ('127.0.0.1', 49247)
+INFO: 2022-03-22 19:41:56,888: Sending message to ('127.0.0.1', 49247)
+INFO: 2022-03-22 19:41:56,888: Data received: Simple_Chat_Bot: 
+User Simple_Chat_Bot has joined the chat!
+::EOMsg::
+INFO: 2022-03-22 19:41:56,888: Sending message to ('127.0.0.1', 49247)
+INFO: 2022-03-22 19:41:56,889: Receiving from client ('127.0.0.1', 49247)
+INFO: 2022-03-22 19:41:56,890: Sending message to ('127.0.0.1', 49246)
+INFO: 2022-03-22 19:41:56,890: Data received: Simple_Chat_Bot: The provided message is too complicated.
+                              Class MsgAnalysis can only process one simple sentence.::EOMsg::Simple_Chat_Bot: The provided message is too complicated.
+                              Class MsgAnalysis can only process one simple sentence.::EOMsg::
+INFO: 2022-03-22 19:41:56,891: Sending message to ('127.0.0.1', 49246)
+INFO: 2022-03-22 19:41:56,892: Sending message to ('127.0.0.1', 49246)
+INFO: 2022-03-22 19:42:40,098: Receiving from client ('127.0.0.1', 49246)
+WARNING: 2022-03-22 19:42:40,098: Server is not receiving from ('127.0.0.1', 49246). Connection is closing!
+INFO: 2022-03-22 19:42:40,098: The connection to ('127.0.0.1', 49246) is closing.
+INFO: 2022-03-22 19:42:40,098: Sending message to ('127.0.0.1', 49247)
+INFO: 2022-03-22 19:42:40,098: Receiving from client ('127.0.0.1', 49247)
+INFO: 2022-03-22 19:42:40,098: Data received: Simple_Chat_Bot: The provided message is too complicated.
+                              Class MsgAnalysis can only process one simple sentence.::EOMsg::
+INFO: 2022-03-22 19:42:40,128: Receiving from client ('127.0.0.1', 49247)
+WARNING: 2022-03-22 19:42:40,128: Server is not receiving from ('127.0.0.1', 49247). Connection is closing!
+INFO: 2022-03-22 19:42:40,128: The connection to ('127.0.0.1', 49247) is closing.
+INFO: 2022-03-22 19:43:19,641: A new message is sent from host
+INFO: 2022-03-22 19:44:49,654: A new message is sent from host
+INFO: 2022-03-22 19:46:19,664: A new message is sent from host
+INFO: 2022-03-22 19:47:49,675: A new message is sent from host
+INFO: 2022-03-22 19:49:19,687: A new message is sent from host
+INFO: 2022-03-22 19:50:49,691: A new message is sent from host
+INFO: 2022-03-22 19:52:16,806: New client connection accepted for source ('127.0.0.1', 49278).
+INFO: 2022-03-22 19:52:16,806: Sending message to ('127.0.0.1', 49278)
+INFO: 2022-03-22 19:52:16,806: Sending message to ('127.0.0.1', 49278)
+INFO: 2022-03-22 19:52:16,806: Sending message to ('127.0.0.1', 49278)
+INFO: 2022-03-22 19:52:16,806: Sending message to ('127.0.0.1', 49278)
+INFO: 2022-03-22 19:52:16,806: Sending message to ('127.0.0.1', 49278)
+INFO: 2022-03-22 19:52:16,806: Sending message to ('127.0.0.1', 49278)
+INFO: 2022-03-22 19:52:16,806: Sending message to ('127.0.0.1', 49278)
+INFO: 2022-03-22 19:52:16,806: Sending message to ('127.0.0.1', 49278)
+INFO: 2022-03-22 19:52:16,806: Sending message to ('127.0.0.1', 49278)
+INFO: 2022-03-22 19:52:16,806: Sending message to ('127.0.0.1', 49278)
+INFO: 2022-03-22 19:52:16,806: Sending message to ('127.0.0.1', 49278)
+INFO: 2022-03-22 19:52:16,806: Sending message to ('127.0.0.1', 49278)
+INFO: 2022-03-22 19:52:16,806: Sending message to ('127.0.0.1', 49278)
+INFO: 2022-03-22 19:52:16,822: Sending message to ('127.0.0.1', 49278)
+INFO: 2022-03-22 19:52:16,822: Receiving from client ('127.0.0.1', 49278)
+INFO: 2022-03-22 19:52:16,822: Data received: Userchat: Userchat::EOMsg::
+INFO: 2022-03-22 19:52:19,712: A new message is sent from host
+INFO: 2022-03-22 19:52:19,712: Sending message to ('127.0.0.1', 49278)
+INFO: 2022-03-22 19:52:20,812: New client connection accepted for source ('127.0.0.1', 49279).
+INFO: 2022-03-22 19:52:20,812: Receiving from client ('127.0.0.1', 49279)
+INFO: 2022-03-22 19:52:20,812: Data received: Simple_Chat_Bot: 
+User Simple_Chat_Bot has joined the chat!
+::EOMsg::
+INFO: 2022-03-22 19:52:20,812: Sending message to ('127.0.0.1', 49279)
+INFO: 2022-03-22 19:52:20,812: Sending message to ('127.0.0.1', 49279)
+INFO: 2022-03-22 19:52:20,812: Sending message to ('127.0.0.1', 49279)
+INFO: 2022-03-22 19:52:20,812: Sending message to ('127.0.0.1', 49279)
+INFO: 2022-03-22 19:52:20,812: Sending message to ('127.0.0.1', 49279)
+INFO: 2022-03-22 19:52:20,812: Sending message to ('127.0.0.1', 49279)
+INFO: 2022-03-22 19:52:20,812: Sending message to ('127.0.0.1', 49279)
+INFO: 2022-03-22 19:52:20,812: Sending message to ('127.0.0.1', 49279)
+INFO: 2022-03-22 19:52:20,812: Sending message to ('127.0.0.1', 49279)
+INFO: 2022-03-22 19:52:20,812: Sending message to ('127.0.0.1', 49279)
+INFO: 2022-03-22 19:52:20,812: Sending message to ('127.0.0.1', 49279)
+INFO: 2022-03-22 19:52:20,812: Sending message to ('127.0.0.1', 49279)
+INFO: 2022-03-22 19:52:20,812: Sending message to ('127.0.0.1', 49279)
+INFO: 2022-03-22 19:52:20,812: Sending message to ('127.0.0.1', 49279)
+INFO: 2022-03-22 19:52:20,812: Sending message to ('127.0.0.1', 49279)
+INFO: 2022-03-22 19:52:20,812: Sending message to ('127.0.0.1', 49279)
+INFO: 2022-03-22 19:52:20,812: Receiving from client ('127.0.0.1', 49279)
+INFO: 2022-03-22 19:52:20,812: Sending message to ('127.0.0.1', 49278)
+INFO: 2022-03-22 19:52:20,812: Data received: Simple_Chat_Bot: I do not want to talk about the weather. It is boring and always depressing!::EOMsg::Simple_Chat_Bot: I do not want to talk about the weather. It is boring and always depressing!::EOMsg::Simple_Chat_Bot: I do not want to talk about the weather. It is boring and always depressing!::EOMsg::
+INFO: 2022-03-22 19:52:20,812: Sending message to ('127.0.0.1', 49278)
+INFO: 2022-03-22 19:52:20,812: Sending message to ('127.0.0.1', 49278)
+INFO: 2022-03-22 19:52:20,812: Sending message to ('127.0.0.1', 49278)
+INFO: 2022-03-22 19:53:49,716: A new message is sent from host
+INFO: 2022-03-22 19:53:49,716: Sending message to ('127.0.0.1', 49278)
+INFO: 2022-03-22 19:53:49,716: Sending message to ('127.0.0.1', 49279)
+INFO: 2022-03-22 19:53:49,716: Receiving from client ('127.0.0.1', 49279)
+INFO: 2022-03-22 19:53:49,716: Data received: Simple_Chat_Bot: I have the same question.::EOMsg::
+INFO: 2022-03-22 19:53:49,716: Sending message to ('127.0.0.1', 49278)
+INFO: 2022-03-22 19:54:01,846: The service is stoping due to user interaction.
+INFO: 2022-03-22 19:56:43,960: Service is listening to incomming connections on port 2020.
+INFO: 2022-03-22 19:56:43,960: A new message is sent from host
+INFO: 2022-03-22 19:56:47,613: New client connection accepted for source ('127.0.0.1', 49295).
+INFO: 2022-03-22 19:56:47,613: Receiving from client ('127.0.0.1', 49295)
+INFO: 2022-03-22 19:56:47,613: Sending message to ('127.0.0.1', 49295)
+INFO: 2022-03-22 19:56:47,613: Data received: Userchat: Userchat::EOMsg::
+INFO: 2022-03-22 19:56:51,627: New client connection accepted for source ('127.0.0.1', 49296).
+INFO: 2022-03-22 19:56:51,628: Receiving from client ('127.0.0.1', 49296)
+INFO: 2022-03-22 19:56:51,628: Data received: Simple_Chat_Bot: Simple_Chat_Bot::EOMsg::
+INFO: 2022-03-22 19:56:51,629: Sending message to ('127.0.0.1', 49296)
+INFO: 2022-03-22 19:56:51,629: Sending message to ('127.0.0.1', 49296)
+INFO: 2022-03-22 19:56:51,629: Sending message to ('127.0.0.1', 49295)
+INFO: 2022-03-22 19:56:51,630: Receiving from client ('127.0.0.1', 49296)
+INFO: 2022-03-22 19:56:51,630: Data received: Simple_Chat_Bot: If you say so!::EOMsg::Simple_Chat_Bot: The provided message is too complicated.
+                              Class MsgAnalysis can only process one simple sentence.::EOMsg::
+INFO: 2022-03-22 19:56:51,630: Sending message to ('127.0.0.1', 49295)
+INFO: 2022-03-22 19:56:51,630: Sending message to ('127.0.0.1', 49295)
+INFO: 2022-03-22 19:58:04,154: Receiving from client ('127.0.0.1', 49295)
+WARNING: 2022-03-22 19:58:04,154: Server is not receiving from ('127.0.0.1', 49295). Connection is closing!
+INFO: 2022-03-22 19:58:04,154: The connection to ('127.0.0.1', 49295) is closing.
+INFO: 2022-03-22 19:58:04,154: Sending message to ('127.0.0.1', 49296)
+INFO: 2022-03-22 19:58:04,154: Receiving from client ('127.0.0.1', 49296)
+INFO: 2022-03-22 19:58:04,154: Data received: Simple_Chat_Bot: The provided message is too complicated.
+                              Class MsgAnalysis can only process one simple sentence.::EOMsg::
+INFO: 2022-03-22 19:58:04,176: Receiving from client ('127.0.0.1', 49296)
+WARNING: 2022-03-22 19:58:04,176: Server is not receiving from ('127.0.0.1', 49296). Connection is closing!
+INFO: 2022-03-22 19:58:04,176: The connection to ('127.0.0.1', 49296) is closing.
+INFO: 2022-03-22 19:58:13,982: A new message is sent from host
+INFO: 2022-03-22 19:59:29,808: New client connection accepted for source ('127.0.0.1', 49309).
+INFO: 2022-03-22 19:59:29,808: Receiving from client ('127.0.0.1', 49309)
+INFO: 2022-03-22 19:59:29,808: Sending message to ('127.0.0.1', 49309)
+INFO: 2022-03-22 19:59:29,808: Data received: Userchat: Userchat::EOMsg::
+INFO: 2022-03-22 19:59:29,808: Sending message to ('127.0.0.1', 49309)
+INFO: 2022-03-22 19:59:29,808: Sending message to ('127.0.0.1', 49309)
+INFO: 2022-03-22 19:59:29,808: Sending message to ('127.0.0.1', 49309)
+INFO: 2022-03-22 19:59:29,808: Sending message to ('127.0.0.1', 49309)
+INFO: 2022-03-22 19:59:29,808: Sending message to ('127.0.0.1', 49309)
+INFO: 2022-03-22 19:59:29,808: Sending message to ('127.0.0.1', 49309)
+INFO: 2022-03-22 19:59:29,808: Sending message to ('127.0.0.1', 49309)
+INFO: 2022-03-22 19:59:29,818: Sending message to ('127.0.0.1', 49309)
+INFO: 2022-03-22 19:59:33,811: New client connection accepted for source ('127.0.0.1', 49312).
+INFO: 2022-03-22 19:59:33,811: Receiving from client ('127.0.0.1', 49312)
+INFO: 2022-03-22 19:59:33,811: Data received: Simple_Chat_Bot: Simple_Chat_Bot::EOMsg::
+INFO: 2022-03-22 19:59:33,811: Sending message to ('127.0.0.1', 49312)
+INFO: 2022-03-22 19:59:33,811: Sending message to ('127.0.0.1', 49312)
+INFO: 2022-03-22 19:59:33,811: Sending message to ('127.0.0.1', 49312)
+INFO: 2022-03-22 19:59:33,811: Sending message to ('127.0.0.1', 49312)
+INFO: 2022-03-22 19:59:33,811: Sending message to ('127.0.0.1', 49312)
+INFO: 2022-03-22 19:59:33,811: Sending message to ('127.0.0.1', 49312)
+INFO: 2022-03-22 19:59:33,811: Sending message to ('127.0.0.1', 49312)
+INFO: 2022-03-22 19:59:33,811: Sending message to ('127.0.0.1', 49312)
+INFO: 2022-03-22 19:59:33,811: Sending message to ('127.0.0.1', 49312)
+INFO: 2022-03-22 19:59:33,811: Sending message to ('127.0.0.1', 49312)
+INFO: 2022-03-22 19:59:33,811: Receiving from client ('127.0.0.1', 49312)
+INFO: 2022-03-22 19:59:33,811: Sending message to ('127.0.0.1', 49309)
+INFO: 2022-03-22 19:59:33,811: Data received: Simple_Chat_Bot: I did not know that.::EOMsg::Simple_Chat_Bot: The provided message is too complicated.
+                              Class MsgAnalysis can only process one simple sentence.::EOMsg::Simple_Chat_Bot: If you want to talk about the weather, you have to talk to someone else.::EOMsg::Simple_Chat_Bot: The provided message is too complicated.
+                              Class MsgAnalysis can only process one simple sentence.::EOMsg::
+INFO: 2022-03-22 19:59:33,811: Sending message to ('127.0.0.1', 49309)
+INFO: 2022-03-22 19:59:33,811: Sending message to ('127.0.0.1', 49309)
+INFO: 2022-03-22 19:59:33,811: Sending message to ('127.0.0.1', 49309)
+INFO: 2022-03-22 19:59:33,811: Sending message to ('127.0.0.1', 49309)
+INFO: 2022-03-22 19:59:43,994: A new message is sent from host
+INFO: 2022-03-22 19:59:43,994: Sending message to ('127.0.0.1', 49312)
+INFO: 2022-03-22 19:59:43,994: Sending message to ('127.0.0.1', 49309)
+INFO: 2022-03-22 19:59:43,994: Receiving from client ('127.0.0.1', 49312)
+INFO: 2022-03-22 19:59:43,994: Data received: Simple_Chat_Bot: How can you say something like that.::EOMsg::
+INFO: 2022-03-22 19:59:43,994: Sending message to ('127.0.0.1', 49309)
+INFO: 2022-03-22 20:00:41,386: Receiving from client ('127.0.0.1', 49309)
+INFO: 2022-03-22 20:00:41,386: Data received: Userchat: It is boaring!::EOMsg::
+INFO: 2022-03-22 20:00:41,386: Sending message to ('127.0.0.1', 49312)
+INFO: 2022-03-22 20:00:41,386: Receiving from client ('127.0.0.1', 49312)
+INFO: 2022-03-22 20:00:41,386: Data received: Simple_Chat_Bot: I did not know that.::EOMsg::
+INFO: 2022-03-22 20:00:41,386: Sending message to ('127.0.0.1', 49309)
+INFO: 2022-03-22 20:01:07,478: Receiving from client ('127.0.0.1', 49309)
+INFO: 2022-03-22 20:01:07,478: Data received: Userchat: Is it nice today?::EOMsg::
+INFO: 2022-03-22 20:01:07,478: Sending message to ('127.0.0.1', 49312)
+INFO: 2022-03-22 20:01:14,010: A new message is sent from host
+INFO: 2022-03-22 20:01:14,010: Sending message to ('127.0.0.1', 49309)
+INFO: 2022-03-22 20:01:14,010: Sending message to ('127.0.0.1', 49312)
+INFO: 2022-03-22 20:01:14,010: Receiving from client ('127.0.0.1', 49312)
+INFO: 2022-03-22 20:01:14,010: Data received: Simple_Chat_Bot: How can you say something like that.::EOMsg::
+INFO: 2022-03-22 20:01:14,010: Sending message to ('127.0.0.1', 49309)
+INFO: 2022-03-22 20:01:42,574: Receiving from client ('127.0.0.1', 49309)
+INFO: 2022-03-22 20:01:42,574: Data received: Userchat: Is it nice today?::EOMsg::
+INFO: 2022-03-22 20:01:42,574: Sending message to ('127.0.0.1', 49312)
+INFO: 2022-03-22 20:02:10,664: Receiving from client ('127.0.0.1', 49309)
+INFO: 2022-03-22 20:02:10,665: Data received: Userchat: Can you please respond?::EOMsg::
+INFO: 2022-03-22 20:02:10,666: Sending message to ('127.0.0.1', 49312)
+INFO: 2022-03-22 20:02:44,021: A new message is sent from host
+INFO: 2022-03-22 20:02:44,021: Sending message to ('127.0.0.1', 49312)
+INFO: 2022-03-22 20:02:44,021: Sending message to ('127.0.0.1', 49309)
+INFO: 2022-03-22 20:02:44,021: Receiving from client ('127.0.0.1', 49312)
+INFO: 2022-03-22 20:02:44,021: Data received: Simple_Chat_Bot: I do not want to talk about the weather. It is boring and always depressing!::EOMsg::
+INFO: 2022-03-22 20:02:44,021: Sending message to ('127.0.0.1', 49309)
+INFO: 2022-03-22 20:04:14,034: A new message is sent from host
+INFO: 2022-03-22 20:04:14,034: Sending message to ('127.0.0.1', 49309)
+INFO: 2022-03-22 20:04:14,034: Sending message to ('127.0.0.1', 49312)
+INFO: 2022-03-22 20:04:14,034: Receiving from client ('127.0.0.1', 49312)
+INFO: 2022-03-22 20:04:14,034: Data received: Simple_Chat_Bot: I did not know that.::EOMsg::
+INFO: 2022-03-22 20:04:14,034: Sending message to ('127.0.0.1', 49309)
+INFO: 2022-03-22 20:04:19,267: Receiving from client ('127.0.0.1', 49309)
+WARNING: 2022-03-22 20:04:19,267: Server is not receiving from ('127.0.0.1', 49309). Connection is closing!
+INFO: 2022-03-22 20:04:19,267: The connection to ('127.0.0.1', 49309) is closing.
+INFO: 2022-03-22 20:04:19,267: Sending message to ('127.0.0.1', 49312)
+INFO: 2022-03-22 20:04:19,267: Receiving from client ('127.0.0.1', 49312)
+INFO: 2022-03-22 20:04:19,267: Data received: Simple_Chat_Bot: The provided message is too complicated.
+                              Class MsgAnalysis can only process one simple sentence.::EOMsg::
+INFO: 2022-03-22 20:04:19,305: Receiving from client ('127.0.0.1', 49312)
+WARNING: 2022-03-22 20:04:19,305: Server is not receiving from ('127.0.0.1', 49312). Connection is closing!
+INFO: 2022-03-22 20:04:19,305: The connection to ('127.0.0.1', 49312) is closing.
+INFO: 2022-03-22 20:05:05,234: The service is stoping due to user interaction.
+INFO: 2022-03-22 20:06:02,827: Service is listening to incomming connections on port 2020.
+INFO: 2022-03-22 20:06:02,827: A new message is sent from host
+INFO: 2022-03-22 20:06:08,539: New client connection accepted for source ('127.0.0.1', 49347).
+INFO: 2022-03-22 20:06:08,539: Receiving from client ('127.0.0.1', 49347)
+INFO: 2022-03-22 20:06:08,539: Sending message to ('127.0.0.1', 49347)
+INFO: 2022-03-22 20:06:08,539: Data received: Userchat: Userchat::EOMsg::
+INFO: 2022-03-22 20:06:12,551: New client connection accepted for source ('127.0.0.1', 49348).
+INFO: 2022-03-22 20:06:12,551: Receiving from client ('127.0.0.1', 49348)
+INFO: 2022-03-22 20:06:12,551: Sending message to ('127.0.0.1', 49348)
+INFO: 2022-03-22 20:06:12,551: Data received: Simple_Chat_Bot: Simple_Chat_Bot::EOMsg::
+INFO: 2022-03-22 20:06:12,551: Sending message to ('127.0.0.1', 49348)
+INFO: 2022-03-22 20:06:12,551: Sending message to ('127.0.0.1', 49347)
+INFO: 2022-03-22 20:06:12,551: Receiving from client ('127.0.0.1', 49348)
+INFO: 2022-03-22 20:06:12,551: Data received: Simple_Chat_Bot: If you say so!::EOMsg::Simple_Chat_Bot: Hello::EOMsg::
+INFO: 2022-03-22 20:06:12,551: Sending message to ('127.0.0.1', 49347)
+INFO: 2022-03-22 20:06:12,551: Sending message to ('127.0.0.1', 49347)
+INFO: 2022-03-22 20:06:45,693: Receiving from client ('127.0.0.1', 49347)
+INFO: 2022-03-22 20:06:45,693: Data received: Userchat: Hi::EOMsg::
+INFO: 2022-03-22 20:06:45,693: Sending message to ('127.0.0.1', 49348)
+INFO: 2022-03-22 20:06:45,693: Receiving from client ('127.0.0.1', 49348)
+INFO: 2022-03-22 20:06:45,693: Data received: Simple_Chat_Bot: I did not know that.::EOMsg::
+INFO: 2022-03-22 20:06:45,693: Sending message to ('127.0.0.1', 49347)
+INFO: 2022-03-22 20:07:08,751: Receiving from client ('127.0.0.1', 49347)
+WARNING: 2022-03-22 20:07:08,751: Server is not receiving from ('127.0.0.1', 49347). Connection is closing!
+INFO: 2022-03-22 20:07:08,751: The connection to ('127.0.0.1', 49347) is closing.
+INFO: 2022-03-22 20:07:08,751: Sending message to ('127.0.0.1', 49348)
+INFO: 2022-03-22 20:07:08,751: Receiving from client ('127.0.0.1', 49348)
+INFO: 2022-03-22 20:07:08,751: Data received: Simple_Chat_Bot: The provided message is too complicated.
+                              Class MsgAnalysis can only process one simple sentence.::EOMsg::
+INFO: 2022-03-22 20:07:08,783: Receiving from client ('127.0.0.1', 49348)
+WARNING: 2022-03-22 20:07:08,783: Server is not receiving from ('127.0.0.1', 49348). Connection is closing!
+INFO: 2022-03-22 20:07:08,783: The connection to ('127.0.0.1', 49348) is closing.
+INFO: 2022-03-22 20:07:32,837: A new message is sent from host
+INFO: 2022-03-22 20:09:02,854: A new message is sent from host
+INFO: 2022-03-22 21:11:45,523: A new message is sent from host
+INFO: 2022-03-22 21:11:57,155: The service is stoping due to user interaction.
+INFO: 2022-03-22 21:13:28,882: Service is listening to incomming connections on port 2020.
+INFO: 2022-03-22 21:13:28,898: A new message is sent from host
+INFO: 2022-03-22 21:13:33,128: New client connection accepted for source ('127.0.0.1', 50374).
+INFO: 2022-03-22 21:13:33,128: Receiving from client ('127.0.0.1', 50374)
+INFO: 2022-03-22 21:13:33,128: Sending message to ('127.0.0.1', 50374)
+INFO: 2022-03-22 21:13:33,128: Data received: Userchat: Userchat::EOMsg::
+INFO: 2022-03-22 21:13:37,137: New client connection accepted for source ('127.0.0.1', 50375).
+INFO: 2022-03-22 21:13:37,137: Receiving from client ('127.0.0.1', 50375)
+INFO: 2022-03-22 21:13:37,137: Sending message to ('127.0.0.1', 50375)
+INFO: 2022-03-22 21:13:37,137: Data received: Simple_Chat_Bot: Simple_Chat_Bot::EOMsg::
+INFO: 2022-03-22 21:13:37,137: Sending message to ('127.0.0.1', 50375)
+INFO: 2022-03-22 21:13:37,137: Sending message to ('127.0.0.1', 50374)
+INFO: 2022-03-22 21:13:37,137: Receiving from client ('127.0.0.1', 50375)
+INFO: 2022-03-22 21:13:37,144: Data received: Simple_Chat_Bot: I have the same question.::EOMsg::Simple_Chat_Bot: Hello::EOMsg::
+INFO: 2022-03-22 21:13:37,144: Sending message to ('127.0.0.1', 50374)
+INFO: 2022-03-22 21:13:37,144: Sending message to ('127.0.0.1', 50374)
+INFO: 2022-03-22 21:14:08,238: Receiving from client ('127.0.0.1', 50374)
+INFO: 2022-03-22 21:14:08,238: Data received: Userchat: Do you like the weather?::EOMsg::
+INFO: 2022-03-22 21:14:08,238: Sending message to ('127.0.0.1', 50375)
+INFO: 2022-03-22 21:14:08,238: Receiving from client ('127.0.0.1', 50375)
+INFO: 2022-03-22 21:14:08,238: Data received: Simple_Chat_Bot: I did not know that.::EOMsg::
+INFO: 2022-03-22 21:14:08,238: Sending message to ('127.0.0.1', 50374)
+INFO: 2022-03-22 21:14:38,363: Receiving from client ('127.0.0.1', 50374)
+WARNING: 2022-03-22 21:14:38,363: Server is not receiving from ('127.0.0.1', 50374). Connection is closing!
+INFO: 2022-03-22 21:14:38,363: The connection to ('127.0.0.1', 50374) is closing.
+INFO: 2022-03-22 21:14:38,363: Sending message to ('127.0.0.1', 50375)
+INFO: 2022-03-22 21:14:38,363: Receiving from client ('127.0.0.1', 50375)
+INFO: 2022-03-22 21:14:38,363: Data received: Simple_Chat_Bot: The provided message is too complicated.
+                              Class MsgAnalysis can only process one simple sentence.::EOMsg::
+INFO: 2022-03-22 21:14:38,385: Receiving from client ('127.0.0.1', 50375)
+WARNING: 2022-03-22 21:14:38,385: Server is not receiving from ('127.0.0.1', 50375). Connection is closing!
+INFO: 2022-03-22 21:14:38,385: The connection to ('127.0.0.1', 50375) is closing.
+INFO: 2022-03-22 21:14:58,902: A new message is sent from host
+INFO: 2022-03-22 21:16:28,909: A new message is sent from host
+INFO: 2022-03-22 21:17:58,914: A new message is sent from host
+INFO: 2022-03-22 21:19:28,927: A new message is sent from host
+INFO: 2022-03-22 21:20:31,448: The service is stoping due to user interaction.
+INFO: 2022-03-22 21:39:09,400: Service is listening to incomming connections on port 2020.
+INFO: 2022-03-22 21:39:09,400: A new message is sent from host
+INFO: 2022-03-22 21:39:12,862: New client connection accepted for source ('127.0.0.1', 63031).
+INFO: 2022-03-22 21:39:12,877: Receiving from client ('127.0.0.1', 63031)
+INFO: 2022-03-22 21:39:12,877: Sending message to ('127.0.0.1', 63031)
+INFO: 2022-03-22 21:39:12,877: Data received: Userchat: Userchat::EOMsg::
+INFO: 2022-03-22 21:39:16,874: New client connection accepted for source ('127.0.0.1', 63032).
+INFO: 2022-03-22 21:39:16,874: Receiving from client ('127.0.0.1', 63032)
+INFO: 2022-03-22 21:39:16,874: Sending message to ('127.0.0.1', 63032)
+INFO: 2022-03-22 21:39:16,874: Data received: Simple_Chat_Bot: Simple_Chat_Bot::EOMsg::
+INFO: 2022-03-22 21:39:16,874: Sending message to ('127.0.0.1', 63032)
+INFO: 2022-03-22 21:39:16,874: Sending message to ('127.0.0.1', 63031)
+INFO: 2022-03-22 21:39:16,874: Receiving from client ('127.0.0.1', 63032)
+INFO: 2022-03-22 21:39:16,874: Data received: Simple_Chat_Bot: If you say so!::EOMsg::Simple_Chat_Bot: Welcome!::EOMsg::
+INFO: 2022-03-22 21:39:16,874: Sending message to ('127.0.0.1', 63031)
+INFO: 2022-03-22 21:39:16,874: Sending message to ('127.0.0.1', 63031)
+INFO: 2022-03-22 21:40:00,057: Receiving from client ('127.0.0.1', 63031)
+INFO: 2022-03-22 21:40:00,057: Data received: Userchat: The weather is nice today!::EOMsg::
+INFO: 2022-03-22 21:40:00,057: Sending message to ('127.0.0.1', 63032)
+INFO: 2022-03-22 21:40:00,057: Receiving from client ('127.0.0.1', 63032)
+INFO: 2022-03-22 21:40:00,057: Data received: Simple_Chat_Bot: I did not know that.::EOMsg::
+INFO: 2022-03-22 21:40:00,057: Sending message to ('127.0.0.1', 63031)
+INFO: 2022-03-22 21:40:18,116: Receiving from client ('127.0.0.1', 63031)
+INFO: 2022-03-22 21:40:18,116: Data received: Userchat: Do you like the weather today?::EOMsg::
+INFO: 2022-03-22 21:40:18,116: Sending message to ('127.0.0.1', 63032)
+INFO: 2022-03-22 21:40:18,116: Receiving from client ('127.0.0.1', 63032)
+INFO: 2022-03-22 21:40:18,116: Data received: Simple_Chat_Bot: If you say so!::EOMsg::
+INFO: 2022-03-22 21:40:18,116: Sending message to ('127.0.0.1', 63031)
+INFO: 2022-03-22 21:40:39,429: A new message is sent from host
+INFO: 2022-03-22 21:40:39,429: Sending message to ('127.0.0.1', 63032)
+INFO: 2022-03-22 21:40:39,429: Sending message to ('127.0.0.1', 63031)
+INFO: 2022-03-22 21:40:39,429: Receiving from client ('127.0.0.1', 63032)
+INFO: 2022-03-22 21:40:39,429: Data received: Simple_Chat_Bot: I do not want to talk about the weather. It is boring and always depressing!::EOMsg::
+INFO: 2022-03-22 21:40:39,429: Sending message to ('127.0.0.1', 63031)
+INFO: 2022-03-22 21:41:07,300: Receiving from client ('127.0.0.1', 63031)
+INFO: 2022-03-22 21:41:07,300: Data received: Userchat: Please, try again!::EOMsg::
+INFO: 2022-03-22 21:41:07,300: Sending message to ('127.0.0.1', 63032)
+INFO: 2022-03-22 21:41:07,300: Receiving from client ('127.0.0.1', 63032)
+INFO: 2022-03-22 21:41:07,300: Data received: Simple_Chat_Bot: How can you say something like that.::EOMsg::
+INFO: 2022-03-22 21:41:07,300: Sending message to ('127.0.0.1', 63031)
+INFO: 2022-03-22 21:42:09,442: A new message is sent from host
+INFO: 2022-03-22 21:42:09,442: Sending message to ('127.0.0.1', 63031)
+INFO: 2022-03-22 21:42:09,442: Sending message to ('127.0.0.1', 63032)
+INFO: 2022-03-22 21:42:09,442: Receiving from client ('127.0.0.1', 63032)
+INFO: 2022-03-22 21:42:09,442: Data received: Simple_Chat_Bot: I do not want to talk about the weather. It is boring and always depressing!::EOMsg::
+INFO: 2022-03-22 21:42:09,442: Sending message to ('127.0.0.1', 63031)
+INFO: 2022-03-22 21:42:10,530: Receiving from client ('127.0.0.1', 63031)
+INFO: 2022-03-22 21:42:10,530: Data received: Userchat: User: This is a test. Please treat this as a test.::EOMsg::
+INFO: 2022-03-22 21:42:10,530: Sending message to ('127.0.0.1', 63032)
+INFO: 2022-03-22 21:42:10,530: Receiving from client ('127.0.0.1', 63032)
+INFO: 2022-03-22 21:42:10,530: Data received: Simple_Chat_Bot: The provided message is too complicated.
+                              Class MsgAnalysis can only process one simple sentence.::EOMsg::
+INFO: 2022-03-22 21:42:10,530: Sending message to ('127.0.0.1', 63031)
+INFO: 2022-03-22 21:43:39,442: A new message is sent from host
+INFO: 2022-03-22 21:43:39,442: Sending message to ('127.0.0.1', 63032)
+INFO: 2022-03-22 21:43:39,442: Sending message to ('127.0.0.1', 63031)
+INFO: 2022-03-22 21:43:39,442: Receiving from client ('127.0.0.1', 63032)
+INFO: 2022-03-22 21:43:39,442: Data received: Simple_Chat_Bot: If you say so!::EOMsg::
+INFO: 2022-03-22 21:43:39,442: Sending message to ('127.0.0.1', 63031)
+INFO: 2022-03-22 21:45:09,451: A new message is sent from host
+INFO: 2022-03-22 21:45:09,451: Sending message to ('127.0.0.1', 63031)
+INFO: 2022-03-22 21:45:09,451: Sending message to ('127.0.0.1', 63032)
+INFO: 2022-03-22 21:45:09,453: Receiving from client ('127.0.0.1', 63032)
+INFO: 2022-03-22 21:45:09,453: Data received: Simple_Chat_Bot: If you want to talk about the weather, you have to talk to someone else.::EOMsg::
+INFO: 2022-03-22 21:45:09,453: Sending message to ('127.0.0.1', 63031)
+INFO: 2022-03-22 21:45:21,512: Receiving from client ('127.0.0.1', 63031)
+WARNING: 2022-03-22 21:45:21,512: Server is not receiving from ('127.0.0.1', 63031). Connection is closing!
+INFO: 2022-03-22 21:45:21,512: The connection to ('127.0.0.1', 63031) is closing.
+INFO: 2022-03-22 21:45:21,512: Sending message to ('127.0.0.1', 63032)
+INFO: 2022-03-22 21:45:21,512: Receiving from client ('127.0.0.1', 63032)
+INFO: 2022-03-22 21:45:21,512: Data received: Simple_Chat_Bot: The provided message is too complicated.
+                              Class MsgAnalysis can only process one simple sentence.::EOMsg::
+INFO: 2022-03-22 21:45:21,543: Receiving from client ('127.0.0.1', 63032)
+WARNING: 2022-03-22 21:45:21,543: Server is not receiving from ('127.0.0.1', 63032). Connection is closing!
+INFO: 2022-03-22 21:45:21,543: The connection to ('127.0.0.1', 63032) is closing.
+INFO: 2022-03-22 21:45:27,856: The service is stoping due to user interaction.
+INFO: 2022-03-22 21:48:34,998: Service is listening to incomming connections on port 2020.
+INFO: 2022-03-22 21:48:35,013: A new message is sent from host
+INFO: 2022-03-22 21:48:39,511: New client connection accepted for source ('127.0.0.1', 63100).
+INFO: 2022-03-22 21:48:39,511: Receiving from client ('127.0.0.1', 63100)
+INFO: 2022-03-22 21:48:39,511: Sending message to ('127.0.0.1', 63100)
+INFO: 2022-03-22 21:48:39,511: Data received: Userchat: Userchat::EOMsg::
+INFO: 2022-03-22 21:48:43,515: New client connection accepted for source ('127.0.0.1', 63101).
+INFO: 2022-03-22 21:48:43,515: Receiving from client ('127.0.0.1', 63101)
+INFO: 2022-03-22 21:48:43,515: Sending message to ('127.0.0.1', 63101)
+INFO: 2022-03-22 21:48:43,515: Data received: Simple_Chat_Bot: Simple_Chat_Bot::EOMsg::
+INFO: 2022-03-22 21:48:43,515: Sending message to ('127.0.0.1', 63101)
+INFO: 2022-03-22 21:48:43,515: Sending message to ('127.0.0.1', 63100)
+INFO: 2022-03-22 21:48:43,522: Receiving from client ('127.0.0.1', 63101)
+INFO: 2022-03-22 21:48:43,522: Data received: Simple_Chat_Bot: How can you say something like that.::EOMsg::Simple_Chat_Bot: Welcome!::EOMsg::
+INFO: 2022-03-22 21:48:43,522: Sending message to ('127.0.0.1', 63100)
+INFO: 2022-03-22 21:48:43,522: Sending message to ('127.0.0.1', 63100)
+INFO: 2022-03-22 21:49:56,843: Receiving from client ('127.0.0.1', 63100)
+INFO: 2022-03-22 21:49:56,843: Data received: Userchat: Do you like the weather today?::EOMsg::
+INFO: 2022-03-22 21:49:56,843: Sending message to ('127.0.0.1', 63101)
+INFO: 2022-03-22 21:49:56,843: Receiving from client ('127.0.0.1', 63101)
+INFO: 2022-03-22 21:49:56,843: Data received: Simple_Chat_Bot: I think it is nice!::EOMsg::
+INFO: 2022-03-22 21:49:56,843: Sending message to ('127.0.0.1', 63100)
+INFO: 2022-03-22 21:50:05,016: A new message is sent from host
+INFO: 2022-03-22 21:50:05,016: Sending message to ('127.0.0.1', 63101)
+INFO: 2022-03-22 21:50:05,016: Sending message to ('127.0.0.1', 63100)
+INFO: 2022-03-22 21:50:05,016: Receiving from client ('127.0.0.1', 63101)
+INFO: 2022-03-22 21:50:05,016: Data received: Simple_Chat_Bot: I have the same question.::EOMsg::
+INFO: 2022-03-22 21:50:05,016: Sending message to ('127.0.0.1', 63100)
+INFO: 2022-03-22 21:50:22,960: Receiving from client ('127.0.0.1', 63100)
+INFO: 2022-03-22 21:50:22,960: Data received: Userchat: Is it sunny in Oslo?::EOMsg::
+INFO: 2022-03-22 21:50:22,960: Sending message to ('127.0.0.1', 63101)
+INFO: 2022-03-22 21:50:22,960: Receiving from client ('127.0.0.1', 63101)
+INFO: 2022-03-22 21:50:22,960: Data received: Simple_Chat_Bot: I did not know that.::EOMsg::
+INFO: 2022-03-22 21:50:22,960: Sending message to ('127.0.0.1', 63100)
+INFO: 2022-03-22 21:50:41,009: Receiving from client ('127.0.0.1', 63100)
+WARNING: 2022-03-22 21:50:41,009: Server is not receiving from ('127.0.0.1', 63100). Connection is closing!
+INFO: 2022-03-22 21:50:41,009: The connection to ('127.0.0.1', 63100) is closing.
+INFO: 2022-03-22 21:50:41,009: Sending message to ('127.0.0.1', 63101)
+INFO: 2022-03-22 21:50:41,009: Receiving from client ('127.0.0.1', 63101)
+INFO: 2022-03-22 21:50:41,009: Data received: Simple_Chat_Bot: The provided message is too complicated.
+                              I can only process one sentence sentence.::EOMsg::
+INFO: 2022-03-22 21:50:41,041: Receiving from client ('127.0.0.1', 63101)
+WARNING: 2022-03-22 21:50:41,041: Server is not receiving from ('127.0.0.1', 63101). Connection is closing!
+INFO: 2022-03-22 21:50:41,041: The connection to ('127.0.0.1', 63101) is closing.
+INFO: 2022-03-22 21:51:35,024: A new message is sent from host
+INFO: 2022-03-22 21:53:05,033: A new message is sent from host
+INFO: 2022-03-22 21:54:35,046: A new message is sent from host
+INFO: 2022-03-22 21:56:05,057: A new message is sent from host
+INFO: 2022-03-22 21:57:35,069: A new message is sent from host
+INFO: 2022-03-22 21:59:05,081: A new message is sent from host
+INFO: 2022-03-22 21:59:56,848: The service is stoping due to user interaction.
+INFO: 2022-03-22 22:00:18,559: Service is listening to incomming connections on port 2020.
+INFO: 2022-03-22 22:00:18,559: A new message is sent from host
+INFO: 2022-03-22 22:00:24,258: New client connection accepted for source ('127.0.0.1', 63232).
+INFO: 2022-03-22 22:00:24,258: Receiving from client ('127.0.0.1', 63232)
+INFO: 2022-03-22 22:00:24,258: Data received: Userchat: Userchat::EOMsg::
+INFO: 2022-03-22 22:00:24,258: Sending message to ('127.0.0.1', 63232)
+INFO: 2022-03-22 22:00:28,261: New client connection accepted for source ('127.0.0.1', 63233).
+INFO: 2022-03-22 22:00:28,261: Receiving from client ('127.0.0.1', 63233)
+INFO: 2022-03-22 22:00:28,261: Data received: Simple_Chat_Bot: Simple_Chat_Bot::EOMsg::
+INFO: 2022-03-22 22:00:28,261: Sending message to ('127.0.0.1', 63233)
+INFO: 2022-03-22 22:00:28,261: Sending message to ('127.0.0.1', 63233)
+INFO: 2022-03-22 22:00:28,261: Sending message to ('127.0.0.1', 63232)
+INFO: 2022-03-22 22:00:28,261: Receiving from client ('127.0.0.1', 63233)
+INFO: 2022-03-22 22:00:28,267: Data received: Simple_Chat_Bot: If you say so!::EOMsg::Simple_Chat_Bot: Welcome!::EOMsg::
+INFO: 2022-03-22 22:00:28,267: Sending message to ('127.0.0.1', 63232)
+INFO: 2022-03-22 22:00:28,267: Sending message to ('127.0.0.1', 63232)
+INFO: 2022-03-22 22:00:30,472: New client connection accepted for source ('127.0.0.1', 63234).
+INFO: 2022-03-22 22:00:30,472: Receiving from client ('127.0.0.1', 63234)
+INFO: 2022-03-22 22:00:30,472: Data received: Weather_Bot: Weather_Bot::EOMsg::
+INFO: 2022-03-22 22:00:30,472: Sending message to ('127.0.0.1', 63234)
+INFO: 2022-03-22 22:00:30,472: Sending message to ('127.0.0.1', 63234)
+INFO: 2022-03-22 22:00:30,472: Sending message to ('127.0.0.1', 63234)
+INFO: 2022-03-22 22:00:30,472: Sending message to ('127.0.0.1', 63234)
+INFO: 2022-03-22 22:00:30,472: Sending message to ('127.0.0.1', 63234)
+INFO: 2022-03-22 22:00:30,472: Receiving from client ('127.0.0.1', 63234)
+INFO: 2022-03-22 22:00:30,472: Sending message to ('127.0.0.1', 63232)
+INFO: 2022-03-22 22:00:30,472: Data received: Weather_Bot: I did not know that.::EOMsg::Weather_Bot: Welcome!::EOMsg::Weather_Bot: Hi::EOMsg::
+INFO: 2022-03-22 22:00:30,472: Sending message to ('127.0.0.1', 63233)
+INFO: 2022-03-22 22:00:30,472: Receiving from client ('127.0.0.1', 63233)
+INFO: 2022-03-22 22:00:30,472: Sending message to ('127.0.0.1', 63232)
+INFO: 2022-03-22 22:00:30,472: Data received: Simple_Chat_Bot: Hi::EOMsg::
+INFO: 2022-03-22 22:00:30,472: Sending message to ('127.0.0.1', 63233)
+INFO: 2022-03-22 22:00:30,472: Sending message to ('127.0.0.1', 63232)
+INFO: 2022-03-22 22:00:30,472: Sending message to ('127.0.0.1', 63233)
+INFO: 2022-03-22 22:00:30,472: Sending message to ('127.0.0.1', 63232)
+INFO: 2022-03-22 22:00:30,472: Sending message to ('127.0.0.1', 63233)
+INFO: 2022-03-22 22:00:30,472: Sending message to ('127.0.0.1', 63232)
+INFO: 2022-03-22 22:00:30,472: Sending message to ('127.0.0.1', 63234)
+INFO: 2022-03-22 22:01:48,572: A new message is sent from host
+INFO: 2022-03-22 22:01:48,572: Sending message to ('127.0.0.1', 63232)
+INFO: 2022-03-22 22:01:48,572: Sending message to ('127.0.0.1', 63233)
+INFO: 2022-03-22 22:01:48,572: Sending message to ('127.0.0.1', 63234)
+INFO: 2022-03-22 22:01:48,572: Receiving from client ('127.0.0.1', 63233)
+INFO: 2022-03-22 22:01:48,572: Data received: Simple_Chat_Bot: If you say so!::EOMsg::
+INFO: 2022-03-22 22:01:48,572: Receiving from client ('127.0.0.1', 63234)
+INFO: 2022-03-22 22:01:48,572: Sending message to ('127.0.0.1', 63232)
+INFO: 2022-03-22 22:01:48,572: Data received: Weather_Bot: If you say so!::EOMsg::
+INFO: 2022-03-22 22:01:48,572: Sending message to ('127.0.0.1', 63234)
+INFO: 2022-03-22 22:01:48,572: Sending message to ('127.0.0.1', 63232)
+INFO: 2022-03-22 22:01:48,572: Sending message to ('127.0.0.1', 63233)
+INFO: 2022-03-22 22:03:18,584: A new message is sent from host
+INFO: 2022-03-22 22:03:18,584: Sending message to ('127.0.0.1', 63234)
+INFO: 2022-03-22 22:03:18,584: Sending message to ('127.0.0.1', 63232)
+INFO: 2022-03-22 22:03:18,584: Sending message to ('127.0.0.1', 63233)
+INFO: 2022-03-22 22:03:18,584: Receiving from client ('127.0.0.1', 63233)
+INFO: 2022-03-22 22:03:18,584: Data received: Simple_Chat_Bot: If you want to talk about the weather, you have to talk to someone else.::EOMsg::
+INFO: 2022-03-22 22:03:18,584: Sending message to ('127.0.0.1', 63234)
+INFO: 2022-03-22 22:03:18,590: Sending message to ('127.0.0.1', 63232)
+INFO: 2022-03-22 22:04:48,599: A new message is sent from host
+INFO: 2022-03-22 22:04:48,599: Sending message to ('127.0.0.1', 63234)
+INFO: 2022-03-22 22:04:48,599: Sending message to ('127.0.0.1', 63232)
+INFO: 2022-03-22 22:04:48,599: Sending message to ('127.0.0.1', 63233)
+INFO: 2022-03-22 22:04:48,599: Receiving from client ('127.0.0.1', 63233)
+INFO: 2022-03-22 22:04:48,599: Data received: Simple_Chat_Bot: I did not know that.::EOMsg::
+INFO: 2022-03-22 22:04:48,599: Sending message to ('127.0.0.1', 63234)
+INFO: 2022-03-22 22:04:48,599: Sending message to ('127.0.0.1', 63232)
+INFO: 2022-03-22 22:06:18,615: A new message is sent from host
+INFO: 2022-03-22 22:06:18,615: Sending message to ('127.0.0.1', 63233)
+INFO: 2022-03-22 22:06:18,615: Sending message to ('127.0.0.1', 63234)
+INFO: 2022-03-22 22:06:18,615: Receiving from client ('127.0.0.1', 63233)
+INFO: 2022-03-22 22:06:18,615: Sending message to ('127.0.0.1', 63232)
+INFO: 2022-03-22 22:06:18,615: Data received: Simple_Chat_Bot: How can you say something like that.::EOMsg::
+INFO: 2022-03-22 22:06:18,615: Sending message to ('127.0.0.1', 63232)
+INFO: 2022-03-22 22:06:18,615: Sending message to ('127.0.0.1', 63234)
+INFO: 2022-03-22 22:07:48,627: A new message is sent from host
+INFO: 2022-03-22 22:07:48,627: Sending message to ('127.0.0.1', 63234)
+INFO: 2022-03-22 22:07:48,627: Sending message to ('127.0.0.1', 63232)
+INFO: 2022-03-22 22:07:48,627: Sending message to ('127.0.0.1', 63233)
+INFO: 2022-03-22 22:07:48,627: Receiving from client ('127.0.0.1', 63233)
+INFO: 2022-03-22 22:07:48,627: Data received: Simple_Chat_Bot: How can you say something like that.::EOMsg::
+INFO: 2022-03-22 22:07:48,627: Sending message to ('127.0.0.1', 63234)
+INFO: 2022-03-22 22:07:48,627: Sending message to ('127.0.0.1', 63232)
+INFO: 2022-03-22 22:08:30,039: Receiving from client ('127.0.0.1', 63232)
+WARNING: 2022-03-22 22:08:30,039: Server is not receiving from ('127.0.0.1', 63232). Connection is closing!
+INFO: 2022-03-22 22:08:30,039: The connection to ('127.0.0.1', 63232) is closing.
+INFO: 2022-03-22 22:08:30,039: Sending message to ('127.0.0.1', 63233)
+INFO: 2022-03-22 22:08:30,039: Sending message to ('127.0.0.1', 63234)
+INFO: 2022-03-22 22:08:30,039: Receiving from client ('127.0.0.1', 63233)
+INFO: 2022-03-22 22:08:30,039: Data received: Simple_Chat_Bot: The provided message is too complicated.
+                              I can only process one sentence sentence.::EOMsg::
+INFO: 2022-03-22 22:08:30,039: Sending message to ('127.0.0.1', 63234)
+INFO: 2022-03-22 22:08:30,070: Receiving from client ('127.0.0.1', 63233)
+WARNING: 2022-03-22 22:08:30,070: Server is not receiving from ('127.0.0.1', 63233). Connection is closing!
+INFO: 2022-03-22 22:08:30,070: The connection to ('127.0.0.1', 63233) is closing.
+INFO: 2022-03-22 22:08:30,070: Receiving from client ('127.0.0.1', 63234)
+INFO: 2022-03-22 22:08:30,070: Sending message to ('127.0.0.1', 63234)
+WARNING: 2022-03-22 22:08:30,070: The connection with the client ('127.0.0.1', 63234) has ended: [WinError 10054] En eksisterende tilkobling ble tvangslukket av den eksterne verten
+WARNING: 2022-03-22 22:08:30,070: The connection with the client ('127.0.0.1', 63234) has ended: [WinError 10054] En eksisterende tilkobling ble tvangslukket av den eksterne verten
+INFO: 2022-03-22 22:08:30,070: The connection to ('127.0.0.1', 63234) is closing.
+INFO: 2022-03-22 22:08:54,867: The service is stoping due to user interaction.

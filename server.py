@@ -319,10 +319,6 @@ class SimpleChatServer:
         self.sendQueues[cliSock.getpeername()][1] = msgList.pop()
         
         if clientVariables[2] == "":
-            #regexResult = self.botnamePattern.search(data_recv)
-            #if bool(regexResult):
-            #    clientVariables[2] = regexResult.groups()[0] 
-            
             # If there is no username registered for the socket, then 
             # the message must be the first message (connection message), 
             # containing only the username
@@ -370,7 +366,7 @@ if __name__=="__main__":
     
     #Handle command line argument
     parser = argparse.ArgumentParser(description="This program starts a sigle threaded chat service.")
-    parser.add_argument('-p', '--Port', nargs='?', const=2020, metavar="PORT",
+    parser.add_argument('-p', '--Port', nargs='?', default=2020, metavar="PORT",
                         type=int, help="The port number associated with the service")
     args = parser.parse_args()
     

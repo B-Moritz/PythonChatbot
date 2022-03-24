@@ -231,7 +231,7 @@ class WeatherApi:
                 return "partially cloudy"
             else:
                 # If  the fraction is greater or equal to 75%
-                return "sunny"
+                return "clear"
     
     def convertTemperature(self, airTemp):
         """

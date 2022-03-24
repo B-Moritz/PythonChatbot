@@ -1,0 +1,8 @@
+What is the temperature in Oslo?
+Is it sunny in Oslo?
+How is the weather in Berlin?
+It is cloudy in Oslo!
+It is a bad day!
+Do you like the weather in London?
+How would you rate the weather in Paris?
+

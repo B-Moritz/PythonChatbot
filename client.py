@@ -335,49 +335,107 @@ class ChatBot(ChatUser, threading.Thread):
             self.sendToServer(self.cliSock)
             
     def initiateClosure(self):
+        """
+        This method initiates the termination of the client socket for the bot.
+        """
+        # The event flag is set in order to break the while loop in the main thread 
         self.event.set()
         print(f"{self.username} is disconnected!")
         
-    def sendInitialMessage(self, user):
-        self.sendQueue.put(f"{user}")
+        
+    def sendInitialMessage(self, botName):
+        """
+        This method adds the botname to the send queue. 
+
+        Parameters
+        ----------
+        botName : String
+            The name of the bot which is joining the chat thread.
+        """
+        self.sendQueue.put(f"{botName}")
             
     def generateResponse(self):
+        """
+        This method generates the response to the last received message.
+        If there are several messages in the receive queue for the client, 
+        all messages except the latest will be ignored. The method then 
+        executes the analysis of the message with the MsgAnalysis class and 
+        adds a response message to the send queue.
         
+        The method calls the getBotResponse method in order to get the specific 
+        bot. The getBotResponse should be overwritten for each bot that inherits 
+        the ChatBot classs. This way the response can be customized for each bot.
+        """
         while self.recvQueue.qsize() > 1:
             # If the receive queue contains more than one message, 
             # then all messages are dropped except one (the latest)
             self.recvQueue.get()
-        
+        # The last message is set as the message to be handled by the bot    
         curMsg = self.recvQueue.get()
         if not bool(self.unamePattern.search(curMsg)):
             # if the message is not from a bot
             try:
                 msgObj = MsgAnalysis(curMsg)
             except ValueError as E:
+                # If the messag cannot be handeled by the analysis class, 
+                # then send the exception as a message.
                 self.sendQueue.put(str(E))
                 return
-            
+            # Call the classify method to add tags to the message
             msgObj.classifyMsg()
             
-            if Tags.join in msgObj.tags:
-                self.sendQueue.put(random.choice(self.greetings))
-                print(f"Greeting because of: {curMsg}")
-                return
             
-            if Tags.question in msgObj.tags:
-                
-                if Tags.opinion in msgObj.tags:
-                    self.sendQueue.put(random.choice(self.opinionResponses))
-                elif Tags.temperature in msgObj.tags or Tags.weather in msgObj.tags:
-                    self.sendQueue.put(random.choice(self.weatherResponse))
-                elif Tags.location in msgObj.tags:
-                    self.sendQueue.put(random.choice(self.locationResponse))
-                    
-            elif Tags.statement in msgObj.tags:
-                self.sendQueue.put(random.choice(self.statementResponses))
+            if Tags.join in msgObj.tags:
+                # If the message is taged as join message then add a 
+                # greeting and return.
+                self.sendQueue.put(random.choice(self.greetings))
+                #print(f"Greeting because of: {curMsg}") # Used for debuging
+            else: 
+                # Get the specific response for the bot 
+                response = self.getBotResponse(msgObj)
+                # Send the response
+                self.sendQueue.put(response)
+            
+    def getBotResponse(self, msgObj):
+        """
+        This method is finding a simple response to a message. The method 
+        takes an MsgAnalysis object as argument.
         
-            else:
-                self.sendQueue.put(random.choice(self.generalResponse))
+        Parameters
+        ----------
+        msgObj : MsgAnalysis
+            An object with the message that should be responded to.
+            The object should contian the result of classsification process
+            (see docstring of MsgAnalysis). 
+
+        Returns
+        -------
+        The method returns a string, which is the response to the message in 
+        the provided MsgAnalysis object.
+
+        """
+        if Tags.question in msgObj.tags:
+            # Is the message a question?
+            if Tags.opinion in msgObj.tags:
+                # If the message is a request for an opinion, then 
+                # return a random response for opinion questions
+                return(random.choice(self.opinionResponses))
+            elif Tags.temperature in msgObj.tags or Tags.weather in msgObj.tags:
+                # If the message is asking for the temperature or the weather 
+                # then return a random weather response
+                return(random.choice(self.weatherResponse))
+            elif Tags.location in msgObj.tags:
+                # If the question only contians a location then 
+                # Return a random location response.
+                return(random.choice(self.locationResponse))
+                
+        elif Tags.statement in msgObj.tags:
+            # Is the message a statement/suggestion?
+            # A random statement response is returned.
+            return(random.choice(self.statementResponses))
+        else:
+            # General response
+            return(random.choice(self.generalResponse))
                 
                 
 class WeatherBot(ChatBot):
@@ -390,128 +448,148 @@ class WeatherBot(ChatBot):
         self.YrObj = yr.WeatherApi()
         
                 
-    def generateResponse(self):
-        while self.recvQueue.qsize() > 1:
-            # If the receive queue contains more than one message, 
-            # then all messages are dropped except one (the latest)
-            self.recvQueue.get()
-        # The last message is set as the message to be handled by the bot    
-        curMsg = self.recvQueue.get()
+    # def generateResponse(self):
+    #     while self.recvQueue.qsize() > 1:
+    #         # If the receive queue contains more than one message, 
+    #         # then all messages are dropped except one (the latest)
+    #         self.recvQueue.get()
+    #     # The last message is set as the message to be handled by the bot    
+    #     curMsg = self.recvQueue.get()
         
-        if not bool(self.unamePattern.search(curMsg)):
-            # if the message is not from a bot
+    #     if not bool(self.unamePattern.search(curMsg)):
+    #         # if the message is not from a bot
+    #         try:
+    #             msgObj = MsgAnalysis(curMsg)
+    #         except ValueError as E:
+    #             # If the messag cannot be handeled by the analysis class, 
+    #             # then send the exception as a message.
+    #             self.sendQueue.put(str(E))
+    #             return
+    #         # Call the classify method to add tags to the message
+    #         msgObj.classifyMsg()
             
-            # The message is analyzed by instantiating an analysis object 
-            # and running the classification method 
-            try:
-                msgObj = MsgAnalysis(curMsg)
-            except ValueError as E:
-                # If the messag cannot be handeled by the analysis class, 
-                # then send the exception message.
-                self.sendQueue.put(str(E))
-                return
-            # call the classify method to add tags to the message
-            msgObj.classifyMsg()
+    #         #print(msgObj.tags) # Used to debug
             
-            print(msgObj.tags) # Used to debug
-            
-            if Tags.join in msgObj.tags:
-                # If the message is taged as join message then add a 
-                # greeting and return.
-                self.sendQueue.put(random.choice(self.greetings))
-                print(f"Greeting because of: {curMsg}") # Used for debug
-                return
-            
-            if Tags.question in msgObj.tags:
-                # Is the message a question?
-                print("Question identified") # Used for debug
-                if Tags.opinion in msgObj.tags:
-                    # Is the message asking for an opinion?
-                    print("Opinion identified") #Used for Debug
-                    
-                    if Tags.weather in msgObj.tags and Tags.location in msgObj.tags:
-                        # Does the message contain weather subjects and a location?
-                        print("Weather and location identified") # Used for debug
-                        try:
-                            # Get weather data for the specified location
-                            self.YrObj.getCurrentWeatherData(msgObj.location)
-                            # Add message about the weather for the given location
-                            self.sendQueue.put(f"The weather in {msgObj.location} is \
-                                               {self.YrObj.convertCloudArea()} and \
-                                               {self.YrObj.convertTemperature()}!")
-                        except ValueError:
-                            print("City not found in list") # Used for debug
-                            # The location was not identified as a city.
-                            self.sendQueue.put(random.choice(self.unknownLocation))
-                    elif Tags.weather in msgObj.tags:
-                        print("weather but no location was identified") # Used for debug
-                        # The location was not identified.
-                        self.sendQueue.put(random.choice(self.unknownLocation))
-                    else:
-                        print("general opinion response") # Used for debug
-                        # General response for opinion questions
-                        self.sendQueue.put(random.choice(self.opinionResponses))
+    #         if Tags.join in msgObj.tags:
+    #             # If the message is taged as join message then add a 
+    #             # greeting and return.
+    #             self.sendQueue.put(random.choice(self.greetings))
+    #             # print(f"Greeting because of: {curMsg}") # Used for debug
+    #             return
+    #         else:
+                
+    def getBotResponse(self, msgObj):
+        """
+        This method geterates a response to the message provided as argument.
+        The response is specific for the Weatherbot. 
+
+        Parameters
+        ----------
+        msgObj : MsgAnalysis
+            An object with the message that should be responded to.
+            The object should contian the result of classsification process
+            (see docstring of MsgAnalysis). 
+
+        Returns
+        -------
+        The method returns a string, which is the response to the message in 
+        the provided MsgAnalysis object.
+
+        """
+        if Tags.question in msgObj.tags:
+            # Is the message a question?
+            #print("Question identified") # Used for debug
+            if Tags.opinion in msgObj.tags:
+                # Is the message asking for an opinion?
+                #print("Opinion identified") #Used for Debug
+                
+                if Tags.weather in msgObj.tags and Tags.location in msgObj.tags:
+                    # Does the message contain weather subjects and a location?
+                    #print("Weather and location identified") # Used for debug
+                    try:
+                        # Get weather data for the specified location
+                        airTemp, cloudAreaFrac = self.YrObj.getCurrentWeatherData(msgObj.location)
+                        # Add message about the weather for the given location
+                        return("The weather in " + msgObj.location + 
+                                           " is " + self.YrObj.convertCloudArea(cloudAreaFrac) + 
+                                           " and " + self.YrObj.convertTemperature(airTemp) + ". " + 
+                                           ("I like it!" if airTemp > 15 and cloudAreaFrac < 10 else "I do not like it!") + 
+                                           "\n Information is based on data from MET Norway.")
+                                            # The bot likes the weather if air temperature is greater than 15 and 
+                                            # cloud area fraction is less than 10 %.
                         
-                elif Tags.temperature in msgObj.tags:
-                    # Is the message about the temperature?
-                    print("Temperature identified") # Used for debug
-                    if Tags.location in msgObj.tags:
-                        # Is the message containing a location?
-                        print("Location identified") # Used for debug
-                        try:
-                            # Get the weather data for the location
-                            self.YrObj.getCurrentWeatherData(msgObj.location)
-                            # Send a message informing about the temperature for the next hour.
-                            self.sendQueue.put("The temperature in " + msgObj.location + 
-                                               " is " + str(self.YrObj.curData['Air temperature']) 
-                                               + " degree celcius!\n Based on data from MET Norway.")
-                        except ValueError:
-                            print("City not found in list") # Used for debug
-                            # The location was not identified as a city.
-                            self.sendQueue.put(random.choice(self.unknownLocation))
-                    else:
-                        print("weather but no location was identified") # Used for debug
-                        # The location was not identified.
-                        self.sendQueue.put(random.choice(self.unknownLocation))
-                        
+                    except ValueError:
+                        #print("City not found in list") # Used for debug
+                        # The location was not identified as a city.
+                        return(random.choice(self.unknownLocation))
                 elif Tags.weather in msgObj.tags:
-                    print("weather was identified") # Used for debug
-                    # Is the message askin for the wether?
-                    if Tags.location in msgObj.tags:
-                        print("Location identified") # Used for debug
-                        try:
-                            # Get the weather data for the given location
-                            self.YrObj.getCurrentWeatherData(msgObj.location)
-                            # Send a message about the weather at the given location the next hour.
-                            self.sendQueue.put("The temperature in " + msgObj.location + 
-                                              " is " + str(self.YrObj.curData['Air temperature']) +
-                                              " degree celcius! The sky is " + 
-                                              str(self.YrObj.convertCloudArea(self.YrObj.curData['Cloud_area_fraction'])) + 
-                                              ".\n Based on data from MET Norway.")
-                                               
-                        except ValueError:
-                            print("Location was not found in list") # Used for debug
-                            # The location was not identified as a city.
-                            self.sendQueue.put(random.choice(self.unknownLocation))
-                             
-            elif Tags.statement in msgObj.tags:
-                print("identified as statement/suggestion")
-                self.sendQueue.put(random.choice(self.statementResponses))
-            else:
-                
-                self.sendQueue.put(random.choice(self.generalResponse))
-                
-            print("-------- [ End response generation] -------------")
-                            
+                    #print("weather but no location was identified") # Used for debug
+                    # The location was not identified.
+                    return(random.choice(self.unknownLocation))
+                else:
+                    #print("general opinion response") # Used for debug
+                    # General response for opinion questions
+                    return(random.choice(self.opinionResponses))
+                    
+            elif Tags.temperature in msgObj.tags:
+                # Is the message about the temperature?
+                #print("Temperature identified") # Used for debug
+                if Tags.location in msgObj.tags:
+                    # Is the message containing a location?
+                    #print("Location identified") # Used for debug
+                    try:
+                        # Get the weather data for the location
+                        self.YrObj.getCurrentWeatherData(msgObj.location)
+                        # Send a message informing about the temperature for the next hour.
+                        return("The temperature in " + msgObj.location + 
+                                           " is " + str(self.YrObj.curData['Air temperature']) 
+                                           + " degree celcius!" + 
+                                           "\n Information is based on data from MET Norway.")
+                    except ValueError:
+                        #print("City not found in list") # Used for debug
+                        # The location was not identified as a city.
+                        return(random.choice(self.unknownLocation))
+                else:
+                    #print("weather but no location was identified") # Used for debug
+                    # The location was not identified.
+                    return(random.choice(self.unknownLocation))
+                    
+            elif Tags.weather in msgObj.tags:
+                #print("weather was identified") # Used for debug
+                # Is the message askin for the wether?
+                if Tags.location in msgObj.tags:
+                    #print("Location identified") # Used for debug
+                    try:
+                        # Get the weather data for the given location
+                        self.YrObj.getCurrentWeatherData(msgObj.location)
+                        # Send a message about the weather at the given location the next hour.
+                        return("The temperature in " + msgObj.location + 
+                                          " is " + str(self.YrObj.curData['Air temperature']) +
+                                          " degree celcius! The sky is " + 
+                                          str(self.YrObj.convertCloudArea(self.YrObj.curData['Cloud_area_fraction'])) + 
+                                          ".\n Information is based on data from MET Norway.")
+                                           
+                    except ValueError:
+                        #print("Location was not found in list") # Used for debug
+                        # The location was not identified as a city.
+                        return(random.choice(self.unknownLocation))
+                         
+        elif Tags.statement in msgObj.tags:
+            #print("identified as statement/suggestion")
+            return(random.choice(self.statementResponses))
+        else:
+            # If the message is not a statement or a question, reply with general response
+            return(random.choice(self.generalResponse))
+                        
             
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="This program starts all chatbots defined and connects \
                                      them to the server")
                                      
-    parser.add_argument("-d", "--Dest", nargs='?', const=socket.gethostbyname(socket.gethostname())
+    parser.add_argument("-d", "--Dest", nargs='?', default=socket.gethostbyname(socket.gethostname())
                         , metavar="DESTINATION", type=str, help="The IPv4 address of the server")
     
-    parser.add_argument("-p", "--Port", nargs='?', const=2020, metavar="PORT", type=int, help="Portnumber that the server is listening on.")
+    parser.add_argument("-p", "--Port", nargs='?', default=2020, metavar="PORT", type=int, help="Portnumber that the server is listening on.")
     argParsed = parser.parse_args()
     
     testChat = ChatUser(argParsed.Dest, argParsed.Port)

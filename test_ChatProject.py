@@ -34,42 +34,42 @@ class testClientModule(unittest.TestCase):
         joinObj = MsgAnalysis(joinMessage)
         joinObj.classifyMsg()
         
-        # Assert that the message only has one tag
+        # Check that the message only has one tag
         self.assertEqual(len(joinObj.tags), 1)
-        # Assert that the join tag is the first tag
+        # Check that the join tag is the first tag
         self.assertEqual(joinObj.tags[0], Tags.join)
 
         # Case: The message is a question
         questionMessage = "\nHost: How is the weather in Berlin?"
         questionObj = MsgAnalysis(questionMessage)
         questionObj.classifyMsg()
-        # Assert that the questionObject is adding the weather tag.
+        # Check that the questionObject is adding the weather tag.
         self.assertTrue(Tags.weather in questionObj.tags)
-        # Assert that the questionObject has added the question tag
+        # Check that the questionObject has added the question tag
         self.assertTrue(Tags.question in questionObj.tags)
-        # Assert that the location has been identified:
+        # Check that the location has been identified:
         self.assertEqual(questionObj.location, "Berlin", "The location was not identified")
-        # Assert that the message is not taged as join
+        # Check that the message is not taged as join
         self.assertFalse(Tags.join in questionObj.tags, "The join tag should not be added for questions.") 
         
         # Case: The message is a statement/suggestion
         statement = "\nUser: It is cold today!"
         statObj = MsgAnalysis(statement)
         statObj.classifyMsg()
-        # Assert that the message is taged as a statement:
+        # Check that the message is taged as a statement:
         self.assertTrue(Tags.statement in statObj.tags)
-        # Assert that the message is not taged as question
+        # Check that the message is not taged as question
         self.assertFalse(Tags.question in statObj.tags)
-        # Assert that the message is taged with temperature
+        # Check that the message is taged with temperature
         self.assertTrue(Tags.temperature in statObj.tags)
-        # Assert that the message is not taged with location
+        # Check that the message is not taged with location
         self.assertFalse(Tags.location in statObj.tags)
         
         # Case: The message asks for an opinion
         opinion = "\nHost: How would you rate the weather today?"
         opiObj = MsgAnalysis(opinion)
         opiObj.classifyMsg()
-        # Assert that the message is classified as opinion
+        # Control that the message is classified as opinion
         self.assertTrue(Tags.opinion in opiObj.tags, "The message should be taged as opinion.")
         self.assertTrue(Tags.weather in opiObj.tags, "The message should be taged with subject weather!")
         self.assertTrue(Tags.question in opiObj.tags, "The message should be taged as a question!")
@@ -79,7 +79,7 @@ class testClientModule(unittest.TestCase):
         question = "\nUser: Is it sunny in Oslo?"
         questionObj = MsgAnalysis(question)
         questionObj.classifyMsg()
-        # Assert that the message is classified as question
+        # Control that the message is classified as question
         self.assertTrue(Tags.question in questionObj.tags, "Should be a question, but was not taged.")
         self.assertEqual(questionObj.location, "Oslo", "The location was not identified.")
         self.assertTrue(Tags.weather in questionObj.tags, "Should have been taged as weather!")
@@ -92,21 +92,21 @@ class testClientModule(unittest.TestCase):
         testYr = yr.WeatherApi()
         
         # -- Test the getCoordinates method
-        # Assert that the city was found.
+        # Check that the city was found.
         self.assertTrue(testYr.getCoordinates("Oslo"), "The city 'Oslo' should be in the list.")
-        # Assert that the coordinates are as expected (Oslo)
+        # Check that the coordinates are as expected (Oslo)
         self.assertEqual(testYr.long, 10.7528, "The longitued was not correct for Oslo")
         self.assertEqual(testYr.lat, 59.9111, "The  latitued was not correct for Oslo")
-        # Assert that the ValueError is thrown when the city is not in the list
+        # Control that the ValueError is thrown when the city is not in the list
         with self.assertRaises(ValueError):
             testYr.getCoordinates("test")
             
         # -- Test the getCurrentWeatherData method
         testYr = yr.WeatherApi()
-        # Assert that the method raises TypeError if city is not a string
+        # Control that the method raises TypeError if city is not a string
         with self.assertRaises(TypeError):
             testYr.getCurrentWeatherData(10)
-        # Asser that the method raises ValueError if the city is not known
+        # Check that the method raises ValueError if the city is not known
         with self.assertRaises(ValueError):
             testYr.getCurrentWeatherData("test")
             
@@ -123,21 +123,21 @@ class testClientModule(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             testYr.convertCloudArea(float(110))
            
-        # Assert that the method returns the right word for different input fractions
+        # Control that the method returns the right word for different input fractions
         self.assertEqual(testYr.convertCloudArea(10.0), "wery cloudy")
         self.assertEqual(testYr.convertCloudArea(25.0), "cloudy")
         self.assertEqual(testYr.convertCloudArea(50.0), "partially cloudy")
-        self.assertEqual(testYr.convertCloudArea(75.0), "sunny")
+        self.assertEqual(testYr.convertCloudArea(75.0), "clear")
         self.assertTrue(type(testYr.convertCloudArea(d2)) == str, f"The fraction {d2} from \
                         getCurrentTemperatureData could not be processed by convertCloudArea.")
         
-        # test the convertTemperature() method
+        # Control the convertTemperature() method
         with self.assertRaises(TypeError):
             testYr.convertTemperature("test")
         
         with self.assertRaises(ValueError):
             testYr.convertTemperature(-300.0)
-        # Asser that the convert temperature method returns the correct word
+        # Check that the convert temperature method returns the correct word
         self.assertEqual(testYr.convertTemperature(30.0), "hot")
         self.assertEqual(testYr.convertTemperature(20.0), "not cold")
         self.assertEqual(testYr.convertTemperature(10.0), "cold")
@@ -162,9 +162,10 @@ class testClientModule(unittest.TestCase):
         bot.generateResponse()
         # The expected response from the bot
         expectedResponse = ("The temperature in Oslo is " + str(airTemp) + 
-                            " degree celcius!\n Based on data from MET Norway.")
+                            " degree celcius!\n Information is based on data from MET Norway.")
         
         realResponse = bot.sendQueue.get()
+        # Check that the response generated is correct.
         self.assertEqual(realResponse, expectedResponse)
         
         # Test question about the weather
@@ -175,11 +176,24 @@ class testClientModule(unittest.TestCase):
         expectedResponse = ("The temperature in " + "Oslo" + 
                           " is " + str(airTemp) + " degree celcius! The sky is " + 
                           testYr.convertCloudArea(cloud) + 
-                          ".\n Based on data from MET Norway.")
+                          ".\n Information is based on data from MET Norway.")
         realResponse = bot.sendQueue.get()
+        # Check that the response is correct  
         self.assertEqual(realResponse, expectedResponse)
         
-        
+        # Test request for opinion about the weather (with location) ----
+        bot.recvQueue.put("\nUser: Do you like the weather in Oslo?")
+        # pricess the question
+        bot.generateResponse()
+        # The exptected response from the bot
+        expectedResponse = ("The weather in " + "Oslo" + 
+                           " is " + testYr.convertCloudArea(cloud) + 
+                           " and " + testYr.convertTemperature(airTemp) + ". " + 
+                           ("I like it!" if airTemp > 15 and cloud < 10 else "I do not like it!") + 
+                           "\n Information is based on data from MET Norway.")
+        realResponse = bot.sendQueue.get()
+        # Check that the response from the bot is correct
+        self.assertEqual(realResponse, expectedResponse)
         
         
         
