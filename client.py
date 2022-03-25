@@ -177,6 +177,7 @@ class ChatUser(threading.Thread):
     END_OF_MSG = "::EOMsg::"
     username = "Userchat"
     data_recv = ""
+    kickedMessage = re.compile("^Kicked by the host for (.*)")
     
     def __init__(self, dest, port):
         threading.Thread.__init__(self)
@@ -196,7 +197,7 @@ class ChatUser(threading.Thread):
         
     def sendInitialMessage(self, user):
         self.sendQueue.put(f"{user}")
-        print(f"\nUser {user} has joined the chat!\n")
+        print(f"\nYou have joined the chat with username {user}!\n")
         
     def run(self):
         self.cliSock.connect((self.dest, self.port))
@@ -235,16 +236,15 @@ class ChatUser(threading.Thread):
                 self.event.is_set()
             
         
-        
+        # The client socket is closed when the while loop is done
         self.cliSock.close()
+        # Waiting for the thread for the user interaction.
         outputThread.join()
-        return
         
     def generateOutput(self):
         pattern = re.compile("^\/exit")
         while not self.event.is_set():
             msg = input()
-            #pdb.set_trace()
             if bool(pattern.search(msg)):
                 print(f"{self.username} is disconnecting from the chat.")
                 self.event.set()
@@ -274,6 +274,13 @@ class ChatUser(threading.Thread):
         msgList = self.data_recv.split(self.END_OF_MSG)
         self.data_recv = msgList.pop()
         for msg in msgList:
+            curKickedResult = self.kickedMessage.search() 
+            if bool(curKickedResult):
+                # The server has sent a kick message 
+                reason = curKickedResult.groups()[0]
+                # The client socket is therefore closed with the reason 
+                # given by the server.
+                self.initiateClosure(reason)
             self.recvQueue.put(msg)
                     
             
@@ -282,7 +289,7 @@ class ChatUser(threading.Thread):
         for i in range(self.sendQueue.qsize()):
             curMsg = (f"{self.username}: " + self.sendQueue.get() + self.END_OF_MSG).encode()
             
-            while dataSent < len(curMsg):
+            while dataSent < len(curMsg) and not self.event.is_set():
                 cur_sent = cliSock.send(curMsg[dataSent:])
                 
                 if cur_sent == 0:
@@ -291,8 +298,11 @@ class ChatUser(threading.Thread):
                     return
                 dataSent += cur_sent
     
-    def initiateClosure(self):
+    def initiateClosure(self, reason):
         self.event.set()
+        if reason != "":
+            print(f"You have been removed from the chat by the host. \
+                  The following reason was given: {reason}")
         print("Please press enter to stop the program!")
         
         
@@ -317,7 +327,7 @@ class ChatBot(ChatUser, threading.Thread):
     generalResponse = ["I am not sure if I understand your message.\n Could you please clarify?",
                        "Please write in english, so I can understand you!"]
     
-    greetings =["Hi", "Hello", "Welcome!"]
+    greetings =["Hi", "Hello", "Welcome"]
     
     
     def __init__(self, dest, port):
@@ -328,15 +338,21 @@ class ChatBot(ChatUser, threading.Thread):
         self.cliSock.connect((self.dest, self.port))
         self.sendInitialMessage(self.username)
         self.sendToServer(self.cliSock)
-        #pdb.set_trace()
         while not self.event.is_set():
             self.receiveFromServer(self.cliSock)
             self.generateResponse()
             self.sendToServer(self.cliSock)
             
-    def initiateClosure(self):
+    def initiateClosure(self, reason):
         """
         This method initiates the termination of the client socket for the bot.
+        
+        Parameters
+        ----------
+        reason : String
+            This argument is a string containing the reason for why the server 
+            stoped the connection. Because this is a bot, the reason should be "" and
+            therefore ignored.
         """
         # The event flag is set in order to break the while loop in the main thread 
         self.event.set()
@@ -366,14 +382,18 @@ class ChatBot(ChatUser, threading.Thread):
         bot. The getBotResponse should be overwritten for each bot that inherits 
         the ChatBot classs. This way the response can be customized for each bot.
         """
-        while self.recvQueue.qsize() > 1:
+        while self.recvQueue.qsize() > 0:
             # If the receive queue contains more than one message, 
-            # then all messages are dropped except one (the latest)
-            self.recvQueue.get()
-        # The last message is set as the message to be handled by the bot    
-        curMsg = self.recvQueue.get()
-        if not bool(self.unamePattern.search(curMsg)):
-            # if the message is not from a bot
+            # then all messages are dropped except one (the latest replyable message)
+            msg = self.recvQueue.get()
+            if not bool(self.unamePattern.search(msg)):
+                # The message that will be replyed to by the bot is set as curent message
+                # if it is not from a bot.
+                curMsg = msg
+        
+        if curMsg:
+            # If the there is a current message set then generate a reply.
+            # else return without any response generated.
             try:
                 msgObj = MsgAnalysis(curMsg)
             except ValueError as E:
@@ -384,11 +404,11 @@ class ChatBot(ChatUser, threading.Thread):
             # Call the classify method to add tags to the message
             msgObj.classifyMsg()
             
-            
             if Tags.join in msgObj.tags:
                 # If the message is taged as join message then add a 
                 # greeting and return.
-                self.sendQueue.put(random.choice(self.greetings))
+                self.sendQueue.put(random.choice(self.greetings + " " + 
+                                                 self.username + random.choice(["!", ".", ""])))
                 #print(f"Greeting because of: {curMsg}") # Used for debuging
             else: 
                 # Get the specific response for the bot 
@@ -439,44 +459,19 @@ class ChatBot(ChatUser, threading.Thread):
                 
                 
 class WeatherBot(ChatBot):
+    """
+    This class contians the methods for the Weatherbot. It inherits from 
+    the ChatBot class. The bot can be used by first instantiating an object. 
+    The destination address and port should be given as argumen to the constructor.
+    The object will be a threading object and the thread can be started with the
+     method start(). The method initiateClosure can be called to stop the bot.
+    """
     username = "Weather_Bot"
-    
     unknownLocation = ["Please name a known city!", "What city are you refering too?"]
     
     def __init__(self, dest, port):
         ChatBot.__init__(self, dest, port)
         self.YrObj = yr.WeatherApi()
-        
-                
-    # def generateResponse(self):
-    #     while self.recvQueue.qsize() > 1:
-    #         # If the receive queue contains more than one message, 
-    #         # then all messages are dropped except one (the latest)
-    #         self.recvQueue.get()
-    #     # The last message is set as the message to be handled by the bot    
-    #     curMsg = self.recvQueue.get()
-        
-    #     if not bool(self.unamePattern.search(curMsg)):
-    #         # if the message is not from a bot
-    #         try:
-    #             msgObj = MsgAnalysis(curMsg)
-    #         except ValueError as E:
-    #             # If the messag cannot be handeled by the analysis class, 
-    #             # then send the exception as a message.
-    #             self.sendQueue.put(str(E))
-    #             return
-    #         # Call the classify method to add tags to the message
-    #         msgObj.classifyMsg()
-            
-    #         #print(msgObj.tags) # Used to debug
-            
-    #         if Tags.join in msgObj.tags:
-    #             # If the message is taged as join message then add a 
-    #             # greeting and return.
-    #             self.sendQueue.put(random.choice(self.greetings))
-    #             # print(f"Greeting because of: {curMsg}") # Used for debug
-    #             return
-    #         else:
                 
     def getBotResponse(self, msgObj):
         """
@@ -600,13 +595,13 @@ if __name__ == "__main__":
     testBot.start()
     
     time.sleep(2)
-    weatherBot = WeatherBot(argParsed.Dest, argParsed.Port)
-    weatherBot.start()
+    #weatherBot = WeatherBot(argParsed.Dest, argParsed.Port)
+    #weatherBot.start()
     
     testChat.join()
     testBot.initiateClosure()
-    weatherBot.initiateClosure()
+    #weatherBot.initiateClosure()
     testBot.join()
-    weatherBot.join()
+    #weatherBot.join()
     
     

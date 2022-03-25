@@ -26,7 +26,7 @@ import random
 import time
 import pdb
 from select import select
-import datetime
+from datetime import datetime
 
 class HostBot:
     """
@@ -111,6 +111,16 @@ class SimpleChatServer:
     HOSTBOT_UNAME = "Host"
     # The time between host messages (seconds)
     HOST_PERIOD = 90
+    # The main part of the kick message
+    KICK_MSG = "Kicked by the host for "
+    
+    
+    CMD_SET = {"list connections" : ["Prints a list of all connected users.", 
+                                     "Takes no argument", self.listConnections], 
+               "kick": ["Disconnects a specified user from the server", 
+                        "Argument: The username of the user", ]}
+    
+    CMD_ALIAS = {"lc" : "list connections"}
     
     def __init__(self, port):
         if type(port)!=int or port < 0 or port > 65535:
@@ -126,6 +136,7 @@ class SimpleChatServer:
         self.recvRest = {}
         self.closeNext = []
         self.activeThreads = Queue()
+        self.finishRemovalList = []
         
         
     def startService(self):
@@ -142,10 +153,13 @@ class SimpleChatServer:
         mainThread = threading.Thread(target=self.mainThread, daemon=True)
         mainThread.start()
         
+        # List the commandset
+        
+        
         while True:
-            cmd = input("Please type \"exit\" to stop the service: \n")
+            cmd = input("Type \"exit\" to stop the service: \n")
             if cmd == "exit" or cmd == "Exit":
-                print("Service is shuting down.")
+                print("Service is shutting down.")
                 logging.info("The service is stoping due to user interaction.")
                 self.event.set()
                 break
@@ -177,11 +191,14 @@ class SimpleChatServer:
                 curThread = threading.Thread(target=self.sendToClient, args=(client, ))
                 curThread.start()
                 self.activeThreads.put(curThread)
-           
+          
             
             while not self.activeThreads.empty():
                 self.activeThreads.get().join()
-                
+            
+            while len(self.finishRemovalList) != 0:
+                self.finishRemoval(self.finishRemovalList.pop())
+            
             while len(err) != 0:
                 self.removeClient(err.pop())
                 
@@ -225,14 +242,20 @@ class SimpleChatServer:
     def acceptConnection(self):
         client, src = self.serverSocket.accept()
         logging.info(f"New client connection accepted for source {src}.")
+        logging.info(f"History added to sendQueue of the new connection: {str(self.history)}")        
         curQueue = Queue()
         for i in range(len(self.history)):
             curQueue.put(self.history[i])
             
         # sendQueues is a dictionary that contains variables for each connected 
         # user socket. Format:
-        # {client.getpeername() : [curQueue, rest_from_last_receive, "username"]}
-        self.sendQueues[client.getpeername()] = [curQueue, "", ""]
+        # {client.getpeername() : [curQueue, rest_from_last_receive, "username", time_last_received_msg, Kick_reason, socketObject
+        self.sendQueues[client.getpeername()] = [curQueue,          #0 
+                                                 "",                #1 
+                                                 "",                #2
+                                                 datetime.now(),    #3 
+                                                 "",                #4
+                                                 client]            #5
         
         self.checkReadable.append(client)
         self.checkWritable.append(client)
@@ -243,8 +266,9 @@ class SimpleChatServer:
         sendQueue = self.sendQueues[cliSock.getpeername()][0]
         
         for i in range(sendQueue.qsize()):
-            logging.info(f"Sending message to {cliSock.getpeername()}")
-            msg = (sendQueue.get() + self.END_OF_MSG).encode()
+            sendMsg = sendQueue.get()
+            logging.info(f"Sending {sendMsg} to {cliSock.getpeername()}")
+            msg = (sendMsg + self.END_OF_MSG).encode()
             msgLen = len(msg)
             sentBytes = 0
             while sentBytes < msgLen:    
@@ -350,11 +374,44 @@ class SimpleChatServer:
         logging.info(f"The connection to {cliSock.getpeername()} is closing.")
         uname = self.sendQueues[cliSock.getpeername()][2]
         self.populateSendQues(f"{uname}: User {uname} left the chat.\n", cliSock)
+        # Remove socket from the list of readable sockets to avoid receiving from the client
+        self.checkReadable.remove(cliSock)
+        # The socket is also removed from the list for error checking
+        self.checkError.remove(cliSock)
+        # Add the disconnect message to the clients sendQueue
+        reason = self.sendQueues[cliSock.getpeername()][4]
+        discMessage = self.KICK_MSG + reason
+        self.sendQueues[cliSock.getpeername()][0].put(discMessage)
+        # Add the socket to the list of sockets which are in the removal process
+        self.finishRemovalList.append(cliSock) 
+    
+    def finishRemoval(self, cliSock):
+        """
+        This method finishies the removal of a socket. 
+        It is required that the removeClient method has been 
+        called for the same socket first.
+        """
         self.sendQueues.pop(cliSock.getpeername())
         cliSock.close()
-        self.checkError.remove(cliSock)
-        self.checkReadable.remove(cliSock)
         self.checkWritable.remove(cliSock)
+        
+    def listConnections(self):
+        """
+        This method creates a list of all the connected users 
+        and prints the list to the terminal
+        """
+        outString = "|\tUsername\t|\tIPv4_Address/Port\t|\tTime last received\t|"
+        outString += "\n----------------------------------------------------------"
+        for connection in self.sendQueues.keys():
+            portAndAddress = connection
+            username = self.sendQueues[connection][2]
+            lastReceived = self.sendQueues[connection][3]
+            outString += f"\n|\t{username}\t|\t{portAndAddress}\t|\t{lastReceived}\t|"
+        
+        print(outString)
+        
+    def kick(self, username):
+        
         
         
         
@@ -370,7 +427,7 @@ if __name__=="__main__":
                         type=int, help="The port number associated with the service")
     args = parser.parse_args()
     
-    logDay = f"{datetime.datetime.now().date().__str__()}"
+    logDay = f"{datetime.now().date().__str__()}"
     logging.basicConfig(format='%(levelname)s: %(asctime)s: %(message)s', 
                         filename=f"./Logs/chatServer_{logDay}.log", level=logging.INFO)
     
