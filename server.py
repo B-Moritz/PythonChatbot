@@ -102,6 +102,7 @@ class SimpleChatServer:
     
     """
     event = threading.Event()
+    userInteractionEvent = threading.Event()
     history = []
     # End of message code used to identify the end of each message sent between the server and the user
     END_OF_MSG = "::EOMsg::"
@@ -114,13 +115,7 @@ class SimpleChatServer:
     # The main part of the kick message
     KICK_MSG = "Kicked by the host for "
     
-    
-    CMD_SET = {"list connections" : ["Prints a list of all connected users.", 
-                                     "Takes no argument", self.listConnections], 
-               "kick": ["Disconnects a specified user from the server", 
-                        "Argument: The username of the user", ]}
-    
-    CMD_ALIAS = {"lc" : "list connections"}
+    cmdPattern = re.compile("^([^ ]*) {0,1}(.*)$")
     
     def __init__(self, port):
         if type(port)!=int or port < 0 or port > 65535:
@@ -137,6 +132,14 @@ class SimpleChatServer:
         self.closeNext = []
         self.activeThreads = Queue()
         self.finishRemovalList = []
+        # Defining the command set with commands used to controll the service
+        self.cmdSet = {"listConnections" : ["Prints a list of all connected users. ", 
+                                         "The command takes no arguments.", self.listConnections], 
+                       "kick": ["Disconnects a specified user from the server. ", 
+                                "The command takes two arguments: username of the user (mandatory) " +
+                                "and the reason for the kick (optional). The reason can be given " +
+                                "as a space separated words. Eks: kick User Due to service overload.", self.kickUser],
+                       "exit" : ["Stops the chat service. ", "The comamnd takes no arguments.", self.stopService]}
         
         
     def startService(self):
@@ -146,31 +149,61 @@ class SimpleChatServer:
         self.checkReadable.insert(0, self.serverSocket) 
         
         logging.info("Service is listening to incomming connections on port %s.", str(self.port))
-        
+        print("Python Chat service\tCreated by Bernt Olsen, student at OsloMet.\n")
         print("Service is listening to incomming connections on port {}. \n".format(str(self.port)))
         self.isRunning = True
         
-        mainThread = threading.Thread(target=self.mainThread, daemon=True)
+        mainThread = threading.Thread(target=self.mainThread)
         mainThread.start()
         
         # List the commandset
+        print(self.listCommands())
         
+        while not self.userInteractionEvent.is_set():
+            cmd = input("\033[92mHost\033[0m $> ")
+            # Extract the command and arguments
+            matchResult = self.cmdPattern.search(cmd)
+            
+            if bool(matchResult):
+                cmd = matchResult.groups()[0] # command
+                arguments = matchResult.groups()[1].split(" ") # arguments
+                if cmd in self.cmdSet:
+                    # If the command is recognized, check the  arguments
+                    if cmd == "kick":
+                        reason = ""
+                        # Check the arguments if the kick command is given
+                        if len(arguments) == 0 or arguments[0] == '':
+                            print("No username was specified. Please specify the username \
+                                  of the user that should be removed.")
+                        elif len(arguments) == 1:
+                            username = arguments[0]
+                        else:
+                            reason = arguments[1]
+                            for word in arguments[2:]:
+                                reason += " " + word
+                        
+                        # Run the kick method     
+                        if not self.cmdSet[cmd][2](username, reason):
+                            print(f"User with username {username} was not found!")
+                        else:
+                            print(f"User {username} was removed!")
+                    else:
+                        # Execute method associated with the command
+                        self.cmdSet[cmd][2]()
+                else: 
+                   print(f"The command {cmd} was not recognized!")
         
-        while True:
-            cmd = input("Type \"exit\" to stop the service: \n")
-            if cmd == "exit" or cmd == "Exit":
-                print("Service is shutting down.")
-                logging.info("The service is stoping due to user interaction.")
-                self.event.set()
-                break
-        
-        mainThread.join(15)
+        waitGraphicsThread = threading.Thread(target=self.waitIndication, args=(mainThread,))
+        waitGraphicsThread.start()
+        mainThread.join()
         self.serverSocket.close()
         self.isRunning = False
+        waitGraphicsThread.join()
+        print("Service stopped successfully!")
         
     def mainThread(self):
         
-        hostbotThread = threading.Thread(target=self.hostbotThread)
+        hostbotThread = threading.Thread(target=self.hostbotThread, daemon=True)
         hostbotThread.start()
 
         
@@ -191,7 +224,6 @@ class SimpleChatServer:
                 curThread = threading.Thread(target=self.sendToClient, args=(client, ))
                 curThread.start()
                 self.activeThreads.put(curThread)
-          
             
             while not self.activeThreads.empty():
                 self.activeThreads.get().join()
@@ -206,7 +238,7 @@ class SimpleChatServer:
             while len(self.closeNext) != 0:
                 self.removeClient(self.closeNext.pop())
         
-        hostbotThread.join()
+        hostbotThread.join(1)
             
     def hostbotThread(self):
         """
@@ -249,13 +281,13 @@ class SimpleChatServer:
             
         # sendQueues is a dictionary that contains variables for each connected 
         # user socket. Format:
-        # {client.getpeername() : [curQueue, rest_from_last_receive, "username", time_last_received_msg, Kick_reason, socketObject
-        self.sendQueues[client.getpeername()] = [curQueue,          #0 
-                                                 "",                #1 
-                                                 "",                #2
-                                                 datetime.now(),    #3 
-                                                 "",                #4
-                                                 client]            #5
+        # {client.getpeername() : [sendQueue, rest_from_last_receive, "username", time_last_received_msg, Kick_reason, socketObject
+        self.sendQueues[client.getpeername()] = [curQueue,          #0 sendQueue
+                                                 "",                #1 rest from last receive
+                                                 "",                #2 username
+                                                 datetime.now(),    #3 timestamp last receive
+                                                 "",                #4 kick_reason
+                                                 client]            #5 socket Object
         
         self.checkReadable.append(client)
         self.checkWritable.append(client)
@@ -336,6 +368,8 @@ class SimpleChatServer:
             data_recv = data_recv + cur_recv
         
         logging.info(f"Data received: {data_recv}")
+        # Saving the timestamp for the receive:
+        self.sendQueues[cliSock.getpeername()][3] = datetime.now()
         # Cleaning up the received data and create a list of all messages 
         # contained in the received message 
         msgList = data_recv.replace("\n", "").split(self.END_OF_MSG)
@@ -400,24 +434,112 @@ class SimpleChatServer:
         This method creates a list of all the connected users 
         and prints the list to the terminal
         """
-        outString = "|\tUsername\t|\tIPv4_Address/Port\t|\tTime last received\t|"
-        outString += "\n----------------------------------------------------------"
+        
+        outString = "{:>15}{:>20}{:>30}\n".format("Username", "IPv4 Address/Port", "Time last received")
+        outString += "{:>15}{:>20}{:>30}\n".format("--------", "--------", "--------")
         for connection in self.sendQueues.keys():
-            portAndAddress = connection
+            portAndAddress = str(connection[0]) + ":" + str(connection[1])
             username = self.sendQueues[connection][2]
-            lastReceived = self.sendQueues[connection][3]
-            outString += f"\n|\t{username}\t|\t{portAndAddress}\t|\t{lastReceived}\t|"
+            lastReceived = str(self.sendQueues[connection][3])
+            outString += f"{username:>15}{portAndAddress:>20}{lastReceived:>30}\n"
         
         print(outString)
         
-    def kick(self, username):
-        
-        
-        
-        
-        
-            
+    def kickUser(self, username, reason=""):
+        """
+        This method is used to manualy disconnect a user from the server.
 
+        Parameters
+        ----------
+        username : TYPE
+            The username of the user which is beeing disconnected.
+            
+        reason : String
+            The reason why the user is disconnected by the host.
+            
+        Return
+        ------
+        Boolean
+            The method returns True if the username was found and is beeing removed.
+            It also returns False if the username was not found.
+        """
+        for clientList in self.sendQueues.values():
+            # For each list in the connection dictionary
+            if clientList[2] == username:
+                # If the list contains the username 
+                # then add the socket in the same list to the closeNext list
+                # in order to initiate its removal.
+                self.closeNext.append(clientList[5])
+                # Return true to confirm that the client is removed
+                logging.info(f"User {username} is removed with the following reason: {reason}")
+                return True
+        # If the user was not recognised, then return false
+        return False
+    
+    def listCommands(self):
+        """
+        This method returns a string contianing a list of all 
+        commands that can be used to controll the service.
+
+        Returns
+        -------
+        String
+            A string containing all commands that can be used 
+            to controll the service.
+        """
+        linePattern = re.compile("[\n]{0,1}(.{0,30}[^a-zA-Z0-9])(.*)")
+        emptyString = ""
+        outMsg = "Command set for the Python Chat service:\n\n"
+        outMsg += "{:>20}: \n".format("Commands")
+        outMsg += "{:>20}\n".format("----------")
+        
+        for cmd in self.cmdSet.keys():
+            cmdDescription = ("Description: " + str(self.cmdSet[cmd][0]) + str(self.cmdSet[cmd][1]))
+            
+            matches = linePattern.search(cmdDescription)
+            firstLine = matches.groups()[0]
+            outMsg += f"\n{cmd:>20} - {firstLine:35}\n"
+            while len(matches.groups()[1]) > 0:
+                cmdDescription = matches.groups()[1]
+                matches = linePattern.search(cmdDescription)
+                if bool(matches):
+                    outMsg += f"{emptyString:>20}   {matches.groups()[0]:35}\n"
+                else:
+                    outMsg += f"{emptyString:>20}   {cmdDescription:35} \n"
+                    break
+                    
+        return(outMsg)
+    
+    def stopService(self):
+        """
+        This method removes all connections and stops the chat service
+        """
+        print("  Service is shutting down.", end="\r")
+        logging.info("The service is stoping due to user interaction.")
+        # End the user interaction loop.
+        self.userInteractionEvent.set()
+        # Remove the server socket from the check receivable list to avoid new connections
+        self.checkReadable.pop(0)
+        # Add all sockets to the close next list
+        for clientSocket in self.checkReadable:
+            self.closeNext.append(clientSocket)
+        
+        while len(self.sendQueues.keys()) > 0:
+            # Wait until all connections are removed
+            time.sleep(1)
+        # Set the event flag in order to stop the program
+        self.event.set()
+    
+    def waitIndication(self, mainThread):
+        while mainThread.is_alive():
+            print("-", "\r", end="")
+            time.sleep(0.1)
+            print("\\", "\r", end="")
+            time.sleep(0.1)
+            print("|", "\r", end="")
+            time.sleep(0.1)
+            print("/", "\r", end="")
+            time.sleep(0.1)
 
 if __name__=="__main__":
     

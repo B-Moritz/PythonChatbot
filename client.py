@@ -54,16 +54,19 @@ class MsgAnalysis:
     (chatbots) are dependant on this class. It is used to 
     classify/tag messages received.
     
-    The object has two interesting attributes which describes the 
+    The object has three interesting attributes which describes the 
     message: 
         tags - type: python list - Contains tags from the Tags enum class 
                                    that describe the content of the message.
         
-        location - type: string - This variable contians a location which 
+        location - type: String - This variable contians a location which 
                                   was identified in the message. If there are 
                                   multiple locations, the first mentioned 
                                   location is picked.
                                   
+        username - type: String - This variable contians the username of the 
+                                  user which joined the chat. The variable is 
+                                  only set if the message is a join message.
     The object has one method:
         classifyMsg() - This message tests the message against some 
                         regular expressions which are defined as constants 
@@ -81,7 +84,7 @@ class MsgAnalysis:
     locationReg = "{} (.*)[\s\!\.\?\,]|{} (.*)$"
     locationWords = ["[iI]n", "[aA]t"]
     
-    regJoinCase = re.compile("User .* has joined the chat!")
+    regJoinCase = re.compile("User (.*) has joined the chat!")
         
     def __init__(self, msg):
         
@@ -102,6 +105,7 @@ class MsgAnalysis:
         
         self.tags = []
         self.location = ""
+        self.username = ""
         
     def classifyMsg(self):
         """
@@ -116,11 +120,12 @@ class MsgAnalysis:
         """
         # It is first checked if the message is an introduction message 
         # which is received when a new user joined the chat.
-        
-        if bool(self.regJoinCase.search(self.msg)):
+        joinMatch = self.regJoinCase.search(self.msg)
+        if bool(joinMatch):
             # The message is only taged with the join tag if it is an 
             # introduction.
             self.tags.append(Tags.join)
+            self.username = joinMatch.groups()[0]
             # The metod ends to avoid that other tags can be added
             return
         
@@ -175,7 +180,7 @@ class ChatUser(threading.Thread):
     event = threading.Event()
     # End of message code used to identify the end of each message sent between the server and the user
     END_OF_MSG = "::EOMsg::"
-    username = "Userchat"
+    username = "Chat_User"
     data_recv = ""
     kickedMessage = re.compile("^Kicked by the host for (.*)")
     
@@ -200,7 +205,12 @@ class ChatUser(threading.Thread):
         print(f"\nYou have joined the chat with username {user}!\n")
         
     def run(self):
-        self.cliSock.connect((self.dest, self.port))
+        try:
+            self.cliSock.connect((self.dest, self.port))
+        except:
+            # Write to terminal if the connection could not be established
+            print("Unable to connect to the chat server on destination {self.dest} and port {self.port}.")
+            return
         socketList = [self.cliSock]
         threadList = []
         
@@ -274,13 +284,13 @@ class ChatUser(threading.Thread):
         msgList = self.data_recv.split(self.END_OF_MSG)
         self.data_recv = msgList.pop()
         for msg in msgList:
-            curKickedResult = self.kickedMessage.search() 
-            if bool(curKickedResult):
+            curKickedMatch = self.kickedMessage.search(msg) 
+            if bool(curKickedMatch):
                 # The server has sent a kick message 
-                reason = curKickedResult.groups()[0]
+                reason = curKickedMatch.groups()[0]
                 # The client socket is therefore closed with the reason 
                 # given by the server.
-                self.initiateClosure(reason)
+                self.initiateClosure(reason if reason else " unknown reasons.")
             self.recvQueue.put(msg)
                     
             
@@ -304,6 +314,7 @@ class ChatUser(threading.Thread):
             print(f"You have been removed from the chat by the host. \
                   The following reason was given: {reason}")
         print("Please press enter to stop the program!")
+        
         
         
 class ChatBot(ChatUser, threading.Thread):
@@ -334,8 +345,13 @@ class ChatBot(ChatUser, threading.Thread):
         ChatUser.__init__(self, dest, port)
         
     def run(self):
+        try:
+            self.cliSock.connect((self.dest, self.port))
+        except:
+            # Write to terminal if the connection could not be established
+            print(f"Unable to connect to the chat server on destination {self.dest} and port {self.port}.")
+            return
         
-        self.cliSock.connect((self.dest, self.port))
         self.sendInitialMessage(self.username)
         self.sendToServer(self.cliSock)
         while not self.event.is_set():
@@ -343,7 +359,7 @@ class ChatBot(ChatUser, threading.Thread):
             self.generateResponse()
             self.sendToServer(self.cliSock)
             
-    def initiateClosure(self, reason):
+    def initiateClosure(self, reason=""):
         """
         This method initiates the termination of the client socket for the bot.
         
@@ -382,10 +398,12 @@ class ChatBot(ChatUser, threading.Thread):
         bot. The getBotResponse should be overwritten for each bot that inherits 
         the ChatBot classs. This way the response can be customized for each bot.
         """
+        curMsg = ""
         while self.recvQueue.qsize() > 0:
             # If the receive queue contains more than one message, 
             # then all messages are dropped except one (the latest replyable message)
             msg = self.recvQueue.get()
+            
             if not bool(self.unamePattern.search(msg)):
                 # The message that will be replyed to by the bot is set as curent message
                 # if it is not from a bot.
@@ -407,8 +425,8 @@ class ChatBot(ChatUser, threading.Thread):
             if Tags.join in msgObj.tags:
                 # If the message is taged as join message then add a 
                 # greeting and return.
-                self.sendQueue.put(random.choice(self.greetings + " " + 
-                                                 self.username + random.choice(["!", ".", ""])))
+                self.sendQueue.put(random.choice(self.greetings) + " " + 
+                                                 msgObj.username + random.choice(["!", ".", ""]))
                 #print(f"Greeting because of: {curMsg}") # Used for debuging
             else: 
                 # Get the specific response for the bot 
