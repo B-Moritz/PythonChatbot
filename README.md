@@ -8,5 +8,6 @@ To do:
 * Add one or two chatbots
 * Create unittest for Hostbot and YrInterface
 * Add sitation
+* Write a technical report on how to run the code.
 
 
