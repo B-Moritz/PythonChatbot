@@ -7,7 +7,6 @@ Created on Mon Mar 21 19:11:02 2022
 
 import unittest
 from client import MsgAnalysis, Tags, WeatherBot
-import server
 import YrInterface as yr
 
 class testClientModule(unittest.TestCase):

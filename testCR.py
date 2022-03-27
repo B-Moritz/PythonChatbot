@@ -1,4 +1,4 @@
 
-print("This is a test")
-input("User: \r")
-print("test")
+prompt = 'Add the hidden word: '
+inputStr = input(prompt).lower()
+print ('\u001b[1A' + prompt + '\u011b[K')

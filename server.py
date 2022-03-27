@@ -42,9 +42,14 @@ class ChatSocket:
         for i in range(len(history)):
             self.sendQueue.put(history[i])
             
+        # Add the end history indication
+        self.sendQueue.put("------------[End existing messages]------------")
         self.destAddress = socketObj.getpeername()
         self.lastRecvTime = datetime.now()
         self.recvCounter = 0
+        # Flag is set if the server encounters problems with receiving 
+        # or sending to the client. 
+        self.isBroken = False
         
         
 class HostBot:
@@ -126,7 +131,7 @@ class SimpleChatServer:
     # End of message code used to identify the end of each message sent between the server and the user
     END_OF_MSG = "::EOMsg::"
     # The maximal number of bytes received per receive sycle 
-    MAX_RCV = 100
+    MAX_RCV = 5000
     botnamePattern = re.compile("^(.*): ")
     HOSTBOT_UNAME = "Host"
     # The time between host messages (seconds)
@@ -140,7 +145,7 @@ class SimpleChatServer:
     # The server kicks a user if the user sends SPAM_MSG_NUMBER messages 
     # within SPAM_SECONDS.
     SPAM_MSG_NUMBER = 10
-    SPAM_SECONDS = 1
+    SPAM_SECONDS = 4
     
     def __init__(self, port):
         if type(port)!=int or port < 0 or port > 65535:
@@ -165,7 +170,7 @@ class SimpleChatServer:
                                 "The command takes two arguments: username of the user (mandatory) " +
                                 "and the reason for the kick (optional). The reason can be given " +
                                 "as a space separated words. Eks: kick User Due to service overload.", self.kickUser],
-                       "exit" : ["Stops the chat service. ", "The comamnd takes no arguments.", self.stopService]}
+                       "exit" : ["Stops the chat service. ", "The command takes no arguments.", self.stopService]}
         
         
     def startService(self):
@@ -242,7 +247,7 @@ class SimpleChatServer:
                 logging.error(f"The select function raised the following exception: {E}")
                 readable, writable, err = []
                 # Stoping program
-                print("Fatal error in main thread. Program is closing.")
+                print(f"Fatal error in main thread. Program is closing: {E}")
                 self.event.set()
                 self.userInteractionEvent.set()
                 
@@ -317,21 +322,7 @@ class SimpleChatServer:
     def acceptConnection(self):
         client, src = self.serverSocket.accept()
         logging.info(f"New client connection accepted for source {src}.")
-        #curQueue = Queue()
-        # for i in range(len(self.history)):
-        #     curQueue.put(self.history[i])
-            
-        # # sendQueues is a dictionary that contains variables for each connected 
-        # # user socket. Format:
-        # # {SocketId : [sendQueue, rest_from_last_receive, "username", time_last_received_msg, Kick_reason, socketObject, destination address and port]
-        # self.sendQueues[client.getpeername()] = [curQueue,          #0 sendQueue
-        #                                          "",                #1 rest from last receive
-        #                                          "",                #2 username
-        #                                          datetime.now(),    #3 timestamp last receive
-        #                                          "",                #4 kick_reason
-        #                                          client,            #5 socket Object
-        #                                          client.getpeername()]  #6 destination address and port            
-        
+
         curChatSocket = ChatSocket(client, self.history)
         self.chatUsers.append(curChatSocket)
         
@@ -353,15 +344,20 @@ class SimpleChatServer:
                 try:
                     curSent = cliSock.send(msg[sentBytes:])
                 except (ConnectionAbortedError, ConnectionResetError) as E:
-                    logging.warning(f"The connection with the client {curChatUser.username} {curChatUser.destAddress} has ended: {E}")
-                    self.closeNext.append(cliSock)
+                    self.connectionErrorHandling(curChatUser, cliSock, str(E))
                     return
                 
                 sentBytes += curSent
                 if curSent == 0:
-                    logging.error(f"The connection with client {curChatUser.username} {curChatUser.destAddress} is broken. No data was sent.")
-                    self.closeNext.append(cliSock)
-                
+                    self.connectionErrorHandling(curChatUser, cliSock)
+                    
+    def connectionErrorHandling(self, curChatUser, cliSock, E=""):
+        if not curChatUser.isBroken:
+            logging.warning(f"The connection with the client {curChatUser.username} {curChatUser.destAddress} has ended. {E}")
+            # Set the isBroken flag
+            curChatUser.isBroken = True
+            self.closeNext.append(cliSock)
+            
     def recvFromClient(self, cliSock):
         """
         This method reads the content of the receive buffer of the given client socket.
@@ -399,17 +395,13 @@ class SimpleChatServer:
                 # Read from the buffer of the client socket
                 cur_recv = cliSock.recv(1024).decode()
             except (ConnectionAbortedError, ConnectionResetError) as E:
-                logging.warning(f"The connection with the client {curChatUser.destAddress} has ended: {E}")
-                # Queue the socket for termination and end the receive thread.
-                self.closeNext.append(cliSock)
+                self.connectionErrorHandling(curChatUser, cliSock, str(E))
                 return
                 
             if len(cur_recv) == 0:
                 # If the recv method returned nothing, then the connection is closed.
                 # The data that was sent before an EOMsg was found will be dropped
-                logging.warning(f"Server is not receiving from {curChatUser.destAddress}. Connection is closing!")
-                # Queue the socket for termination and end the receive thread.
-                self.closeNext.append(cliSock)
+                self.connectionErrorHandling(curChatUser, cliSock)
                 return
             
             # The received data is added to the data from the previous receive cycle
@@ -422,14 +414,14 @@ class SimpleChatServer:
         msgList = data_recv.replace("\n", "").split(self.END_OF_MSG)
         
         # Determine if the use is spaming (10 messages within a second)
-        if (datetime.now() - curChatUser.lastRecvTime).seconds < self.SPAM_SECONDS:
-            curChatUser.recvCounter += 1
-            logging.info("Number of reception: {curChatUser.recvCounter}")
+        if (datetime.now() - curChatUser.lastRecvTime).seconds <= self.SPAM_SECONDS:
+            curChatUser.recvCounter += len(msgList)
+            logging.info(f"Number of receptions for {curChatUser.username}: {str(curChatUser.recvCounter)}")
             if curChatUser.recvCounter >= self.SPAM_MSG_NUMBER:
                 # User is spaming SPAM_MSG_NUMBER messages in SPAM_SECONDS seconds
                 # The user will as a result be removed
                 logging.warning(f"User {curChatUser.username} sent {self.SPAM_MSG_NUMBER} within {self.SPAM_SECONDS}." + 
-                                "The user will be kicked for this!")
+                                "The user will be kicked for this! Type 1")
                 # A reason for the removal is provided
                 curChatUser.kickReason = "sending too many messages at the same time"
                 # The removal is initiated
@@ -439,7 +431,7 @@ class SimpleChatServer:
             # The user has sent too many messages (more than SPAM_MSG_NUMBER)
             # The user is removed
             logging.warning(f"User {curChatUser.username} sent {self.SPAM_MSG_NUMBER} in rappid succession." + 
-                            "The user will be kicked for this!")
+                            "The user will be kicked for this! Type 2")
             # A reason for the removal is provided
             curChatUser.kickReason = "Sending too many messages in rapid succession!"
             # The removal is initiated
@@ -448,6 +440,8 @@ class SimpleChatServer:
         else:        
             # Adding a new timestamp for the last receive time attribute:
             curChatUser.lastRecvTime = datetime.now()
+            # Reset counter
+            curChatUser.recvCounter = 0
             
         # The last message in the msgList is stored (emplty string, if the last messsage is complete)
         curChatUser.recvRest = msgList.pop()
@@ -458,7 +452,7 @@ class SimpleChatServer:
             # containing only the username
             curChatUser.username = msgList[0][msgList[0].find(":") + 2 : ]
             # Send a join message to all clients
-            self.populateSendQueues(f"\nUser {curChatUser.username} has joined the chat!", cliSock)
+            self.populateSendQueues(f"User {curChatUser.username} has joined the chat!", cliSock)
         else:
             # The message is processed as a chat message if the username is set
             for msg in msgList:
@@ -484,16 +478,24 @@ class SimpleChatServer:
         curChatUser = self.searchChatUser(cliSock)
         logging.info(f"The connection to {curChatUser.username} {curChatUser.destAddress} is closing.")
         # Send a message to all other users informing that the user is no longer active
-        self.populateSendQueues(f"{self.HOSTBOT_UNAME}: User {curChatUser.username} left the chat.\n", cliSock)
+        self.populateSendQueues(f"{self.HOSTBOT_UNAME}: User {curChatUser.username} left the chat.", cliSock)
         # Remove socket from the list of readable sockets to avoid receiving from the client
         self.checkReadable.remove(cliSock)
         # The socket is also removed from the list for error checking
         self.checkError.remove(cliSock)
-        # Add the disconnect message to the clients sendQueue
-        disconnectMessage = self.KICK_MSG + curChatUser.kickReason
-        curChatUser.sendQueue.put(disconnectMessage)
-        # Add the socket to the list of sockets which are in the removal process
-        self.finishRemovalList.append(cliSock) 
+        
+        if not curChatUser.isBroken:
+            # Add the disconnect message to the clients sendQueue
+            disconnectMessage = self.KICK_MSG + curChatUser.kickReason
+            curChatUser.sendQueue.put(disconnectMessage)
+            # Add the socket to the list of sockets which are in the removal process
+            self.finishRemovalList.append(cliSock) 
+        else:
+            # The connection is broken
+            # Finish the removal
+            self.checkWritable.remove(cliSock)
+            self.chatUsers.remove(curChatUser)
+            cliSock.close()
     
     def finishRemoval(self, cliSock):
         """
