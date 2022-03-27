@@ -209,7 +209,7 @@ class ChatUser(threading.Thread):
             self.cliSock.connect((self.dest, self.port))
         except:
             # Write to terminal if the connection could not be established
-            print("Unable to connect to the chat server on destination {self.dest} and port {self.port}.")
+            print(f"Unable to connect to the chat server on destination {self.dest} and port {self.port}.")
             return
         socketList = [self.cliSock]
         threadList = []
@@ -311,8 +311,8 @@ class ChatUser(threading.Thread):
     def initiateClosure(self, reason):
         self.event.set()
         if reason != "":
-            print(f"You have been removed from the chat by the host. \
-                  The following reason was given: {reason}")
+            print("You have been removed from the chat by the host. " +
+                  f"The following reason was given: {reason}")
         print("Please press enter to stop the program!")
         
         
@@ -613,13 +613,17 @@ if __name__ == "__main__":
     testBot.start()
     
     time.sleep(2)
-    #weatherBot = WeatherBot(argParsed.Dest, argParsed.Port)
-    #weatherBot.start()
+    weatherBot = WeatherBot(argParsed.Dest, argParsed.Port)
+    weatherBot.start()
     
     testChat.join()
-    testBot.initiateClosure()
-    #weatherBot.initiateClosure()
+    if testBot.is_alive():
+        testBot.initiateClosure()
     testBot.join()
-    #weatherBot.join()
+    
+    if weatherBot.is_alive():
+        weatherBot.initiateClosure()
+        
+    weatherBot.join()
     
     
