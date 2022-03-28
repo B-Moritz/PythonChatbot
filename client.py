@@ -86,7 +86,6 @@ class MsgAnalysis:
     
     regJoinCase = re.compile("User (.*) has joined the chat!")
     
-    CONNECTION_STOPED_MSG = "The connection with the chat server has stoped."
         
     def __init__(self, msg):
         
@@ -180,8 +179,9 @@ class ChatUser(threading.Thread):
     """
     # End of message code used to identify the end of each message sent between the server and the user
     END_OF_MSG = "::EOMsg::"
-    data_recv = ""
     kickedMessage = re.compile("^Kicked by the host for (.*)")
+    CONNECTION_STOPPED_MSG = "The connection with the chat server has stoped."
+    GENERATE_DELAY = 1
     
     def __init__(self, dest, port, username):
         threading.Thread.__init__(self)
@@ -212,12 +212,13 @@ class ChatUser(threading.Thread):
         self.sendQueue = Queue()
         self.recvQueue = Queue()
         self.event = threading.Event()
+        self.data_recv = ""
         
         
     def sendInitialMessage(self, user):
         self.sendQueue.put(f"{user}")
         print(f"\nYou have joined the chat with username {user}!\n\n" + 
-              "Loading existing messages in the thread", end="\r")
+              "Loading existing messages in the thread")
         
     def run(self):
         try:
@@ -244,16 +245,14 @@ class ChatUser(threading.Thread):
             if len(writable) > 0 and self.sendQueue.qsize() > 0 and not self.event.is_set():
                 self.sendToServer(writable[0])
             else:
-                # If the socket is not writable, the connection is asumed to be stoped
-                #self.event.set()
                 time.sleep(1)
                 
             for i in range(self.recvQueue.qsize()):
                 print("\n" + self.recvQueue.get().replace(self.END_OF_MSG, ""))
                 
             if len(error) > 0:
-                print(self.CONNECTION_STOPED_MSG)
-                self.event.is_set()
+                print(self.CONNECTION_STOPPED_MSG)
+                self.event.set()
             
         
         # The client socket is closed when the while loop is done
@@ -263,14 +262,20 @@ class ChatUser(threading.Thread):
         
     def generateOutput(self):
         exitPattern = re.compile("^\/exit")
+        usernameString = f"{self.username}: "
         while not self.event.is_set():
-            msg = input()
-            if bool(exitPattern.search(msg)):
-                print("You are disconnecting from the chat.")
-                self.event.set()
-            else:
-                print(f"{self.username}: " + msg)
-                self.sendQueue.put(msg)
+            startTime = time.time()
+            totalMsg = ""
+            while (time.time() - startTime) < self.GENERATE_DELAY:
+                msg = input()
+                if bool(exitPattern.search(msg)):
+                    print("You are disconnecting from the chat.")
+                    self.event.set()
+                else:
+                    print(usernameString + msg)
+                    totalMsg += usernameString + msg + self.END_OF_MSG
+                    
+            self.sendQueue.put(totalMsg[len(usernameString):-len(self.END_OF_MSG)])
         
         
     def receiveFromServer(self, cliSock):
@@ -278,13 +283,14 @@ class ChatUser(threading.Thread):
         cur_recv = ""
         while not bool(pattern.search(self.data_recv)):
             try:
-                cur_recv = cliSock.recv(1024).decode()
+                cur_recv = cliSock.recv(4096).decode()
             except ConnectionResetError:
                 # If the client socket raises the ConnectionResetError 
                 # this program implies that the server stoped the connection with this 
                 # client.
-                print(self.CONNECTION_STOPED_MSG)
-                self.initiateClosure()
+                if not self.event.is_set():
+                    print(self.CONNECTION_STOPPED_MSG)
+                    self.initiateClosure()
                 return
                 
             self.data_recv += cur_recv
@@ -294,7 +300,7 @@ class ChatUser(threading.Thread):
                 # a disconnected connection is indicated.
                 if not self.event.is_set():
                     self.initiateClosure()
-                    print(self.CONNECTION_STOPED_MSG)
+                    print(self.CONNECTION_STOPPED_MSG)
                 return
         
         msgList = self.data_recv.split(self.END_OF_MSG)
@@ -315,13 +321,17 @@ class ChatUser(threading.Thread):
         dataSent = 0
         for i in range(self.sendQueue.qsize()):
             curMsg = (f"{self.username}: " + self.sendQueue.get() + self.END_OF_MSG).encode()
-            
-            while dataSent < len(curMsg) and not self.event.is_set():
-                cur_sent = cliSock.send(curMsg[dataSent:])
+            while dataSent < len(curMsg):
+                
+                if not self.event.is_set():
+                    cur_sent = cliSock.send(curMsg[dataSent:])
+                else:
+                    return
                 
                 if cur_sent == 0:
-                    print(self.CONNECTION_STOPED_MSG)
-                    self.initiateClosure()
+                    if not self.event.is_set():
+                        print(self.CONNECTION_STOPPED_MSG)
+                        self.initiateClosure()
                     return
                 dataSent += cur_sent
     
@@ -334,7 +344,7 @@ class ChatUser(threading.Thread):
         
 class ChatBot(ChatUser, threading.Thread):
     
-    unamePattern = re.compile("^(.*[Bb]ot): |[-]+\[End existing messages\][-]+")
+    unamePattern = re.compile("^(.*[Bb]ot): |[-]+\[End existing messages\][-]+|User .*[bB]ot has joined the chat!")
     opinionResponses = ["I think it is nice!", 
                         "I am not sure, try to ask someone else.", 
                         "I do not like it."]
@@ -353,7 +363,7 @@ class ChatBot(ChatUser, threading.Thread):
     generalResponse = ["I am not sure if I understand your message.\n Could you please clarify?",
                        "Please write in english, so I can understand you!"]
     
-    greetings =["Hi", "Hello", "Welcome"]
+    greetings =["Hi", "Hello"]
     # Response delay
     BOT_RESPONSE_DELAY = 1
     
@@ -373,8 +383,8 @@ class ChatBot(ChatUser, threading.Thread):
         self.sendToServer(self.cliSock)
         while not self.event.is_set():
             
-            startTime = time.time()
-            while (time.time() - startTime) < self.BOT_RESPONSE_DELAY: 
+            if not self.event.is_set(): 
+                time.sleep(self.BOT_RESPONSE_DELAY)
                 self.receiveFromServer(self.cliSock)
                 
             self.generateResponse()
@@ -447,10 +457,8 @@ class ChatBot(ChatUser, threading.Thread):
             if Tags.join in msgObj.tags:
                 # If the message is taged as join message then add a 
                 # greeting and return.
-                if not msgObj.username[-3:].lower() == "bot":
-                    # If the join message is related to a bot, then no greeting is sent.
-                    self.sendQueue.put(random.choice(self.greetings) + " " + 
-                                       msgObj.username + random.choice(["!", ".", ""]))
+                self.sendQueue.put(random.choice(self.greetings) + " " + 
+                                   msgObj.username + random.choice(["!", ".", ""]))
                 #print(f"Greeting because of: {curMsg}") # Used for debuging
             else: 
                 # Get the specific response for the bot 
@@ -638,25 +646,25 @@ if __name__ == "__main__":
     testChat = ChatUser(argParsed.Dest, argParsed.Port, argParsed.Username)
     testChat.start()
     
-    # time.sleep(4)
-    # # Start a simple chat bot.
-    # testBot = ChatBot(argParsed.Dest, argParsed.Port)
-    # testBot.start()
+    time.sleep(4)
+    # Start a simple chat bot.
+    testBot = ChatBot(argParsed.Dest, argParsed.Port)
+    testBot.start()
     
-    # time.sleep(2)
-    # # Start the weatherBot. 
-    # weatherBot = WeatherBot(argParsed.Dest, argParsed.Port)
-    # weatherBot.start()
+    time.sleep(2)
+    # Start the weatherBot. 
+    weatherBot = WeatherBot(argParsed.Dest, argParsed.Port)
+    weatherBot.start()
     
     testChat.join()
     # Stop all bots if the client thread is finished
-    # if testBot.is_alive():
-    #     testBot.initiateClosure()
-    # testBot.join()
+    if testBot.is_alive():
+        testBot.initiateClosure()
+    testBot.join()
     
-    # if weatherBot.is_alive():
-    #     weatherBot.initiateClosure()
+    if weatherBot.is_alive():
+        weatherBot.initiateClosure()
         
-    # weatherBot.join()
+    weatherBot.join()
     
     

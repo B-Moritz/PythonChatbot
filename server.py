@@ -218,6 +218,8 @@ class SimpleChatServer:
                                 print(f"User with username {username} was not found!")
                             else:
                                 print(f"User {username} was removed!")
+                    elif cmd == "exit":
+                        self.cmdSet[cmd][2]("The service is stopping!")
                     else:
                         # Execute method associated with the command
                         self.cmdSet[cmd][2]()
@@ -332,11 +334,10 @@ class SimpleChatServer:
     
     def sendToClient(self, cliSock):
         curChatUser = self.searchChatUser(cliSock)
-        sendQueue = curChatUser.sendQueue
         
-        for i in range(sendQueue.qsize()):
-            sendMsg = sendQueue.get()
-            logging.info(f"Sending \"{sendMsg}\" to {curChatUser.username} {curChatUser.destAddress}")
+        for i in range(curChatUser.sendQueue.qsize()):
+            sendMsg = curChatUser.sendQueue.get()
+            #logging.info(f"Sending \"{sendMsg}\" to {curChatUser.username} {curChatUser.destAddress}")
             msg = (sendMsg + self.END_OF_MSG).encode()
             msgLen = len(msg)
             sentBytes = 0
@@ -393,7 +394,7 @@ class SimpleChatServer:
             # reading from buffer.
             try:
                 # Read from the buffer of the client socket
-                cur_recv = cliSock.recv(1024).decode()
+                cur_recv = cliSock.recv(4096).decode()
             except (ConnectionAbortedError, ConnectionResetError) as E:
                 self.connectionErrorHandling(curChatUser, cliSock, str(E))
                 return
@@ -412,6 +413,7 @@ class SimpleChatServer:
         # Cleaning up the received data and create a list of all messages 
         # contained in the received message 
         msgList = data_recv.replace("\n", "").split(self.END_OF_MSG)
+        #logging.info(f"The msgList for {curChatUser.username}:" + str(msgList))
         
         # Determine if the use is spaming (10 messages within a second)
         if (datetime.now() - curChatUser.lastRecvTime).seconds <= self.SPAM_SECONDS:
@@ -420,7 +422,7 @@ class SimpleChatServer:
             if curChatUser.recvCounter >= self.SPAM_MSG_NUMBER:
                 # User is spaming SPAM_MSG_NUMBER messages in SPAM_SECONDS seconds
                 # The user will as a result be removed
-                logging.warning(f"User {curChatUser.username} sent {self.SPAM_MSG_NUMBER} within {self.SPAM_SECONDS}." + 
+                logging.warning(f"User {curChatUser.username} sent {self.SPAM_MSG_NUMBER} messages within {self.SPAM_SECONDS} seconds. " + 
                                 "The user will be kicked for this! Type 1")
                 # A reason for the removal is provided
                 curChatUser.kickReason = "sending too many messages at the same time"
@@ -438,6 +440,7 @@ class SimpleChatServer:
             self.closeNext.append(curChatUser.clientSocket)
             return
         else:        
+            logging.info(f"Reseting receive counter {curChatUser.username}.")
             # Adding a new timestamp for the last receive time attribute:
             curChatUser.lastRecvTime = datetime.now()
             # Reset counter
@@ -589,7 +592,7 @@ class SimpleChatServer:
                     
         return(outMsg)
     
-    def stopService(self):
+    def stopService(self, reason=""):
         """
         This method removes all connections and stops the chat service
         """
@@ -601,8 +604,9 @@ class SimpleChatServer:
         # Remove the server socket from the check receivable list to avoid new connections
         self.checkReadable.pop(0)
         # Add all sockets to the close next list
-        for clientSocket in self.checkReadable:
-            self.closeNext.append(clientSocket)
+        for curChatUser in self.chatUsers:
+            curChatUser.kickReason = reason
+            self.closeNext.append(curChatUser.clientSocket)
                     
         while len(self.chatUsers) > 0:
             # Wait until all connections are removed
