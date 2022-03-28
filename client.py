@@ -46,6 +46,13 @@ class Tags(enum.Enum):
     #If the message is a join message
     join = 8
     
+    # activity tags
+    activity = 11
+    sport = 12
+    art = 13
+    # The message contains a request or suggestion for an activity
+    requestActivity = 14
+    
 
 class MsgAnalysis:
     """
@@ -75,11 +82,17 @@ class MsgAnalysis:
     
     complicationDetection = re.compile(".*: .*[\.\?\!\:][A-Za-z0-9\s]+")
     questionWords = re.compile("([Ww]hat)|([Ww]here)|([Ww]hen)|([Ww]hy)|([Ww]hich) \
-                               |([Ww]ho)|([Hh]ow)|([Ww]hose)|([cC]an you)|([cC]ould you)|([Ii]s it)|([dD]o you)")
+                               |([Ww]ho)|([Hh]ow)|([Ww]hose)|([cC]an you)|([cC]ould you)|([Ii]s it)|([dD]o you)|([wW]ould you)")
 
     knownSubjects = {"temperature" : Tags.temperature, "weather" : Tags.weather, "hot" : Tags.temperature, 
-                     "cold" : Tags.temperature, "sunny" : Tags.weather, }
-    opinions = ["[Dd]o you like", "[Cc]an you rate", "[Pp]lease rate", "[Dd]o you think", "[Hh]ow would you rate"]
+                     "cold" : Tags.temperature, "sunny" : Tags.weather}
+    
+    requestActivities = ["[wW]e could", "[wW]e should", "[cC]an we", "[cC]ould we"]
+    
+    activitiesOpinion = {"sport" : Tags.sport, "art" : Tags.art, "football" : Tags.sport, "tennis" : Tags.sport, 
+                         "draw" : Tags.art, "drawing" : Tags.art, "paint" : Tags.art, "painting" : Tags.art}
+    
+    opinions = ["[Dd]o you like", "[Cc]an you rate", "[Pp]lease rate", "[Dd]o you think", "[Hh]ow would you rate", "What do you think about"]
     
     locationReg = "{} (.*)[\s\!\.\?\,]|{} (.*)$"
     locationWords = ["[iI]n", "[aA]t"]
@@ -97,17 +110,17 @@ class MsgAnalysis:
                             
         if bool(self.complicationDetection.search(msg)):
             # Verify that the message is not too complicated
-            print("TO COMPLICATED: " + str(msg))
             raise ValueError("The provided message is too complicated.\n " +
                              "I can only process one sentence.")
            
         self.msg = msg
         # The message is splitt into a list of words
-        self.msgList = self.msg.split(" ")
+        self.msgList = msg.replace(".", "").replace("!", "").replace("?", "").split(" ")
         
         self.tags = []
         self.location = ""
         self.username = ""
+        self.activity = ""
         
     def classifyMsg(self):
         """
@@ -141,11 +154,11 @@ class MsgAnalysis:
         else:
             # If the message was not detected as a question, it is classified 
             # as a statement/suggestion
-            self.tags.append(Tags.statement)
-            
+            self.tags.append(Tags.statement) 
             
         # Find known subjects
         subjects = self.knownSubjects.keys()
+        activities = self.activitiesOpinion.keys()
         for word in self.msgList:
             # For each word in the message, check if it is in the list of 
             # known subject (subjecs)
@@ -155,11 +168,26 @@ class MsgAnalysis:
                 #  -> add the coresponding tag 
                 self.tags.append(self.knownSubjects[word])
             
+            if word in activities:
+                self.activity = word
+                self.tags.append(self.activitiesOpinion[word])
+                self.tags.append(Tags.activity)
+        
+        if Tags.activity in self.tags:
+            # Check if the message requests an activity
+            for pattern in self.requestActivities:
+                patternObj = re.compile(pattern)
+                curMatch = patternObj.search(self.msg)
+                if bool(curMatch):
+                    self.tags.append(Tags.requestActivity)
+                    
+            
         # Check if the message askes for an opinion
-        for opi in self.opinions:
-            curPat = re.compile(opi)
+        for opinion in self.opinions:
+            curPat = re.compile(opinion)
             if bool(curPat.search(self.msg)):
                 self.tags.append(Tags.opinion)
+        
                 
         # Check for a location
         for word in self.locationWords:
@@ -344,31 +372,34 @@ class ChatUser(threading.Thread):
         
 class ChatBot(ChatUser, threading.Thread):
     
-    unamePattern = re.compile("^(.*[Bb]ot): |[-]+\[End existing messages\][-]+|User .*[bB]ot has joined the chat!")
-    opinionResponses = ["I think it is nice!", 
-                        "I am not sure, try to ask someone else.", 
-                        "I do not like it."]
-    
-    statementResponses = ["If you say so!", 
-                          "I did not know that.", 
-                          "How can you say something like that."]
-    
-    weatherResponse = ["I do not want to talk about the weather. It is boring and always depressing!", 
-                      "I have the same question.", 
-                      "If you want to talk about the weather, you have to talk to someone else."]
-    
-    locationResponse = ["I am not an expert in geography unfortunatly, \
-                        maybe some one else can help with this?"]
-    
-    generalResponse = ["I am not sure if I understand your message.\n Could you please clarify?",
-                       "Please write in english, so I can understand you!"]
-    
-    greetings =["Hi", "Hello"]
     # Response delay
     BOT_RESPONSE_DELAY = 1
     
     def __init__(self, dest, port, username="Simple_Chat_Bot"):
         ChatUser.__init__(self, dest, port, username)
+        
+        self.replyFilter = re.compile("^(.*[Bb]ot): |[-]+\[End existing messages\][-]+|User .*[bB]ot has joined the chat!")
+        
+        self.opinionResponses = ["I think it is nice!", 
+                            "I am not sure, try to ask someone else.", 
+                            "I do not like it."]
+        
+        self.statementResponses = ["If you say so!", 
+                              "I did not know that.", 
+                              "How can you say something like that."]
+        
+        self.weatherResponse = ["I do not want to talk about the weather. It is boring and always depressing!", 
+                          "I have the same question.", 
+                          "If you want to talk about the weather, you have to talk to someone else."]
+        
+        self.locationResponse = ["I am not an expert in geography unfortunatly, \
+                            maybe some one else can help with this?"]
+        
+        self.generalResponse = ["I am not sure if I understand your message.\n Could you please clarify?",
+                           "Please write in english, so I can understand you!"]
+        
+        self.greetings = ["Hi", "Hello"]
+        
         
     def run(self):
         #pdb.set_trace()
@@ -436,8 +467,8 @@ class ChatBot(ChatUser, threading.Thread):
             # then all messages are dropped except one (the latest replyable message)
             msg = self.recvQueue.get()
             
-            if not bool(self.unamePattern.search(msg)):
-                # The message that will be replyed to by the bot is set as curent message
+            if not bool(self.replyFilter.search(msg)):
+                # The message that will be replied to by the bot is set as curent message
                 # if it is not from a bot.
                 curMsg = msg
         
@@ -451,6 +482,7 @@ class ChatBot(ChatUser, threading.Thread):
                 # then send the exception as a message.
                 self.sendQueue.put(str(E))
                 return
+            
             # Call the classify method to add tags to the message
             msgObj.classifyMsg()
             
@@ -558,7 +590,7 @@ class WeatherBot(ChatBot):
                                            " is " + self.YrObj.convertCloudArea(cloudAreaFrac) + 
                                            " and " + self.YrObj.convertTemperature(airTemp) + ". " + 
                                            ("I like it!" if airTemp > 15 and cloudAreaFrac < 10 else "I do not like it!") + 
-                                           "\n Information is based on data from MET Norway.")
+                                           "\n This information is based on data from MET Norway.")
                                             # The bot likes the weather if air temperature is greater than 15 and 
                                             # cloud area fraction is less than 10 %.
                         
@@ -588,7 +620,7 @@ class WeatherBot(ChatBot):
                         return("The temperature in " + msgObj.location + 
                                            " is " + str(self.YrObj.curData['Air temperature']) 
                                            + " degree celcius!" + 
-                                           "\n Information is based on data from MET Norway.")
+                                           "\n This information is based on data from MET Norway.")
                     except ValueError:
                         #print("City not found in list") # Used for debug
                         # The location was not identified as a city.
@@ -624,7 +656,140 @@ class WeatherBot(ChatBot):
         else:
             # If the message is not a statement or a question, reply with general response
             return(random.choice(self.generalResponse))
-                        
+                 
+class SportBot(ChatBot):
+    
+    def __init__(self, dest, port, username="Sport_Bot"):
+        ChatBot.__init__(self, dest, port, username)
+        
+        self.activityReplies = {"tennis" : ["Yes, I love tennis!", "I would like to play tennis."], 
+                           "football" : ["I like football, but I prefere tennis", "I like sport in general," + 
+                                         " but hearing about football now is not cheering me up right now"], 
+                           "drawing" : ["I am a big sports fan, but art is not my cup of tea!", "Please, talk about something else! Maybey we can watch sport?"]}
+        
+        self.opinionOnActivities = {Tags.sport : ["I love all kind of sport, and I am realy paying a lot of attention to {} at the moment.",  
+                                             "I think that {} is one of the best sports there is!", 
+                                             "I could watch {} all day!", "I could play {} all day."], 
+                               Tags.art : ["I am not very interested in art. Sorry. But we could talk about sports!", "I dont like art.", 
+                                           "I prefere the art of creating the perfect stop-ball in tennis."]} 
+        
+        self.weatherOpinion = ["I do not care about the weather.", "A true athlete works in any weather!", "The weather is always nice enough in my opinion", 
+                        "There is nothing called bad weather!"]
+        
+    def getBotResponse(self, msgObj):
+        
+        if Tags.question in msgObj.tags:
+            # Is the message a question?
+            if Tags.opinion in msgObj.tags:
+                # Is the message a request for an opinion on a subject?
+                if Tags.activity in msgObj.tags:
+                    # Is the message asking for an opinion on an activity?
+                    if Tags.sport in msgObj.tags:
+                        # Is the message about sport?
+                       return(     # Put a random message into the send queue
+                            random.choice(self.opinionOnActivities[Tags.sport]).format(msgObj.activity)
+                            )
+                    else:
+                        # The message is about art.
+                        return(
+                                random.choice(self.opinionOnActivities[Tags.art])
+                            )
+                elif Tags.temperature in msgObj.tags or Tags.weather in msgObj.tags:
+                    # If the message asks for an opinion about the weather
+                    return(random.choice(self.weatherOpinion))
+                else:
+                    # General response to opinion messages
+                    return(random.choice(self.opinionResponses))
+                    
+            elif Tags.temperature in msgObj.tags or Tags.weather in msgObj.tags:
+                # The message asks about the weather
+                return(random.choice(self.weatherOpinion))
+                
+            elif Tags.activity in msgObj.tags:
+                if msgObj.activity in ["draw", "paint", "painting"]:
+                    msgObj.activity = "drawing"
+                return(random.choice(self.activityReplies[msgObj.activity]))
+                
+        elif Tags.statement in msgObj.tags:
+            # Is the message a statement or a request for an activity?
+            if Tags.requestActivity in msgObj.tags:
+                # The message is a request about an acitivty:
+                if msgObj.activity in ["draw", "paint", "painting"]:
+                    msgObj.activity = "drawing"
+                return(random.choice(self.activityReplies[msgObj.activity]))
+            else:
+                # return default statement response.
+                return(random.choice(self.statementResponses))
+        else:
+            # General response
+            return(random.choice(self.generalResponse))
+        
+class ArtBot(ChatBot):
+    
+    def __init__(self, dest, port, username="Art_Bot"):
+        ChatBot.__init__(self, dest, port, username)
+        
+        self.activityReplies = {"tennis" : ["Tennis! Sounds interesting. What is it?", "I would like to trie, but you would have to teach me!", "No, I am not interested"], 
+                           "football" : ["No football for me, please!", "I don`t like football. Can we talk about something else?", "Football. Such a pointless activity!"], 
+                           "drawing" : ["Yes, I will never say no to that.", "That is a good idea."]}
+        
+        self.opinionOnActivities = {"football" : ["I do not like football. I think that it is compleatly mental to kick around a ball all day, while you can spend your time crating real art.", 
+                                                  "I do not have much symphaty with that sport.", "Lets talk about something relevant!"], 
+                                    "tennis" : ["I am not sure yet. I need to try it first.", "It looks like a cool activity. I would like to try it once."], 
+                               "drawing" : ["I love drawing and creating art with the pencile.", "I think drawing is funny and important for our development as humans.", 
+                                           "I prefere the art of creating the perfect stop-ball in tennis."]} 
+        
+        self.weatherOpinion = ["I am interested in all kinds of weather for spectaculare motives", "The weather is always nice enough in my opinion", 
+                        "There is nothing called bad weather!"]
+        
+    def getBotResponse(self, msgObj):
+        
+        if Tags.question in msgObj.tags:
+            # Is the message a question?
+            if Tags.opinion in msgObj.tags:
+                # Is the message a request for an opinion on a subject?
+                if Tags.activity in msgObj.tags:
+                    # Is the message asking for an opinion on an activity?
+                    if Tags.sport in msgObj.tags:
+                        # Is the message about sport?
+                       return(     # Put a random message into the send queue
+                            random.choice(self.opinionOnActivities[Tags.sport]).format(msgObj.activity)
+                            )
+                    else:
+                        # The message is about art.
+                        return(
+                                random.choice(self.opinionOnActivities[Tags.art])
+                            )
+                elif Tags.temperature in msgObj.tags or Tags.weather in msgObj.tags:
+                    # If the message asks for an opinion about the weather
+                    return(random.choice(self.weatherOpinion))
+                else:
+                    # General response to opinion messages
+                    return(random.choice(self.opinionResponses))
+                    
+            elif Tags.temperature in msgObj.tags or Tags.weather in msgObj.tags:
+                # The message asks about the weather
+                return(random.choice(self.weatherOpinion))
+                
+            elif Tags.activity in msgObj.tags:
+                if msgObj.activity in ["draw", "paint", "painting"]:
+                    msgObj.activity = "drawing"
+                return(random.choice(self.activityReplies[msgObj.activity]))
+                
+        elif Tags.statement in msgObj.tags:
+            # Is the message a statement or a request for an activity?
+            if Tags.requestActivity in msgObj.tags:
+                # The message is a request about an acitivty:
+                if msgObj.activity in ["draw", "paint", "painting"]:
+                    msgObj.activity = "drawing"
+                return(random.choice(self.activityReplies[msgObj.activity]))
+            else:
+                # return default statement response.
+                return(random.choice(self.statementResponses))
+        else:
+            # General response
+            return(random.choice(self.generalResponse))
+            
             
 if __name__ == "__main__":
     # Instantiate an argument parser to handle the commandline arguments and creating a help message.
@@ -646,15 +811,21 @@ if __name__ == "__main__":
     testChat = ChatUser(argParsed.Dest, argParsed.Port, argParsed.Username)
     testChat.start()
     
-    time.sleep(4)
+    time.sleep(1)
     # Start a simple chat bot.
     testBot = ChatBot(argParsed.Dest, argParsed.Port)
     testBot.start()
     
-    time.sleep(2)
+    time.sleep(1)
     # Start the weatherBot. 
     weatherBot = WeatherBot(argParsed.Dest, argParsed.Port)
     weatherBot.start()
+    
+    time.sleep(1)
+    # Start the SportBot
+    sportBot = SportBot(argParsed.Dest, argParsed.Port)
+    sportBot.start()
+    
     
     testChat.join()
     # Stop all bots if the client thread is finished
@@ -667,4 +838,8 @@ if __name__ == "__main__":
         
     weatherBot.join()
     
+    if sportBot.is_alive():
+        sportBot.initiateClosure()
+    
+    sportBot.join()
     
