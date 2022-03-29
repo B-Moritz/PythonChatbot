@@ -208,7 +208,7 @@ class ChatUser(threading.Thread):
     # End of message code used to identify the end of each message sent between the server and the user
     END_OF_MSG = "::EOMsg::"
     kickedMessage = re.compile("^Kicked by the host for (.*)")
-    CONNECTION_STOPPED_MSG = "The connection with the chat server has stoped."
+    CONNECTION_STOPPED_MSG = "The connection with the chat server has stopped."
     GENERATE_DELAY = 1
     
     def __init__(self, dest, port, username):
@@ -246,7 +246,8 @@ class ChatUser(threading.Thread):
     def sendInitialMessage(self, user):
         self.sendQueue.put(f"{user}")
         print(f"\nYou have joined the chat with username {user}!\n\n" + 
-              "Loading existing messages in the thread")
+              "Loading old messages in the thread.\n" + 
+              "----------[Start old messages]----------")
         
     def run(self):
         try:
@@ -272,15 +273,12 @@ class ChatUser(threading.Thread):
                 
             if len(writable) > 0 and self.sendQueue.qsize() > 0 and not self.event.is_set():
                 self.sendToServer(writable[0])
-            else:
-                time.sleep(1)
                 
             for i in range(self.recvQueue.qsize()):
                 print("\n" + self.recvQueue.get().replace(self.END_OF_MSG, ""))
                 
             if len(error) > 0:
-                print(self.CONNECTION_STOPPED_MSG)
-                self.event.set()
+                self.initiateClosure()
             
         
         # The client socket is closed when the while loop is done
@@ -312,13 +310,10 @@ class ChatUser(threading.Thread):
         while not bool(pattern.search(self.data_recv)):
             try:
                 cur_recv = cliSock.recv(4096).decode()
-            except ConnectionResetError:
-                # If the client socket raises the ConnectionResetError 
-                # this program implies that the server stoped the connection with this 
-                # client.
-                if not self.event.is_set():
-                    print(self.CONNECTION_STOPPED_MSG)
-                    self.initiateClosure()
+            except Exception:
+                # If the recv method raises an exception, 
+                # then the client program is closed
+                self.initiateClosure()
                 return
                 
             self.data_recv += cur_recv
@@ -326,9 +321,7 @@ class ChatUser(threading.Thread):
             if len(cur_recv) == 0:
                 # If the socket fetched 0 bytes from the receive buffer, 
                 # a disconnected connection is indicated.
-                if not self.event.is_set():
-                    self.initiateClosure()
-                    print(self.CONNECTION_STOPPED_MSG)
+                self.initiateClosure()
                 return
         
         msgList = self.data_recv.split(self.END_OF_MSG)
@@ -351,23 +344,30 @@ class ChatUser(threading.Thread):
             curMsg = (f"{self.username}: " + self.sendQueue.get() + self.END_OF_MSG).encode()
             while dataSent < len(curMsg):
                 
-                if not self.event.is_set():
+                try:
                     cur_sent = cliSock.send(curMsg[dataSent:])
-                else:
+                except Exception:
+                    # If the recv method raises an exception, 
+                    # then the client program is closed
+                    self.initiateClosure()
                     return
                 
                 if cur_sent == 0:
-                    if not self.event.is_set():
-                        print(self.CONNECTION_STOPPED_MSG)
-                        self.initiateClosure()
+                    self.initiateClosure()
                     return
                 dataSent += cur_sent
     
     def initiateClosure(self, reason=""):
-        self.event.set()
-        if reason != "":
-            print("\nYou have been removed from the chat by the host. " +
-                  f"The following reason was given: {reason}")
+        # if reason == "":
+        #     # Try to wait for a reason
+        #     time.sleep(1)
+        
+        if not self.event.is_set():
+            print(self.CONNECTION_STOPPED_MSG)
+            self.event.set()
+            if reason != "":
+                print("\nYou have been removed from the chat by the host. " +
+                      f"The following reason was given: {reason}")
         
         
 class ChatBot(ChatUser, threading.Thread):
@@ -378,7 +378,7 @@ class ChatBot(ChatUser, threading.Thread):
     def __init__(self, dest, port, username="Simple_Chat_Bot"):
         ChatUser.__init__(self, dest, port, username)
         
-        self.replyFilter = re.compile("^(.*[Bb]ot): |[-]+\[End existing messages\][-]+|User .*[bB]ot has joined the chat!")
+        self.replyFilter = re.compile("^(.*[Bb]ot): |[-]+\[Start new messages\][-]+|User .*[bB]ot has joined the chat!")
         
         self.opinionResponses = ["I think it is nice!", 
                             "I am not sure, try to ask someone else.", 
@@ -430,12 +430,12 @@ class ChatBot(ChatUser, threading.Thread):
         ----------
         reason : String
             This argument is a string containing the reason for why the server 
-            stoped the connection. Because this is a bot, the reason should be "" and
+            stopped the connection. Because this is a bot, the reason should be "" and
             therefore ignored.
         """
         # The event flag is set in order to break the while loop in the main thread 
         self.event.set()
-        print(f"{self.username} is disconnected!")
+        # print(f"{self.username} is disconnected!")
         
         
     def sendInitialMessage(self, botName):
@@ -731,16 +731,16 @@ class ArtBot(ChatBot):
         
         self.activityReplies = {"tennis" : ["Tennis! Sounds interesting. What is it?", "I would like to trie, but you would have to teach me!", "No, I am not interested"], 
                            "football" : ["No football for me, please!", "I don`t like football. Can we talk about something else?", "Football. Such a pointless activity!"], 
-                           "drawing" : ["Yes, I will never say no to that.", "That is a good idea."]}
+                           "drawing" : ["Yes, I will never say no to that.", "That is a good idea.", "Perfect, I have practiced my drawing capabilities lately."]}
         
         self.opinionOnActivities = {"football" : ["I do not like football. I think that it is compleatly mental to kick around a ball all day, while you can spend your time crating real art.", 
                                                   "I do not have much symphaty with that sport.", "Lets talk about something relevant!"], 
                                     "tennis" : ["I am not sure yet. I need to try it first.", "It looks like a cool activity. I would like to try it once."], 
-                               "drawing" : ["I love drawing and creating art with the pencile.", "I think drawing is funny and important for our development as humans.", 
-                                           "I prefere the art of creating the perfect stop-ball in tennis."]} 
+                               "drawing" : ["I love to create art with the pencile.", "It is my faivorit activity.", 
+                                           "With all my hart, i like to paint and draw!"]} 
         
-        self.weatherOpinion = ["I am interested in all kinds of weather for spectaculare motives", "The weather is always nice enough in my opinion", 
-                        "There is nothing called bad weather!"]
+        self.weatherOpinion = ["I like all kinds of weather. Any weather can provide an interesting motive for a drawing.", 
+                               "Let the weather be what it is and live with it!", "I can`t complain. It is nice enough for me!"]
         
     def getBotResponse(self, msgObj):
         
@@ -750,16 +750,10 @@ class ArtBot(ChatBot):
                 # Is the message a request for an opinion on a subject?
                 if Tags.activity in msgObj.tags:
                     # Is the message asking for an opinion on an activity?
-                    if Tags.sport in msgObj.tags:
-                        # Is the message about sport?
-                       return(     # Put a random message into the send queue
-                            random.choice(self.opinionOnActivities[Tags.sport]).format(msgObj.activity)
-                            )
-                    else:
-                        # The message is about art.
-                        return(
-                                random.choice(self.opinionOnActivities[Tags.art])
-                            )
+                    if msgObj.activity in ["draw", "paint", "painting"]:
+                        msgObj.activity = "drawing"
+                    return(random.choice(self.opinionOnActivities[msgObj.activity]))
+                    
                 elif Tags.temperature in msgObj.tags or Tags.weather in msgObj.tags:
                     # If the message asks for an opinion about the weather
                     return(random.choice(self.weatherOpinion))
@@ -826,6 +820,10 @@ if __name__ == "__main__":
     sportBot = SportBot(argParsed.Dest, argParsed.Port)
     sportBot.start()
     
+    time.sleep(1)
+    # Start the ArtBot
+    artBot = ArtBot(argParsed.Dest, argParsed.Port)
+    artBot.start()
     
     testChat.join()
     # Stop all bots if the client thread is finished
@@ -835,11 +833,13 @@ if __name__ == "__main__":
     
     if weatherBot.is_alive():
         weatherBot.initiateClosure()
-        
     weatherBot.join()
     
     if sportBot.is_alive():
         sportBot.initiateClosure()
-    
     sportBot.join()
+    
+    if artBot.is_alive():
+        artBot.initiateClosure()
+    artBot.join()
     

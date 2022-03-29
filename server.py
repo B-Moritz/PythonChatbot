@@ -42,8 +42,8 @@ class ChatSocket:
         for i in range(len(history)):
             self.sendQueue.put(history[i])
             
-        # Add the end history indication
-        self.sendQueue.put("------------[End existing messages]------------")
+        # Add the start new messages indication
+        self.sendQueue.put("------------[Start new messages]------------")
         self.destAddress = socketObj.getpeername()
         self.lastRecvTime = datetime.now()
         self.recvCounter = 0
@@ -311,7 +311,7 @@ class SimpleChatServer:
             # While the event flag is not set
             logging.info("A new message is sent from host")
             # Get the current message set by the HostBot object
-            msg = f"{self.HOSTBOT_UNAME}: {self.hostbot.getCurMsg()}"
+            msg = f"\n\033[92m{self.HOSTBOT_UNAME}\033[0m: {self.hostbot.getCurMsg()}"
             # Add the message to the thread cache
             self.history.append(msg)
 
@@ -481,7 +481,7 @@ class SimpleChatServer:
         curChatUser = self.searchChatUser(cliSock)
         logging.info(f"The connection to {curChatUser.username} {curChatUser.destAddress} is closing.")
         # Send a message to all other users informing that the user is no longer active
-        self.populateSendQueues(f"{self.HOSTBOT_UNAME}: User {curChatUser.username} left the chat.", cliSock)
+        self.populateSendQueues(f"\033[92m{self.HOSTBOT_UNAME}\033[0m: User {curChatUser.username} left the chat.", cliSock)
         # Remove socket from the list of readable sockets to avoid receiving from the client
         self.checkReadable.remove(cliSock)
         # The socket is also removed from the list for error checking
