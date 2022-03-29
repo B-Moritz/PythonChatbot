@@ -4,51 +4,109 @@ Created on Sun Mar 13 00:50:00 2022
 
 @author: Bernt Moritz Schmid Olsen (s341528)   student at OsloMet
 
-The module server is part of the solution to the individual 
-portfolio assignemnt in the course DATA2410 - Datanetwerk 
+This code has been writen for python 3.
+
+This module is part of the solution to the individual 
+portfolio assignemnt in the course DATA2410 - Datanettverk 
 og skytjenester. The module contains the classes used to 
 host the single threaded chat service. This includes handeling 
 TCP connections from users, receiving messages from users and 
-forwarding them to all other users.
+forwarding them to all other users. It also includes generating 
+messages that initiate conversations.
 
-The module consists of two classes. One is the HostBot class. This 
-class simulates the host user which is initiating conversations 
-periodically. 
+Three classes:
+    HostBot class: This class simulates the host user which contians 
+    the list of all possible messages that can be sent to the users. It 
+    also contains a method to pick a message from the list. Each 
+    SimpleChatServer object does have one HostBot object.
+    
+    ChatSocket class: An object of this class represents a client which 
+    is connected to the server. Each SimpleChatServer instance can have 
+    several ChatSocket objects associated.
+    
+    SimpleChatServer class: This is the controller class of the server 
+    side. It contains methods used to listen to incomming connections 
+    from clients, receive messages and forward them to clients. There 
+    is also implemented a small controll pannel, which can be used to 
+    manage the chat thread as an administrator.
+    
+If this file is executed, it instantiates the SimpleChatServer class 
+to create an object which host the chat service. You can specify the port 
+that the server should listen on as an argument. The following line starts 
+a server which is listening on port 2020:
+
+python3 server.py --Port 2020
+
+on Windows: python server.py --Port 2020
+
+You can see the help text by adding the --help option:
+    
+    Python3 server.py --help
+    
+The argument \"Port\" is optional. The server has default port 2020. The address 
+which the server answers on is any address associated with the network interfaces 
+of the end point this program is running on. 
+
+
 """
-
+# Importing the socket module 
 import socket
+import select
+# Importing the module used for logging data to a log file
 import logging
+# Importing a module used to implement and run threads
 import threading
+# Importing a module which parses arguments and adds help information
 import argparse
+# Importing the regex library
 import re
+# Importing a Queue datastructure
 from queue import Queue 
+# Importing the random module used to pick a random message for the host bot
 import random
+
+# Modules for working with time and dates
 import time
-from select import select
 from datetime import datetime
+# Module used to create directorys which are missing in the application file structure
 import os
 
 class ChatSocket:
+    """
+    Objects of this class represents the clients which are connected to the chat service.
+    The SimpleChatServer is dependant on this class.
+    """
     
     def __init__(self, socketObj, history):
         # Attribute containing the rest from the last receive procedure
         self.recvRest = ""
         # The username of the user 
         self.username = ""
+        # The send queue containing messages that should be sent to the user.
         self.sendQueue = Queue()
+        # The reason why the user is getting removed
         self.kickReason = ""
+        # A reference to the client socket object is stored
         self.clientSocket = socketObj
         
         for i in range(len(history)):
+            # The existing thread messages are added to the send queue.
+            # This way, the client will receive all the messages that were sent 
+            # in the chat before the client joined the chat.
             self.sendQueue.put(history[i])
             
-        # Add the start new messages indication
+        # Add the start new messages indication to indicate that the 
+        # next messages are sent after the user connected to the server.
         self.sendQueue.put("------------[Start new messages]------------")
+        # Get the port and destination address of the client
         self.destAddress = socketObj.getpeername()
-        self.lastRecvTime = datetime.now()
+        # The time stamp of the last received message
+        self.lastRecvTime = 0
+        # Number of received messages. Used to detect a user which sends too 
+        # many messages (spaming). 
         self.recvCounter = 0
-        # Flag is set if the server encounters problems with receiving 
-        # or sending to the client. 
+        # This Flag is set if the server encounters problems with receiving 
+        # or sending to the client.
         self.isBroken = False
         
         
@@ -56,16 +114,28 @@ class HostBot:
     """
     This class represents the host which is initiating conversations 
     in the chat thread. The method hostThread in the SimpleChatServer
-    class is dependant on this class.
+    class creates an instance of this class to send messages to all 
+    connected clients.
+    
     The messages which are sent from the host are saved in the 
     conversationInitiators.txt in the same forlder as the server.py 
-    file.
+    file. If the file is not found, some default messages defined in 
+    the code are used.
+    
+    Usage:
+        Instantiate an object of this class and then call getCurMsg 
+        to get the message set as current message (self.curMsg). If the 
+        message lifetime has exeeded the limit (MESSAGE_LIFETIME), then 
+        a new message is set as current message and returned. The user 
+        can update the current message independent of the time by calling 
+        the setCurMsg (returns the new message).
+        
     """
     # The contstant defining the period a message should be active (seconds)
     MESSAGE_LIFETIME = 10
     def __init__(self):
-        # The messages that could be sent by the host, are read from file 
         try:
+            # The messages that could be sent by the host, are read from file 
             with open(".\\conversationInitiators.txt", "r") as file:
                 self.conversationInitiators = file.read().split("\n")
             
@@ -76,6 +146,7 @@ class HostBot:
                 self.conversationInitiators.pop()
             
             if len(self.conversationInitiators) == 0:
+                # Raise RuntimeError if the file is empty
                 raise RuntimeError
         except (FileNotFoundError, RuntimeError):
             # If the file was not found or has no content
@@ -94,7 +165,7 @@ class HostBot:
                                            "Do you like to play tennis?"]
         
         # A message is set as the current message to be sent
-        self.setCurInit()
+        self.setCurMsg()
         
     
     def getCurMsg(self):
@@ -112,31 +183,35 @@ class HostBot:
         if time.time()-self.msgStartTime > self.MESSAGE_LIFETIME:
             # If the current message has been active for longer than the 
             # value given by MESSAGE_LIFETIME, then a new message is set.
-            self.setCurInit()
-            # The current message is returned
-        return self.curInit
+            # The current message is then returned.
+            return(self.setCurMsg())
     
-    def setCurInit(self):
+    def setCurMsg(self):
         """
-        This method sets the current message and stores the start time of 
+        This method sets the current message and stores the start timestamp of 
         the message.
 
         Returns
         -------
-        None.
+        self.curMsg - String
+            The new message is returned.
 
         """
         # A new message is set
-        self.curInit = random.choice(self.conversationInitiators)
+        self.curMsg = random.choice(self.conversationInitiators)
         # The start time of the message is captured
         self.msgStartTime = time.time()
+        # Return the new message
+        return(self.curMsg)
 
 class SimpleChatServer:
     """
+    The SimpleChatServer class has the task to host and controll one single chat thread.
+    
     
     """
-    event = threading.Event()
-    userInteractionEvent = threading.Event()
+
+    
     history = []
     # End of message code used to identify the end of each message sent between the server and the user
     END_OF_MSG = "::EOMsg::"
@@ -162,13 +237,21 @@ class SimpleChatServer:
             raise ValueError(f"The provided port {port} is not valid. \
                              Please provide a decimal number between 0 and 65535")
         
+        # Flags used to signal accross threads
+        self.stopApplication = threading.stopApplication()
+        self.stopUserInteraction = threading.stopApplication()
+        
         self.port = port
         self.isRunning = False
-        #self.sendQueues = {}
+        # The list of all connected users. 
+        #It should contain instances of the ChatSocket classs
         self.chatUsers = []
-        self.checkReadable = []
+        
+        # List of sockets that should be checked by the select command 
+        self.checkReadable = [] # Sockets 
         self.checkWritable = []
         self.checkError = []
+        
         self.recvRest = {}
         self.closeNext = []
         self.activeThreads = Queue()
@@ -200,7 +283,7 @@ class SimpleChatServer:
         # List the commandset
         print(self.listCommands())
         
-        while not self.userInteractionEvent.is_set():
+        while not self.stopUserInteraction.is_set():
             cmd = input("Host $> ")
             # Extract the command and arguments
             matchResult = self.cmdPattern.search(cmd)
@@ -252,16 +335,16 @@ class SimpleChatServer:
         hostbotThread = threading.Thread(target=self.hostbotThread, daemon=True)
         hostbotThread.start()
 
-        while not self.event.is_set() and (len(self.checkWritable) > 0 or len(self.checkReadable) > 0):
+        while not self.stopApplication.is_set() and (len(self.checkWritable) > 0 or len(self.checkReadable) > 0):
             try:
-                readable, writable, err = select(self.checkReadable, self.checkWritable, self.checkError, 10)
+                readable, writable, err = select.select(self.checkReadable, self.checkWritable, self.checkError, 10)
             except OSError as E:
                 logging.error(f"The select function raised the following exception: {E}")
                 readable, writable, err = []
                 # Stoping program
                 print(f"Fatal error in main thread. Program is closing: {E}")
-                self.event.set()
-                self.userInteractionEvent.set()
+                self.stopApplication.set()
+                self.stopUserInteraction.set()
                 
                 
             for client in readable:
@@ -307,7 +390,7 @@ class SimpleChatServer:
         instantiates a HostBot object, gets the message set by the HostBot 
         and sends puts it in each send queue. This is repeated in a cycle with 
         the length given by the HOST_PERIOD constant. The thread ends when the 
-        event flag is set.
+        stopApplication flag is set.
         
         Returns
         -------
@@ -317,8 +400,8 @@ class SimpleChatServer:
         # An HostBot object is instantiated
         self.hostbot = HostBot()
         
-        while not self.event.is_set():
-            # While the event flag is not set
+        while not self.stopApplication.is_set():
+            # While the stopApplication flag is not set
             logging.info("A new message is sent from host")
             # Get the current message set by the HostBot object
             msg = f"\n{self.HOSTBOT_UNAME}: {self.hostbot.getCurMsg()}"
@@ -610,7 +693,7 @@ class SimpleChatServer:
         print("    Removing active connections.", end="\r")
         logging.info("The service is stoping due to an \"exit\" command issued by admin.")
         # End the user interaction loop.
-        self.userInteractionEvent.set()
+        self.stopUserInteraction.set()
         # Remove the server socket from the check receivable list to avoid new connections
         self.checkReadable.pop(0)
         # Add all sockets to the close next list
@@ -625,8 +708,8 @@ class SimpleChatServer:
             
         print("[OK] Removing active connections.")
         logging.info("Stop procedure status: All connections are removed!")
-        # Set the event flag in order to stop the program
-        self.event.set()
+        # Set the stopApplication flag in order to stop the program
+        self.stopApplication.set()
     
     def waitIndication(self):
         print("[-]", "\r", end="")

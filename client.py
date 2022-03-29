@@ -582,7 +582,11 @@ class WeatherBot(ChatBot):
                     #print("Weather and location identified") # Used for debug
                     try:
                         # Get weather data for the specified location
-                        airTemp, cloudAreaFrac = self.YrObj.getCurrentWeatherData(msgObj.location)
+                        try:
+                            airTemp, cloudAreaFrac = self.YrObj.getCurrentWeatherData(msgObj.location)
+                        except:
+                            return("I am unable to reach the MET Api. Could you please make sure I have access to the Internet?")
+                        
                         # Add message about the weather for the given location
                         return("The weather in " + msgObj.location + 
                                            " is " + self.YrObj.convertCloudArea(cloudAreaFrac) + 
@@ -613,7 +617,11 @@ class WeatherBot(ChatBot):
                     #print("Location identified") # Used for debug
                     try:
                         # Get the weather data for the location
-                        self.YrObj.getCurrentWeatherData(msgObj.location)
+                        try:
+                            airTemp, cloudAreaFrac = self.YrObj.getCurrentWeatherData(msgObj.location)
+                        except:
+                            return("I am unable to reach the MET Api. Could you please make sure I have access to the Internet?")
+                        
                         # Send a message informing about the temperature for the next hour.
                         return("The temperature in " + msgObj.location + 
                                            " is " + str(self.YrObj.curData['Air temperature']) 
@@ -635,7 +643,11 @@ class WeatherBot(ChatBot):
                     #print("Location identified") # Used for debug
                     try:
                         # Get the weather data for the given location
-                        self.YrObj.getCurrentWeatherData(msgObj.location)
+                        try:
+                            airTemp, cloudAreaFrac = self.YrObj.getCurrentWeatherData(msgObj.location)
+                        except:
+                            return("I am unable to reach the MET Api. Could you please make sure I have access to the Internet?")
+                        
                         # Send a message about the weather at the given location the next hour.
                         return("The temperature in " + msgObj.location + 
                                           " is " + str(self.YrObj.curData['Air temperature']) +
