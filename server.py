@@ -24,9 +24,9 @@ import re
 from queue import Queue 
 import random
 import time
-import pdb
 from select import select
 from datetime import datetime
+import os
 
 class ChatSocket:
     
@@ -62,7 +62,7 @@ class HostBot:
     file.
     """
     # The contstant defining the period a message should be active (seconds)
-    MESSAGE_LIFETIME = 60
+    MESSAGE_LIFETIME = 10
     def __init__(self):
         # The messages that could be sent by the host, are read from file 
         try:
@@ -81,7 +81,17 @@ class HostBot:
             # If the file was not found or has no content
             # -> write error to the log and add a default message to conversationInitiators
             logging.error("The file, conversationInitiators.txt, was not found!")
-            self.conversationInitiators = ["What is the temperature in Oslo?"]
+            self.conversationInitiators = ["What is the temperature in Oslo?", 
+                                           "Is it sunny in Oslo?", 
+                                           "How is the weather in Berlin?", 
+                                           "It is cloudy in Oslo!", 
+                                           "It is a bad day!", 
+                                           "Do you like the weather in London?", 
+                                           "How would you rate the weather in Paris?", 
+                                           "We could play some football?", 
+                                           "Can we paint a painting?", 
+                                           "What do you think about watching tennis?", 
+                                           "Do you like to play tennis?"]
         
         # A message is set as the current message to be sent
         self.setCurInit()
@@ -135,7 +145,7 @@ class SimpleChatServer:
     botnamePattern = re.compile("^(.*): ")
     HOSTBOT_UNAME = "Host"
     # The time between host messages (seconds)
-    HOST_PERIOD = 90
+    HOST_PERIOD = 30
     # The main part of the kick message
     KICK_MSG = "Kicked by the host for "
     
@@ -191,7 +201,7 @@ class SimpleChatServer:
         print(self.listCommands())
         
         while not self.userInteractionEvent.is_set():
-            cmd = input("\033[92mHost\033[0m $> ")
+            cmd = input("Host $> ")
             # Extract the command and arguments
             matchResult = self.cmdPattern.search(cmd)
             
@@ -231,7 +241,7 @@ class SimpleChatServer:
             self.waitIndication()
             
         mainThread.join()
-        print("[\033[92mOK\033[0m] Waiting for threads to finish.")
+        print("[OK] Waiting for threads to finish.")
         self.serverSocket.close()
         self.isRunning = False
         print("Service stopped successfully!\n")
@@ -311,7 +321,7 @@ class SimpleChatServer:
             # While the event flag is not set
             logging.info("A new message is sent from host")
             # Get the current message set by the HostBot object
-            msg = f"\n\033[92m{self.HOSTBOT_UNAME}\033[0m: {self.hostbot.getCurMsg()}"
+            msg = f"\n{self.HOSTBOT_UNAME}: {self.hostbot.getCurMsg()}"
             # Add the message to the thread cache
             self.history.append(msg)
 
@@ -481,7 +491,7 @@ class SimpleChatServer:
         curChatUser = self.searchChatUser(cliSock)
         logging.info(f"The connection to {curChatUser.username} {curChatUser.destAddress} is closing.")
         # Send a message to all other users informing that the user is no longer active
-        self.populateSendQueues(f"\033[92m{self.HOSTBOT_UNAME}\033[0m: User {curChatUser.username} left the chat.", cliSock)
+        self.populateSendQueues(f"{self.HOSTBOT_UNAME}: User {curChatUser.username} left the chat.", cliSock)
         # Remove socket from the list of readable sockets to avoid receiving from the client
         self.checkReadable.remove(cliSock)
         # The socket is also removed from the list for error checking
@@ -613,19 +623,19 @@ class SimpleChatServer:
             self.waitIndication()
             #logging.info(f"chatUser: {self.chatUsers}")
             
-        print("[\033[92mOK\033[0m] Removing active connections.")
+        print("[OK] Removing active connections.")
         logging.info("Stop procedure status: All connections are removed!")
         # Set the event flag in order to stop the program
         self.event.set()
     
     def waitIndication(self):
-        print("[\033[94m-\033[0m]", "\r", end="")
+        print("[-]", "\r", end="")
         time.sleep(0.1)
-        print("[\033[94m\\\033[0m]", "\r", end="")
+        print("[\\]", "\r", end="")
         time.sleep(0.1)
-        print("[\033[94m|\033[0m]", "\r", end="")
+        print("[|]", "\r", end="")
         time.sleep(0.1)
-        print("[\033[94m/\033[0m]", "\r", end="")
+        print("[/]", "\r", end="")
         time.sleep(0.1)
             
     def searchChatUser(self, cliSock):
@@ -658,6 +668,11 @@ if __name__=="__main__":
     parser.add_argument('-p', '--Port', nargs='?', default=2020, metavar="PORT",
                         type=int, help="The port number associated with the service")
     args = parser.parse_args()
+    
+    # Check that a log folder is present in the application directory
+    if not os.path.isdir("./Logs"):
+        # Create the folder if it does not exist
+        os.mkdir("Logs")
     
     logDay = f"{datetime.now().date().__str__()}"
     logging.basicConfig(format='%(levelname)s: %(asctime)s: %(message)s', 

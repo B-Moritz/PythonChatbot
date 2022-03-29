@@ -24,7 +24,7 @@ class WeatherApi:
     This class contains methods used to connect to the Met api and handle weather data. 
     """
     
-    WORLD_CITIES_PATH = ".\\simplemaps_worldcities_basicv1.74\\worldcities.csv"
+    WORLD_CITIES_PATH = ".\\worldcities.csv"
     CACHE_PATH = ".\\WeatherCache\\wetherDataCache_{}.json"
     ABSOLUTE_ZERO = -273.15
     
@@ -34,11 +34,15 @@ class WeatherApi:
             self.cityData = pandas.read_csv(self.WORLD_CITIES_PATH)
         except FileNotFoundError:
             # Raise exception if the file does not exist
-            raise FileNotFoundError("The worldcities was not found in the programfiles: " \
-                                    ".\\simplemaps_worldcities_basicv1.74\\worldcities.csv")
+            raise FileNotFoundError("The worldcities file was not found in the programfiles: " +
+                                    self.WORLD_CITIES_PATH)
         # Extract a list of all cities        
         self.cityList = self.cityData.loc[:, "city"]
                 
+        # Create the cache folder if it does not exist
+        if not os.path.isdir("./WeatherCache"):
+            # Create the directory
+            os.mkdir("WeatherCache")
         
         
     def getCoordinates(self, city):

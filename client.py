@@ -4,7 +4,7 @@ Created on Sun Mar 13 16:38:50 2022
 
 @author: Bernt Moritz Schmid Olsen (s341528)   student at OsloMet
 
-This module, client, is part of the solution to the individual 
+This module is part of the solution to the individual 
 portofolio assignment in the course DATA2410 - Datanetverk og 
 skytjenester. This module contians classes used to connect chat 
 users and bots to a single thread chat, hosted on a server.
@@ -21,8 +21,6 @@ import time
 import select
 import enum
 import random
-import pdb
-import YrInterface as yr
 
 class Tags(enum.Enum):
     """
@@ -402,7 +400,6 @@ class ChatBot(ChatUser, threading.Thread):
         
         
     def run(self):
-        #pdb.set_trace()
         try:
             self.cliSock.connect((self.dest, self.port))
         except:
@@ -552,6 +549,7 @@ class WeatherBot(ChatBot):
     
     def __init__(self, dest, port, username="Weather_Bot"):
         ChatBot.__init__(self, dest, port, username)
+        # The  constructor raises an exception if the worldcities file does not exist.
         self.YrObj = yr.WeatherApi()
                 
     def getBotResponse(self, msgObj):
@@ -590,7 +588,7 @@ class WeatherBot(ChatBot):
                                            " is " + self.YrObj.convertCloudArea(cloudAreaFrac) + 
                                            " and " + self.YrObj.convertTemperature(airTemp) + ". " + 
                                            ("I like it!" if airTemp > 15 and cloudAreaFrac < 10 else "I do not like it!") + 
-                                           "\n This information is based on data from MET Norway.")
+                                           "\n This information is based on weather data from MET Norway and location data from simplemaps.")
                                             # The bot likes the weather if air temperature is greater than 15 and 
                                             # cloud area fraction is less than 10 %.
                         
@@ -620,7 +618,7 @@ class WeatherBot(ChatBot):
                         return("The temperature in " + msgObj.location + 
                                            " is " + str(self.YrObj.curData['Air temperature']) 
                                            + " degree celcius!" + 
-                                           "\n This information is based on data from MET Norway.")
+                                           "\n This information is based on weather data from MET Norway and location data from simplemaps.")
                     except ValueError:
                         #print("City not found in list") # Used for debug
                         # The location was not identified as a city.
@@ -643,7 +641,7 @@ class WeatherBot(ChatBot):
                                           " is " + str(self.YrObj.curData['Air temperature']) +
                                           " degree celcius! The sky is " + 
                                           str(self.YrObj.convertCloudArea(self.YrObj.curData['Cloud_area_fraction'])) + 
-                                          ".\n This information is based on data from MET Norway.")
+                                          ".\n This information is based on weather data from MET Norway and location data from simplemaps.")
                                            
                     except ValueError:
                         #print("Location was not found in list") # Used for debug
@@ -811,9 +809,16 @@ if __name__ == "__main__":
     testBot.start()
     
     time.sleep(1)
-    # Start the weatherBot. 
-    weatherBot = WeatherBot(argParsed.Dest, argParsed.Port)
-    weatherBot.start()
+    try:
+        import YrInterface as yr
+        
+        # Start the weatherBot. 
+        weatherBot = WeatherBot(argParsed.Dest, argParsed.Port)
+        weatherBot.start()
+    except:
+        # If the weather bot fails, then start a simple bot instead
+        weatherBot = ChatBot(argParsed.Dest, argParsed.Port, "Weather_substitute")
+        weatherBot.start()
     
     time.sleep(1)
     # Start the SportBot
