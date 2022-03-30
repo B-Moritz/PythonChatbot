@@ -5,21 +5,31 @@ Created on Sun Mar 13 16:38:50 2022
 @author: Bernt Moritz Schmid Olsen (s341528)   student at OsloMet
 
 This module is part of the solution to the individual 
-portofolio assignment in the course DATA2410 - Datanetverk og 
-skytjenester. This module contians classes used to connect chat 
+portofolio assignment in the course DATA2410 - Datanettverk og 
+skytjenester. This module contains classes used to connect chat 
 users and bots to a single thread chat, hosted on a server.
 
 If this file, client.py, is executed with  
 """
 
+# The socket module 
 import socket
-import argparse
-import re
-import threading
-from queue import Queue
-import time
 import select
+# The module used to parse commandline arguments
+import argparse
+# Regex library
+import re
+# Module for working with trheads
+import threading
+# Thread-safe queue datastructure
+from queue import Queue
+
+# Module for working with time and sleep
+import time
+# The enum class is imported:
+    #https://www.geeksforgeeks.org/enum-in-python/
 import enum
+# Importing the random module used to pick a random message for the host bot
 import random
 
 class Tags(enum.Enum):
@@ -46,7 +56,9 @@ class Tags(enum.Enum):
     
     # activity tags
     activity = 11
+    # If the message si about sport
     sport = 12
+    # If the message is about art
     art = 13
     # The message contains a request or suggestion for an activity
     requestActivity = 14
@@ -59,7 +71,7 @@ class MsgAnalysis:
     (chatbots) are dependant on this class. It is used to 
     classify/tag messages received.
     
-    The object has three interesting attributes which describes the 
+    The object has four interesting attributes which describes the 
     message: 
         tags - type: python list - Contains tags from the Tags enum class 
                                    that describe the content of the message.
@@ -72,29 +84,46 @@ class MsgAnalysis:
         username - type: String - This variable contians the username of the 
                                   user which joined the chat. The variable is 
                                   only set if the message is a join message.
+                                  
+        Activity - type: String - This variable describes the activity found 
+                                  to be associated with the message. It is 
+                                  only set if the message contains one of 
+                                  words in the activityOpinions dictionary.
+                                  
     The object has one method:
         classifyMsg() - This message tests the message against some 
                         regular expressions which are defined as constants 
                         and are connected to a certain tag.
     """
     
+    # Regex pattern used to detect messages which are to complicated. 
+    # A message is for example too complicated if it contains several sentences.
     complicationDetection = re.compile(".*: .*[\.\?\!\:][A-Za-z0-9\s]+")
+    # A regex pattern used to determine if the message is asking a question.
     questionWords = re.compile("([Ww]hat)|([Ww]here)|([Ww]hen)|([Ww]hy)|([Ww]hich) \
                                |([Ww]ho)|([Hh]ow)|([Ww]hose)|([cC]an you)|([cC]ould you)|([Ii]s it)|([dD]o you)|([wW]ould you)")
-
-    knownSubjects = {"temperature" : Tags.temperature, "weather" : Tags.weather, "hot" : Tags.temperature, 
+                               
+    # Words about the weather maped to their coresponding tags
+    weatherSubjects = {"temperature" : Tags.temperature, "weather" : Tags.weather, "hot" : Tags.temperature, 
                      "cold" : Tags.temperature, "sunny" : Tags.weather}
     
+    # List of regex strings used to determine if the messages makes a sugestion for an activity
     requestActivities = ["[wW]e could", "[wW]e should", "[cC]an we", "[cC]ould we"]
     
+    # Activity words maped to their coresponding tags
     activitiesOpinion = {"sport" : Tags.sport, "art" : Tags.art, "football" : Tags.sport, "tennis" : Tags.sport, 
                          "draw" : Tags.art, "drawing" : Tags.art, "paint" : Tags.art, "painting" : Tags.art}
     
+    # List of regex strings used to determine if the message asks for an opinion.
     opinions = ["[Dd]o you like", "[Cc]an you rate", "[Pp]lease rate", "[Dd]o you think", "[Hh]ow would you rate", "What do you think about"]
     
-    locationReg = "{} (.*)[\s\!\.\?\,]|{} (.*)$"
+    # List of regex string used to detect locations
     locationWords = ["[iI]n", "[aA]t"]
+    # The strings in locationWords are substituted in this regex string.
+    # It finds the word refering to a location
+    locationReg = "{} (.*)[\s\!\.\?\,]|{} (.*)$"
     
+    # Regex pattern used to detect join messages
     regJoinCase = re.compile("User (.*) has joined the chat!")
     
         
@@ -155,7 +184,7 @@ class MsgAnalysis:
             self.tags.append(Tags.statement) 
             
         # Find known subjects
-        subjects = self.knownSubjects.keys()
+        subjects = self.weatherSubjects.keys()
         activities = self.activitiesOpinion.keys()
         for word in self.msgList:
             # For each word in the message, check if it is in the list of 
@@ -164,35 +193,48 @@ class MsgAnalysis:
             if word in subjects:
                 # If the word is a key in the subjects dictionary 
                 #  -> add the coresponding tag 
-                self.tags.append(self.knownSubjects[word])
+                self.tags.append(self.weatherSubjects[word])
             
             if word in activities:
+                # If the word is in the activitiesOpinion dictionary, 
+                # then add the activity found to the activity attribute.
                 self.activity = word
+                # Add the tag associated with the word and add the activity
                 self.tags.append(self.activitiesOpinion[word])
+                # Add the activity tag
                 self.tags.append(Tags.activity)
         
+        # Check if the message requests an activity 
         if Tags.activity in self.tags:
-            # Check if the message requests an activity
+            # A request for activity must already have the activity tag.
             for pattern in self.requestActivities:
+                # For each request pattern compile and make the serarch
                 patternObj = re.compile(pattern)
                 curMatch = patternObj.search(self.msg)
                 if bool(curMatch):
+                    # If the message matches one of the patterns, 
+                    # then add the requestActivity tag
                     self.tags.append(Tags.requestActivity)
+                    break
                     
             
-        # Check if the message askes for an opinion
+        # Check if the message asks for an opinion
         for opinion in self.opinions:
             curPat = re.compile(opinion)
             if bool(curPat.search(self.msg)):
+                # If it asks for and opinion, set the opinion tag.
                 self.tags.append(Tags.opinion)
+                break
         
                 
         # Check for a location
         for word in self.locationWords:
-            # For each word in the 
+            # For each word in the location words list, 
+            # create the regex pattern and run the search
             curPat = re.compile(self.locationReg.format(word, word))
             result = curPat.search(self.msg)
             if result:
+                # If a location was parsed, add it as attribute and set the location tag.
                 self.tags.append(Tags.location)
                 self.location = result.groups()[0]
                 break
@@ -201,13 +243,26 @@ class MsgAnalysis:
 class ChatUser(threading.Thread):
     """
     This class contians method used to connect, send and receive message with 
-    the chat service provided by the server.py module.
+    the chat service provided by the server.py module. The class inherits from 
+    the Thread class and contains an overloaded run method. Objects of this class 
+    are ment to be used as thread objects. Usage:
+        
+        1. Instantiate the object with destination address (String, IPv4), 
+           destination port (int) and username (String)
+        2. Start the thread by calling the .start() method
+        
+        Documentatino about the threading module:
+            https://docs.python.org/3/library/threading.html#module-threading
     """
     # End of message code used to identify the end of each message sent between the server and the user
     END_OF_MSG = "::EOMsg::"
+    # The pattern used to identify a kick message from the host.
     kickedMessage = re.compile("^Kicked by the host for (.*)")
+    # A default message displayed if an error with the connection is found
     CONNECTION_STOPPED_MSG = "The connection with the chat server has stopped."
-    GENERATE_DELAY = 1
+    # Delay set for the user input interaction. All messages the user types within a 
+    # given time (GENERATE_DELAY) in seconds after the first message, are acumulated.
+    GENERATE_DELAY = 1 # seconds
     
     def __init__(self, dest, port, username):
         threading.Thread.__init__(self)
@@ -221,6 +276,9 @@ class ChatUser(threading.Thread):
         
         # Instantiate the client socket object
         self.cliSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # Set the client socket to be non-blocking
+        self.cliSock.setblocking(0)
+        
         if type(dest) != str:
             # Validatet that the destination address is a string
             raise ValueError(f"The provided destination address was {type(dest)}. \
@@ -234,71 +292,142 @@ class ChatUser(threading.Thread):
         # The destination port and address attributes are set
         self.dest = dest
         self.port = port
-        
+        # The send queue for the client
         self.sendQueue = Queue()
+        # The receive queue of the client
         self.recvQueue = Queue()
-        self.event = threading.Event()
+        # The flag used to end the connection with the server and end the client program.
+        self.stopApplication = threading.Event()
+        # The rest from the last receive procedure
         self.data_recv = ""
+        # The rest from the last send procedure
+        self.send_rest = ""
         
-        
-    def sendInitialMessage(self, user):
-        self.sendQueue.put(f"{user}")
-        print(f"\nYou have joined the chat with username {user}!\n\n" + 
-              "Loading old messages in the thread.\n" + 
-              "----------[Start old messages]----------")
         
     def run(self):
+        """
+        This run method contains the main routine of the user chat client. It handles the 
+        sending and receiving of data. It also controlls the user interaction loop, which 
+        obtains input from the user rinning the program.
+
+        Returns
+        -------
+        None.
+
+        """
         try:
+            # initiate a TCP connection with the server on given destination address and destination port
             self.cliSock.connect((self.dest, self.port))
         except:
             # Write to terminal if the connection could not be established
             print(f"Unable to connect to the chat server on destination {self.dest} and port {self.port}.")
             return
-        socketList = [self.cliSock]
         
+        # Add the connection message to the send queue
         self.sendInitialMessage(self.username)
+        # Start the user input thread used to obtain input from the user
+        userInputThread = threading.Thread(target=self.generateOutput, daemon=True)
+        userInputThread.start()
         
-        outputThread = threading.Thread(target=self.generateOutput, daemon=True)
-        outputThread.start()
-        
-        while not self.event.is_set():
+        while not self.stopApplication.is_set():
             # Run the select command to check if the socket has received any data, 
             # has encountered an error or can send to the server.
-            readable, writable, error = select.select(socketList, socketList, socketList, 10) 
+            try:
+                readable, writable, error = select.select(
+                    [self.cliSock], # Check the inbound buffer of the socket
+                    [self.cliSock if not self.sendQueue.empty() else None], # Check if the send buffer is not full when there are messages to be sent
+                    [self.cliSock], # Check for error
+                    10 # timeout in seconds
+                )
+            except OSError:
+                # If the select function fails, then end the client program.
+                self.initiateClosure()
+                break
             
-            if len(readable) > 0 and not self.event.is_set():
+            if readable and not self.stopApplication.is_set():
+                # If there is data in the receive buffer and the stop falg is not set, 
+                # fetch the data with the receivFromServer method
                 self.receiveFromServer(readable[0])
                 
-            if len(writable) > 0 and self.sendQueue.qsize() > 0 and not self.event.is_set():
+            if writable and not self.stopApplication.is_set():
+                # If there is free space in the send buffer, then send the data in the send queue
                 self.sendToServer(writable[0])
                 
-            for i in range(self.recvQueue.qsize()):
+            while not self.recvQueue.empty():
+                # Print all messages that were added to the recvQueue.
+                # Remove the end of messsage code
                 print("\n" + self.recvQueue.get().replace(self.END_OF_MSG, ""))
                 
-            if len(error) > 0:
+            if error and not self.stopApplication.is_set():
+                # If there is an error with the client, then initiate closure of the program
                 self.initiateClosure()
             
         
         # The client socket is closed when the while loop is done
         self.cliSock.close()
         # Waiting for the thread for the user interaction to end.
-        outputThread.join(1)
+        userInputThread.join(1)
+        
+    def sendInitialMessage(self, user):
+        """
+        This method creates the conneciton message which is the first message sent 
+        from the client to the server. The message is then added to the send queue. 
+
+        Parameters
+        ----------
+        user : String
+            The username that should be sent to the server.
+
+        Returns
+        -------
+        None.
+
+        """
+        self.sendQueue.put(f"{user}")
+        # Print first information to the terminal
+        print(f"\nYou have joined the chat with username {user}!\n\n" + 
+              "Loading old messages in the thread.\n" + 
+              "----------[Start old messages]----------")
         
     def generateOutput(self):
+        """
+        This method contians the loop which runs the user interaction. It takes input 
+        from the user and adds it as a message to the send queue. If \"\\exit\" is 
+        typed by the user, then the client program is disconnecting from the server and 
+        ending the program.
+
+        Returns
+        -------
+        None.
+
+        """
+        # This pattern checks if the exit command was issued by the user
         exitPattern = re.compile("^\/exit")
+        # The start of the message that should be sent
         usernameString = f"{self.username}: "
-        while not self.event.is_set():
+        while not self.stopApplication.is_set():
+            # While the stop flag is not set 
+            # Obtian the start timestamp
             startTime = time.time()
+            # Definition of the variable containing the total message (can consist of several messages)
             totalMsg = ""
             while (time.time() - startTime) < self.GENERATE_DELAY:
+                # While the time difference is less than the time specified self.Generate_Delay 
+                # then add to the total message variable
+                
+                # Wait for input from the user
                 msg = input()
                 if bool(exitPattern.search(msg)):
+                    # If the exit command was detected set the stop flag
                     print("You are disconnecting from the chat.")
-                    self.event.set()
+                    self.stopApplication.set()
+                    return
                 else:
+                    # if the cinput is normal, add it to the rest of the messages
                     print(usernameString + msg)
                     totalMsg += usernameString + msg + self.END_OF_MSG
-                    
+            
+            # Add the input data to the send queue
             self.sendQueue.put(totalMsg[len(usernameString):-len(self.END_OF_MSG)])
         
         
@@ -344,11 +473,16 @@ class ChatUser(threading.Thread):
                 
                 try:
                     cur_sent = cliSock.send(curMsg[dataSent:])
+                except OSError:
+                    # The send buffer is full. Save the rest of the message
+                    self.sendRest = curMsg[(dataSent + cur_sent):]
+                    return
                 except Exception:
-                    # If the recv method raises an exception, 
-                    # then the client program is closed
+                    # If the recv method raises an exception other than OSError, 
+                    # then the client program is closed.
                     self.initiateClosure()
                     return
+                
                 
                 if cur_sent == 0:
                     self.initiateClosure()
@@ -360,9 +494,9 @@ class ChatUser(threading.Thread):
         #     # Try to wait for a reason
         #     time.sleep(1)
         
-        if not self.event.is_set():
+        if not self.stopApplication.is_set():
             print(self.CONNECTION_STOPPED_MSG)
-            self.event.set()
+            self.stopApplication.set()
             if reason != "":
                 print("\nYou have been removed from the chat by the host. " +
                       f"The following reason was given: {reason}")
@@ -409,14 +543,14 @@ class ChatBot(ChatUser, threading.Thread):
         
         self.sendInitialMessage(self.username)
         self.sendToServer(self.cliSock)
-        while not self.event.is_set():
+        while not self.stopApplication.is_set():
             
-            if not self.event.is_set(): 
+            if not self.stopApplication.is_set(): 
                 time.sleep(self.BOT_RESPONSE_DELAY)
                 self.receiveFromServer(self.cliSock)
                 
             self.generateResponse()
-            if not self.event.is_set():
+            if not self.stopApplication.is_set():
                 self.sendToServer(self.cliSock)
             
     def initiateClosure(self, reason=""):
@@ -430,8 +564,8 @@ class ChatBot(ChatUser, threading.Thread):
             stopped the connection. Because this is a bot, the reason should be "" and
             therefore ignored.
         """
-        # The event flag is set in order to break the while loop in the main thread 
-        self.event.set()
+        # The stopApplication flag is set in order to break the while loop in the main thread 
+        self.stopApplication.set()
         # print(f"{self.username} is disconnected!")
         
         
