@@ -101,7 +101,7 @@ class ChatSocket:
         # Get the port and destination address of the client
         self.destAddress = socketObj.getpeername()
         # The time stamp of the last received message
-        self.lastRecvTime = 0
+        self.lastRecvTime = datetime.now()
         # Number of received messages. Used to detect a user which sends too 
         # many messages (spaming). 
         self.recvCounter = 0
@@ -164,6 +164,8 @@ class HostBot:
                                            "What do you think about watching tennis?", 
                                            "Do you like to play tennis?"]
         
+        # The attribute containing the current message
+        self.curMsg = "What is the temperature in Oslo?"
         # A message is set as the current message to be sent
         self.setCurMsg()
         
@@ -185,6 +187,9 @@ class HostBot:
             # value given by MESSAGE_LIFETIME, then a new message is set.
             # The current message is then returned.
             return(self.setCurMsg())
+        
+        else:
+            return(self.curMsg)
     
     def setCurMsg(self):
         """
@@ -211,19 +216,19 @@ class SimpleChatServer:
     
     """
 
-    
-    history = []
     # End of message code used to identify the end of each message sent between the server and the user
     END_OF_MSG = "::EOMsg::"
     # The maximal number of bytes received per receive sycle 
-    MAX_RCV = 5000
+    MAX_RCV = 4096*5
+    # Regex pattern used to find the username
     botnamePattern = re.compile("^(.*): ")
+    # The username of the host
     HOSTBOT_UNAME = "Host"
     # The time between host messages (seconds)
     HOST_PERIOD = 30
     # The main part of the kick message
     KICK_MSG = "Kicked by the host for "
-    
+    # The regex pattern used to parse the commands issued by the administrator
     cmdPattern = re.compile("^([^ ]*) {0,1}(.*)$")
     
     # Constants used in checking for spam by users.
@@ -233,30 +238,42 @@ class SimpleChatServer:
     SPAM_SECONDS = 4
     
     def __init__(self, port):
+        # Verify that the port provided as argument to the constructor is valid
         if type(port)!=int or port < 0 or port > 65535:
             raise ValueError(f"The provided port {port} is not valid. \
                              Please provide a decimal number between 0 and 65535")
         
-        # Flags used to signal accross threads
-        self.stopApplication = threading.stopApplication()
-        self.stopUserInteraction = threading.stopApplication()
-        
+        # The port is added to the port attribute
         self.port = port
+        # The isRunning flag is set to False (This attribute indicates if the server is running)
         self.isRunning = False
+        
+        # Flags used to signal accross threads. This flags are thread-safe:
+            # https://docs.python.org/3/library/threading.html#threading.Event
+        self.stopApplication = threading.Event()
+        self.stopUserInteraction = threading.Event()
+        
         # The list of all connected users. 
-        #It should contain instances of the ChatSocket classs
+        # It should contain instances of the ChatSocket classs
         self.chatUsers = []
+        # A list containing all messages which were sent since the service started
+        self.history = []
         
         # List of sockets that should be checked by the select command 
-        self.checkReadable = [] # Sockets 
-        self.checkWritable = []
-        self.checkError = []
+        self.checkReadable = [] # Select checks if the sockets in this list are readable (does the buffer contain data?)
+        self.checkWritable = [] # Select checks if the socket connections in this list can be used to send.
+        self.checkError = [] # Select checks if the socket connections in the list have errors.
         
-        self.recvRest = {}
+        # A list containing references to client sockets which should be closed in the next iteration.
         self.closeNext = []
-        self.activeThreads = Queue()
+        # A list containing all sockets that should send a close message to the client and then be removed
         self.finishRemovalList = []
-        # Defining the command set with commands used to controll the service
+        
+        # This queue contains the references to each send and receive thread created in the mainThread method
+        self.activeThreads = Queue()
+        # Defining the commands which can be used to controll the service
+        # Each key in the dictionary, command name, have a list with a general description of the command, 
+        # Description of the arguments and a reference to the function this command should execute.
         self.cmdSet = {"listConnections" : ["Prints a list of all connected users. ", 
                                          "The command takes no arguments.", self.listConnections], 
                        "kick": ["Disconnects a specified user from the server. ", 
@@ -267,32 +284,56 @@ class SimpleChatServer:
         
         
     def startService(self):
+        """
+        This method is called to start the chat service. It creates the main thread which listenas for 
+        client connecitons, receives data and sends data. It also contians the user interaction loop used 
+        to get commands defined in the self.cmdSet dictionary.
+
+        Returns
+        -------
+        None.
+
+        """
+        # Defines the main server socket with the IPv4 address family (AF_INET) 
+        # and the TCP protocol (SOCK_STREAM) as domain and type
         self.serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # Binds the server socket to the given port and any address associated to any network card ont he ensystem 
+        # running this program.
         self.serverSocket.bind(('', self.port))
+        # The server starts listening on the given port. 
+        # The number of unaccepted connections to the server before the server refuses any new connections, is 5.
         self.serverSocket.listen(5)
+        # The server socket is added to the check readable list so select can check if there ar new connections 
+        # Which the server socket can accept.
         self.checkReadable.insert(0, self.serverSocket) 
         
         logging.info("Service is listening to incomming connections on port %s.", str(self.port))
+        # Print start information about the program and the server
         print("Python Chat service\tCreated by Bernt Olsen, student at OsloMet.\n")
         print("Service is listening to incomming connections on port {}. \n".format(str(self.port)))
+        # Indicate that the server is running
         self.isRunning = True
-        
+        # Create and start the main thread
         mainThread = threading.Thread(target=self.mainThread)
         mainThread.start()
         
-        # List the commandset
+        # List all commands with their descriptions
         print(self.listCommands())
         
+        # User interaciton loop
         while not self.stopUserInteraction.is_set():
+            # Continue until the stopUserInteraction flag is set.
+            # Await input
             cmd = input("Host $> ")
             # Extract the command and arguments
             matchResult = self.cmdPattern.search(cmd)
             
             if bool(matchResult):
+                # If a command was parsed, then get the command and attributes
                 cmd = matchResult.groups()[0] # command
                 arguments = matchResult.groups()[1].split(" ") # arguments
                 if cmd in self.cmdSet:
-                    # If the command is recognized, check the  arguments
+                    # If the command is recognized
                     if cmd == "kick":
                         reason = ""
                         # Check the arguments if the kick command is given
@@ -318,6 +359,8 @@ class SimpleChatServer:
                         self.cmdSet[cmd][2]()
                 else: 
                    print(f"The command {cmd} was not recognized!")
+            else: 
+               print(f"The command {cmd} was not recognized!")
         
         print("    Waiting for threads to finish.", end="\r")
         while mainThread.is_alive():
@@ -448,7 +491,7 @@ class SimpleChatServer:
     def connectionErrorHandling(self, curChatUser, cliSock, E=""):
         if not curChatUser.isBroken:
             logging.warning(f"The connection with the client {curChatUser.username} {curChatUser.destAddress} has ended. {E}")
-            # Set the isBroken flag
+            # Set the isBroken flag to indicate that the client cannot receive.
             curChatUser.isBroken = True
             self.closeNext.append(cliSock)
             
