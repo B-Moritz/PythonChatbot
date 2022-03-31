@@ -546,7 +546,8 @@ class SimpleChatServer:
         """
         # Accept the request from the client and obtain the client socket.
         client, src = self.serverSocket.accept()
-        
+        # Set the socket to non-blocking
+        client.setblocking(0)
         logging.info(f"New client connection accepted for source {src}.")
         
         # Create the ChatSocket object for the new client/user.
@@ -623,20 +624,18 @@ class SimpleChatServer:
             # the send buffer is full or an exception is raised
             try:
                 sentBytes = cliSock.send(msg[totalSentBytes:])
-            except (ConnectionAbortedError, ConnectionResetError) as E:
-                self.connectionErrorHandling(curChatUser, cliSock, str(E))
-                return
-            except OSError:
+            except BlockingIOError:
+                # The socket would block
                 # The buffer is full. Store the last part of the message and return to mainloop
                 curChatUser.sendRest = msg[(totalSentBytes + sentBytes):]
                 return
+            except OSError as E:
+                # If any other OS exceptions were raised, then end the connection
+                self.connectionErrorHandling(curChatUser, cliSock, str(E))
+                return
             
-            # Add the sent bytes to the total 
+            # Add the number of sent bytes to the total 
             totalSentBytes += sentBytes
-            if sentBytes == 0:
-                # If the send method returned without sending anython (0 Bytes), 
-                # then it is assumed that the connection is broken
-                self.connectionErrorHandling(curChatUser, cliSock)
             
     def recvFromClient(self, cliSock):
         """
@@ -668,7 +667,8 @@ class SimpleChatServer:
         try:
             # Read from the buffer of the client socket
             cur_recv = cliSock.recv(4096).decode()
-        except (ConnectionAbortedError, ConnectionResetError) as E:
+        except OSError as E:
+            # If an OS exception is raised, log the error and endd the connection
             self.connectionErrorHandling(curChatUser, cliSock, str(E))
             return
             

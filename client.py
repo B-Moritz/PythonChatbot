@@ -276,8 +276,6 @@ class ChatUser(threading.Thread):
         
         # Instantiate the client socket object
         self.cliSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # Set the client socket to be non-blocking
-        self.cliSock.setblocking(0)
         
         if type(dest) != str:
             # Validatet that the destination address is a string
@@ -315,13 +313,22 @@ class ChatUser(threading.Thread):
         None.
 
         """
+        # Set the client socket to be non-blocking
+        self.cliSock.setblocking(0)
+        
         try:
             # initiate a TCP connection with the server on given destination address and destination port
-            self.cliSock.connect((self.dest, self.port))
+            self.cliSock.connect_ex((self.dest, self.port))
+            # The connect_ex method must be used because the client socket is non blocking:
+                # See this article: https://realpython.com/python-sockets/#multi-connection-client
+                
         except:
             # Write to terminal if the connection could not be established
             print(f"Unable to connect to the chat server on destination {self.dest} and port {self.port}.")
             return
+        
+        # List contianing the socket (for read and error checking by select)
+        socketList = [self.cliSock]
         
         # Add the connection message to the send queue
         self.sendInitialMessage(self.username)
@@ -330,15 +337,22 @@ class ChatUser(threading.Thread):
         userInputThread.start()
         
         while not self.stopApplication.is_set():
-            # Run the select command to check if the socket has received any data, 
-            # has encountered an error or can send to the server.
+            # While the application is not stopped
+            
+            # Create the list of sockets for cheking writability
+            writableList = [self.cliSock] if not self.sendQueue.empty() else []
             try:
+                # Run the select command to check if the socket has received any data, 
+                # has encountered an error or can send to the server.
                 readable, writable, error = select.select(
-                    [self.cliSock], # Check the inbound buffer of the socket
-                    [self.cliSock if not self.sendQueue.empty() else None], # Check if the send buffer is not full when there are messages to be sent
-                    [self.cliSock], # Check for error
+                    socketList, # Check the inbound buffer of the socket
+                    writableList, # Check if the send buffer is not full when there are messages to be sent
+                    socketList, # Check for error
                     10 # timeout in seconds
                 )
+                # The usage of select and handeling receive, connect and sending is based on the following sources:
+                    # https://medium.com/vaidikkapoor/understanding-non-blocking-i-o-with-python-part-1-ec31a2e2db9b
+                    # http://pymotw.com/2/select/ 
             except OSError:
                 # If the select function fails, then end the client program.
                 self.initiateClosure()
@@ -386,8 +400,10 @@ class ChatUser(threading.Thread):
         self.sendQueue.put(f"{user}")
         # Print first information to the terminal
         print(f"\nYou have joined the chat with username {user}!\n\n" + 
-              "Loading old messages in the thread.\n" + 
+              "Loading old messages from the thread.\n" + 
               "----------[Start old messages]----------")
+        # Add delay to show the message
+        time.sleep(1)
         
     def generateOutput(self):
         """
@@ -432,28 +448,49 @@ class ChatUser(threading.Thread):
         
         
     def receiveFromServer(self, cliSock):
-        pattern = re.compile(self.END_OF_MSG)
+        """
+        This method executes the receive process of the client connection.
+        It fetches the first 4096 Bytes from the receive buffer and adds it to 
+        the receive queue.
+
+        Parameters
+        ----------
+        cliSock : Socket object
+            Reference to the socket object of the client.
+
+        Returns
+        -------
+        None.
+
+        """
+        # Variable containing the received data
         cur_recv = ""
-        while not bool(pattern.search(self.data_recv)):
-            try:
-                cur_recv = cliSock.recv(4096).decode()
-            except Exception:
-                # If the recv method raises an exception, 
-                # then the client program is closed
-                self.initiateClosure()
-                return
-                
-            self.data_recv += cur_recv
-            
-            if len(cur_recv) == 0:
-                # If the socket fetched 0 bytes from the receive buffer, 
-                # a disconnected connection is indicated.
-                self.initiateClosure()
-                return
         
+        try:
+            cur_recv = cliSock.recv(4096).decode()
+        except Exception:
+            # If the recv method raises an exception, 
+            # then the client program is closed
+            self.initiateClosure()
+            return
+            
+        # Add the received message to the rest from the previous read cycle.
+        self.data_recv += cur_recv
+        
+        if len(cur_recv) == 0:
+            # If the socket fetched 0 bytes from the receive buffer, 
+            # a disconnected connection is indicated.
+            # The connection is therefore closed
+            self.initiateClosure()
+            return
+        
+        # Create a list of all received messages
         msgList = self.data_recv.split(self.END_OF_MSG)
+        # Add the uncompleate message (empty string if there is no rest)
         self.data_recv = msgList.pop()
+    
         for msg in msgList:
+            # For each message check that it is not a connection end message
             curKickedMatch = self.kickedMessage.search(msg) 
             if bool(curKickedMatch):
                 # The server has sent a kick message 
@@ -462,95 +499,181 @@ class ChatUser(threading.Thread):
                 # given by the server.
                 self.initiateClosure(reason if reason else " unknown.")
             else:
+                # If it is a normal message, add it to the receive queue, 
+                # ino order to print it to the user.
                 self.recvQueue.put(msg)
                     
             
     def sendToServer(self, cliSock):
-        dataSent = 0
+        """
+        This method sends all the messages in the send queue of the client.
+
+        Parameters
+        ----------
+        cliSock : Socket object
+            Reference to the socket object of the client
+
+        Returns
+        -------
+        None.
+
+        """
         for i in range(self.sendQueue.qsize()):
+            # For each message in the send queue at the moment this method is called
+            
+            # Variable for the total sent data for each message. 
+            dataSent = 0
+            # The encoded message which should be sent to the server.
             curMsg = (f"{self.username}: " + self.sendQueue.get() + self.END_OF_MSG).encode()
             while dataSent < len(curMsg):
-                
+                # Continue to send the message while the sent data is less than the length of the message.
                 try:
+                    # Try to send
                     cur_sent = cliSock.send(curMsg[dataSent:])
-                except OSError:
+                except BlockingIOError:
                     # The send buffer is full. Save the rest of the message
                     self.sendRest = curMsg[(dataSent + cur_sent):]
                     return
-                except Exception:
-                    # If the recv method raises an exception other than OSError, 
+                except OSError:
+                    # If the recv method raises an exception other than OSError.BlockingIOError, 
                     # then the client program is closed.
                     self.initiateClosure()
                     return
                 
-                
-                if cur_sent == 0:
-                    self.initiateClosure()
-                    return
+                # Add the number of sent bytes to the total
                 dataSent += cur_sent
     
     def initiateClosure(self, reason=""):
-        # if reason == "":
-        #     # Try to wait for a reason
-        #     time.sleep(1)
+        """
+        This method initiates the termination of the client socket. 
+        A reason for the termination is printed to the erminal if provided 
+        as argument to this method.
+    
+        Parameters
+        ----------
+        reason : String, optional
+            The reason for the disconnection from the server. The default is "".
+    
+        Returns
+        -------
+        None.
+    
+        """
         
         if not self.stopApplication.is_set():
-            print(self.CONNECTION_STOPPED_MSG)
+            # If not the method has already been called, execute the termination 
+            print("\n\n" + self.CONNECTION_STOPPED_MSG)
+            # Set the stop application flag
             self.stopApplication.set()
             if reason != "":
+                # print the reason if it is provided.
                 print("\nYou have been removed from the chat by the host. " +
                       f"The following reason was given: {reason}")
         
         
 class ChatBot(ChatUser, threading.Thread):
+    """
+    This class represents the basic chat bot which connects to the chat server.
+    It inherits from the ChatUser class and the Thread class. It can therefore 
+    be used in the same way as the Chat user (see ChatUser classs for usage). 
+    The overloaded methods are: 
+        
+        run(): The controller method of the bot thread
+        
+        generateResponse(): The method used for generating output from the bot.
+                            Uses the MsgAnalysis class.
+            
+        initiateClosure(): Closes the bot without printing to the terminal
     
-    # Response delay
+        sendInitialMessage(): Add a connect message to the send queue of the 
+                              bot (nothing is printed to terminal).
+    
+        New Method introduced for bots:
+            getBotResponse(): Generates special response. Each bot that inherits 
+                              this class should overwrite the method in order to 
+                              generate unique responses.
+                              
+    """
+    
+    # Response delay used to avoid sending all messages sent withing rappid succession
     BOT_RESPONSE_DELAY = 1
     
     def __init__(self, dest, port, username="Simple_Chat_Bot"):
         ChatUser.__init__(self, dest, port, username)
         
-        self.replyFilter = re.compile("^(.*[Bb]ot): |[-]+\[Start new messages\][-]+|User .*[bB]ot has joined the chat!")
+        # Pattern used to match messages that should not be replied to by the bot
+        self.replyFilter = re.compile("^(.*[Bb]ot): " + # Do not reply to bots
+                                      "|[-]+\[Start new messages\][-]+|" + # Do not reply to the separation lines
+                                      "User .*[bB]ot has joined the chat!" + # Do not reply to join messages about bots
+                                      "|Host: User .* left the chat\.") # Do not reply to disconnect messages from the server
         
+        # Responses sent if the message asks for an opinion        
         self.opinionResponses = ["I think it is nice!", 
-                            "I am not sure, try to ask someone else.", 
-                            "I do not like it."]
+                                 "I am not sure, try to ask someone else.", 
+                                 "I dont`t like it.", 
+                                 "Let me make up my mind first!"]
         
+        # Responses sent if the message is a statement
         self.statementResponses = ["If you say so!", 
-                              "I did not know that.", 
-                              "How can you say something like that."]
+                                   "I did not know that.", 
+                                   "How can you say something like that.", 
+                                   "Are you sure about that?", 
+                                   "Can you proove it?"]
         
+        # Responses when the message is about the weather
         self.weatherResponse = ["I do not want to talk about the weather. It is boring and always depressing!", 
-                          "I have the same question.", 
-                          "If you want to talk about the weather, you have to talk to someone else."]
+                                "I have the same question.", 
+                                "If you want to talk about the weather, you have to talk to someone else."]
         
-        self.locationResponse = ["I am not an expert in geography unfortunatly, \
-                            maybe some one else can help with this?"]
+        # Responses used when the message is about locations
+        self.locationResponse = ["I am not an expert in geography unfortunatly, " + 
+                                 "maybe some one else can help with this?"]
         
+        # Messages sent if the received message is to too complicated or not classifyed by the MsgAnalysis class
         self.generalResponse = ["I am not sure if I understand your message.\n Could you please clarify?",
                            "Please write in english, so I can understand you!"]
         
-        self.greetings = ["Hi", "Hello"]
+        # Greetings for response to join messages
+        self.greetings = ["Hi", "Hello", "A good day to you,", "How are you today"]
         
         
     def run(self):
+        """
+        This method contains the main routine for handeling receiving and sending 
+        for the client socket.
+
+        Returns
+        -------
+        None.
+
+        """
         try:
+            # Try to establish a TCP connection with the server
             self.cliSock.connect((self.dest, self.port))
         except:
             # Write to terminal if the connection could not be established
             print(f"Unable to connect to the chat server on destination {self.dest} and port {self.port}.")
             return
         
+        # The connection message is sent containing the username (botname)
         self.sendInitialMessage(self.username)
+        # Push the initial message to the send buffer
         self.sendToServer(self.cliSock)
         while not self.stopApplication.is_set():
-            
-            if not self.stopApplication.is_set(): 
-                time.sleep(self.BOT_RESPONSE_DELAY)
-                self.receiveFromServer(self.cliSock)
-                
-            self.generateResponse()
+            # While the application is not stopped, run the receive/send process
             if not self.stopApplication.is_set():
+                # If the application is running, receive from buffer.
+                
+                # Delay used to prevent the bot from replying to all messages that 
+                # are received in short succession
+                time.sleep(self.BOT_RESPONSE_DELAY)
+                # Run the receive method
+                self.receiveFromServer(self.cliSock)
+            
+            # Respond to the received messages
+            self.generateResponse()
+            # Send the response to the server if there is data in the send queue.
+            if not self.stopApplication.is_set() and not self.sendQueue.empty():
                 self.sendToServer(self.cliSock)
             
     def initiateClosure(self, reason=""):
@@ -566,7 +689,6 @@ class ChatBot(ChatUser, threading.Thread):
         """
         # The stopApplication flag is set in order to break the while loop in the main thread 
         self.stopApplication.set()
-        # print(f"{self.username} is disconnected!")
         
         
     def sendInitialMessage(self, botName):
@@ -592,6 +714,7 @@ class ChatBot(ChatUser, threading.Thread):
         bot. The getBotResponse should be overwritten for each bot that inherits 
         the ChatBot classs. This way the response can be customized for each bot.
         """
+        # Current message which should be responded to
         curMsg = ""
         while self.recvQueue.qsize() > 0:
             # If the receive queue contains more than one message, 
