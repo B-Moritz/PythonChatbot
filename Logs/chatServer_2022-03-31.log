@@ -1,0 +1,1351 @@
+INFO: 2022-03-31 11:00:37,106: Service is listening to incomming connections on port 2020.
+INFO: 2022-03-31 11:00:37,112: A new message is sent from host
+INFO: 2022-03-31 11:00:51,738: New client connection accepted for source ('192.168.56.1', 53137).
+INFO: 2022-03-31 11:00:52,743: New client connection accepted for source ('192.168.56.1', 53138).
+INFO: 2022-03-31 11:00:55,320: New client connection accepted for source ('192.168.56.1', 53140).
+INFO: 2022-03-31 11:00:56,324: New client connection accepted for source ('192.168.56.1', 53141).
+INFO: 2022-03-31 11:00:57,328: New client connection accepted for source ('192.168.56.1', 53142).
+INFO: 2022-03-31 11:00:57,365: Receiving from client ('192.168.56.1', 53137)
+WARNING: 2022-03-31 11:00:57,365: The connection with the client  ('192.168.56.1', 53137) has ended. [WinError 10054] En eksisterende tilkobling ble tvangslukket av den eksterne verten
+INFO: 2022-03-31 11:00:57,365: The connection to  ('192.168.56.1', 53137) is closing.
+INFO: 2022-03-31 11:00:57,365: Receiving from client ('192.168.56.1', 53138)
+WARNING: 2022-03-31 11:00:57,365: The connection with the client  ('192.168.56.1', 53138) has ended. [WinError 10054] En eksisterende tilkobling ble tvangslukket av den eksterne verten
+INFO: 2022-03-31 11:00:57,365: Receiving from client ('192.168.56.1', 53140)
+INFO: 2022-03-31 11:00:57,365: Receiving from client ('192.168.56.1', 53141)
+WARNING: 2022-03-31 11:00:57,365: The connection with the client  ('192.168.56.1', 53140) has ended. [WinError 10054] En eksisterende tilkobling ble tvangslukket av den eksterne verten
+WARNING: 2022-03-31 11:00:57,365: The connection with the client  ('192.168.56.1', 53141) has ended. [WinError 10054] En eksisterende tilkobling ble tvangslukket av den eksterne verten
+INFO: 2022-03-31 11:00:57,365: Receiving from client ('192.168.56.1', 53142)
+WARNING: 2022-03-31 11:00:57,365: The connection with the client  ('192.168.56.1', 53142) has ended. [WinError 10054] En eksisterende tilkobling ble tvangslukket av den eksterne verten
+INFO: 2022-03-31 11:00:57,365: The connection to  ('192.168.56.1', 53142) is closing.
+INFO: 2022-03-31 11:00:57,365: The connection to  ('192.168.56.1', 53141) is closing.
+INFO: 2022-03-31 11:00:57,365: The connection to  ('192.168.56.1', 53140) is closing.
+INFO: 2022-03-31 11:00:57,365: The connection to  ('192.168.56.1', 53138) is closing.
+INFO: 2022-03-31 11:01:07,131: A new message is sent from host
+INFO: 2022-03-31 11:01:37,146: A new message is sent from host
+INFO: 2022-03-31 11:02:07,161: A new message is sent from host
+INFO: 2022-03-31 11:02:27,873: New client connection accepted for source ('192.168.56.1', 53154).
+INFO: 2022-03-31 11:02:27,873: Receiving from client ('192.168.56.1', 53154)
+INFO: 2022-03-31 11:02:27,876: Data received: Bernt: Bernt::EOMsg::
+INFO: 2022-03-31 11:02:27,876: Number of receptions for : 2
+INFO: 2022-03-31 11:02:28,892: New client connection accepted for source ('192.168.56.1', 53155).
+INFO: 2022-03-31 11:02:30,851: New client connection accepted for source ('192.168.56.1', 53157).
+INFO: 2022-03-31 11:02:31,861: New client connection accepted for source ('192.168.56.1', 53158).
+INFO: 2022-03-31 11:02:32,869: New client connection accepted for source ('192.168.56.1', 53159).
+INFO: 2022-03-31 11:02:32,938: Receiving from client ('192.168.56.1', 53159)
+WARNING: 2022-03-31 11:02:32,938: The connection with the client  ('192.168.56.1', 53159) has ended. [WinError 10054] En eksisterende tilkobling ble tvangslukket av den eksterne verten
+INFO: 2022-03-31 11:02:32,938: The connection to  ('192.168.56.1', 53159) is closing.
+INFO: 2022-03-31 11:02:32,938: Receiving from client ('192.168.56.1', 53154)
+WARNING: 2022-03-31 11:02:32,938: The connection with the client Bernt ('192.168.56.1', 53154) has ended. [WinError 10054] En eksisterende tilkobling ble tvangslukket av den eksterne verten
+INFO: 2022-03-31 11:02:32,938: Receiving from client ('192.168.56.1', 53155)
+INFO: 2022-03-31 11:02:32,938: Receiving from client ('192.168.56.1', 53157)
+WARNING: 2022-03-31 11:02:32,938: The connection with the client  ('192.168.56.1', 53155) has ended. [WinError 10054] En eksisterende tilkobling ble tvangslukket av den eksterne verten
+WARNING: 2022-03-31 11:02:32,938: The connection with the client  ('192.168.56.1', 53157) has ended. [WinError 10054] En eksisterende tilkobling ble tvangslukket av den eksterne verten
+INFO: 2022-03-31 11:02:32,938: Receiving from client ('192.168.56.1', 53158)
+WARNING: 2022-03-31 11:02:32,938: The connection with the client  ('192.168.56.1', 53158) has ended. [WinError 10054] En eksisterende tilkobling ble tvangslukket av den eksterne verten
+INFO: 2022-03-31 11:02:32,938: The connection to  ('192.168.56.1', 53158) is closing.
+INFO: 2022-03-31 11:02:32,938: The connection to  ('192.168.56.1', 53157) is closing.
+INFO: 2022-03-31 11:02:32,938: The connection to  ('192.168.56.1', 53155) is closing.
+INFO: 2022-03-31 11:02:32,938: The connection to Bernt ('192.168.56.1', 53154) is closing.
+INFO: 2022-03-31 11:02:37,165: A new message is sent from host
+INFO: 2022-03-31 11:03:07,175: A new message is sent from host
+INFO: 2022-03-31 11:03:37,180: A new message is sent from host
+INFO: 2022-03-31 11:04:07,185: A new message is sent from host
+INFO: 2022-03-31 11:04:37,194: A new message is sent from host
+INFO: 2022-03-31 11:05:07,202: A new message is sent from host
+INFO: 2022-03-31 11:05:37,211: A new message is sent from host
+INFO: 2022-03-31 11:06:07,213: A new message is sent from host
+INFO: 2022-03-31 11:06:37,218: A new message is sent from host
+INFO: 2022-03-31 11:07:07,224: A new message is sent from host
+INFO: 2022-03-31 11:07:26,987: New client connection accepted for source ('192.168.56.1', 53184).
+INFO: 2022-03-31 11:07:26,987: Receiving from client ('192.168.56.1', 53184)
+INFO: 2022-03-31 11:07:26,987: Data received: Bernt: Bernt::EOMsg::
+INFO: 2022-03-31 11:07:26,987: Number of receptions for : 2
+INFO: 2022-03-31 11:07:27,993: New client connection accepted for source ('192.168.56.1', 53185).
+INFO: 2022-03-31 11:07:27,993: Receiving from client ('192.168.56.1', 53185)
+INFO: 2022-03-31 11:07:27,993: Data received: Simple_Chat_Bot: Simple_Chat_Bot::EOMsg::
+INFO: 2022-03-31 11:07:27,993: Number of receptions for : 2
+INFO: 2022-03-31 11:07:29,012: Receiving from client ('192.168.56.1', 53185)
+INFO: 2022-03-31 11:07:29,012: Data received: Simple_Chat_Bot: Hi Bernt::EOMsg::
+INFO: 2022-03-31 11:07:29,012: Number of receptions for Simple_Chat_Bot: 4
+INFO: 2022-03-31 11:07:29,991: New client connection accepted for source ('192.168.56.1', 53187).
+INFO: 2022-03-31 11:07:29,991: Receiving from client ('192.168.56.1', 53187)
+INFO: 2022-03-31 11:07:29,991: Data received: Weather_Bot: Weather_Bot::EOMsg::
+INFO: 2022-03-31 11:07:29,991: Number of receptions for : 2
+INFO: 2022-03-31 11:07:30,996: Receiving from client ('192.168.56.1', 53187)
+INFO: 2022-03-31 11:07:30,996: Data received: Weather_Bot: Hello Bernt.::EOMsg::
+INFO: 2022-03-31 11:07:30,996: Number of receptions for Weather_Bot: 4
+INFO: 2022-03-31 11:07:30,996: New client connection accepted for source ('192.168.56.1', 53188).
+INFO: 2022-03-31 11:07:30,996: Receiving from client ('192.168.56.1', 53188)
+INFO: 2022-03-31 11:07:30,996: Data received: Sport_Bot: Sport_Bot::EOMsg::
+INFO: 2022-03-31 11:07:30,996: Number of receptions for : 2
+INFO: 2022-03-31 11:07:32,006: Receiving from client ('192.168.56.1', 53188)
+INFO: 2022-03-31 11:07:32,006: Data received: Sport_Bot: Hello Bernt.::EOMsg::
+INFO: 2022-03-31 11:07:32,006: Number of receptions for Sport_Bot: 4
+INFO: 2022-03-31 11:07:32,006: New client connection accepted for source ('192.168.56.1', 53189).
+INFO: 2022-03-31 11:07:32,006: Receiving from client ('192.168.56.1', 53189)
+INFO: 2022-03-31 11:07:32,006: Data received: Art_Bot: Art_Bot::EOMsg::
+INFO: 2022-03-31 11:07:32,006: Number of receptions for : 2
+INFO: 2022-03-31 11:07:33,029: Receiving from client ('192.168.56.1', 53189)
+INFO: 2022-03-31 11:07:33,029: Data received: Art_Bot: Hi Bernt.::EOMsg::
+INFO: 2022-03-31 11:07:33,029: Number of receptions for Art_Bot: 4
+INFO: 2022-03-31 11:07:37,244: A new message is sent from host
+INFO: 2022-03-31 11:07:43,098: Receiving from client ('192.168.56.1', 53185)
+WARNING: 2022-03-31 11:07:43,098: The connection with the client Simple_Chat_Bot ('192.168.56.1', 53185) has ended. [WinError 10054] En eksisterende tilkobling ble tvangslukket av den eksterne verten
+INFO: 2022-03-31 11:07:43,098: The connection to Simple_Chat_Bot ('192.168.56.1', 53185) is closing.
+INFO: 2022-03-31 11:07:43,098: Receiving from client ('192.168.56.1', 53184)
+WARNING: 2022-03-31 11:07:43,098: The connection with the client Bernt ('192.168.56.1', 53184) has ended. [WinError 10054] En eksisterende tilkobling ble tvangslukket av den eksterne verten
+INFO: 2022-03-31 11:07:43,098: Receiving from client ('192.168.56.1', 53187)
+INFO: 2022-03-31 11:07:43,098: Receiving from client ('192.168.56.1', 53188)
+WARNING: 2022-03-31 11:07:43,098: The connection with the client Weather_Bot ('192.168.56.1', 53187) has ended. [WinError 10054] En eksisterende tilkobling ble tvangslukket av den eksterne verten
+INFO: 2022-03-31 11:07:43,114: Receiving from client ('192.168.56.1', 53189)
+WARNING: 2022-03-31 11:07:43,114: The connection with the client Sport_Bot ('192.168.56.1', 53188) has ended. [WinError 10054] En eksisterende tilkobling ble tvangslukket av den eksterne verten
+WARNING: 2022-03-31 11:07:43,114: The connection with the client Art_Bot ('192.168.56.1', 53189) has ended. [WinError 10054] En eksisterende tilkobling ble tvangslukket av den eksterne verten
+INFO: 2022-03-31 11:07:43,114: The connection to Art_Bot ('192.168.56.1', 53189) is closing.
+INFO: 2022-03-31 11:07:43,114: The connection to Sport_Bot ('192.168.56.1', 53188) is closing.
+INFO: 2022-03-31 11:07:43,114: The connection to Weather_Bot ('192.168.56.1', 53187) is closing.
+INFO: 2022-03-31 11:07:43,114: The connection to Bernt ('192.168.56.1', 53184) is closing.
+INFO: 2022-03-31 11:08:07,255: A new message is sent from host
+INFO: 2022-03-31 11:08:37,267: A new message is sent from host
+INFO: 2022-03-31 11:08:46,518: New client connection accepted for source ('192.168.56.1', 53198).
+INFO: 2022-03-31 11:08:46,518: Receiving from client ('192.168.56.1', 53198)
+INFO: 2022-03-31 11:08:46,518: Data received: Bernt: Bernt::EOMsg::
+INFO: 2022-03-31 11:08:46,518: Number of receptions for : 2
+INFO: 2022-03-31 11:08:47,524: New client connection accepted for source ('192.168.56.1', 53199).
+INFO: 2022-03-31 11:08:47,524: Receiving from client ('192.168.56.1', 53199)
+INFO: 2022-03-31 11:08:47,524: Data received: Simple_Chat_Bot: Simple_Chat_Bot::EOMsg::
+INFO: 2022-03-31 11:08:47,524: Number of receptions for : 2
+INFO: 2022-03-31 11:08:48,527: Receiving from client ('192.168.56.1', 53199)
+INFO: 2022-03-31 11:08:48,527: Data received: Simple_Chat_Bot: Hi Bernt::EOMsg::
+INFO: 2022-03-31 11:08:48,527: Number of receptions for Simple_Chat_Bot: 4
+INFO: 2022-03-31 11:08:49,567: New client connection accepted for source ('192.168.56.1', 53201).
+INFO: 2022-03-31 11:08:49,567: Receiving from client ('192.168.56.1', 53201)
+INFO: 2022-03-31 11:08:49,567: Data received: Weather_Bot: Weather_Bot::EOMsg::
+INFO: 2022-03-31 11:08:49,567: Number of receptions for : 2
+INFO: 2022-03-31 11:08:50,570: New client connection accepted for source ('192.168.56.1', 53202).
+INFO: 2022-03-31 11:08:50,570: Receiving from client ('192.168.56.1', 53202)
+INFO: 2022-03-31 11:08:50,570: Data received: Sport_Bot: Sport_Bot::EOMsg::
+INFO: 2022-03-31 11:08:50,570: Number of receptions for : 2
+INFO: 2022-03-31 11:08:50,586: Receiving from client ('192.168.56.1', 53201)
+INFO: 2022-03-31 11:08:50,586: Data received: Weather_Bot: Hello Bernt::EOMsg::
+INFO: 2022-03-31 11:08:50,586: Number of receptions for Weather_Bot: 4
+INFO: 2022-03-31 11:08:51,572: Receiving from client ('192.168.56.1', 53202)
+INFO: 2022-03-31 11:08:51,572: Data received: Sport_Bot: Hello Bernt!::EOMsg::
+INFO: 2022-03-31 11:08:51,572: Number of receptions for Sport_Bot: 4
+INFO: 2022-03-31 11:08:51,572: New client connection accepted for source ('192.168.56.1', 53203).
+INFO: 2022-03-31 11:08:51,572: Receiving from client ('192.168.56.1', 53203)
+INFO: 2022-03-31 11:08:51,572: Data received: Art_Bot: Art_Bot::EOMsg::
+INFO: 2022-03-31 11:08:51,572: Number of receptions for : 2
+INFO: 2022-03-31 11:08:52,576: Receiving from client ('192.168.56.1', 53203)
+INFO: 2022-03-31 11:08:52,576: Data received: Art_Bot: Hi Bernt::EOMsg::
+INFO: 2022-03-31 11:08:52,576: Number of receptions for Art_Bot: 4
+INFO: 2022-03-31 11:09:07,279: A new message is sent from host
+INFO: 2022-03-31 11:09:12,582: Receiving from client ('192.168.56.1', 53199)
+INFO: 2022-03-31 11:09:12,582: Data received: Simple_Chat_Bot: If you want to talk about the weather, you have to talk to someone else.::EOMsg::
+INFO: 2022-03-31 11:09:12,582: Reseting receive counter Simple_Chat_Bot.
+INFO: 2022-03-31 11:09:12,586: Receiving from client ('192.168.56.1', 53202)
+INFO: 2022-03-31 11:09:12,586: Data received: Sport_Bot: A true athlete works in any weather!::EOMsg::
+INFO: 2022-03-31 11:09:12,586: Reseting receive counter Sport_Bot.
+INFO: 2022-03-31 11:09:12,587: Receiving from client ('192.168.56.1', 53203)
+INFO: 2022-03-31 11:09:12,587: Data received: Art_Bot: I like all kinds of weather. Any weather can provide an interesting motive for a drawing.::EOMsg::
+INFO: 2022-03-31 11:09:12,587: Reseting receive counter Art_Bot.
+INFO: 2022-03-31 11:09:13,494: Receiving from client ('192.168.56.1', 53201)
+INFO: 2022-03-31 11:09:13,494: Data received: Weather_Bot: The temperature in Berlin is 3.1 degree celcius! The sky is clear.
+ This information is based on weather data from MET Norway and location data from simplemaps.::EOMsg::
+INFO: 2022-03-31 11:09:13,494: Reseting receive counter Weather_Bot.
+INFO: 2022-03-31 11:09:37,289: A new message is sent from host
+INFO: 2022-03-31 11:09:43,518: Receiving from client ('192.168.56.1', 53199)
+INFO: 2022-03-31 11:09:43,518: Data received: Simple_Chat_Bot: I think it is nice!::EOMsg::
+INFO: 2022-03-31 11:09:43,518: Reseting receive counter Simple_Chat_Bot.
+INFO: 2022-03-31 11:09:43,518: Receiving from client ('192.168.56.1', 53201)
+INFO: 2022-03-31 11:09:43,518: Data received: Weather_Bot: I am not sure, try to ask someone else.::EOMsg::
+INFO: 2022-03-31 11:09:43,518: Reseting receive counter Weather_Bot.
+INFO: 2022-03-31 11:09:43,518: Receiving from client ('192.168.56.1', 53202)
+INFO: 2022-03-31 11:09:43,518: Data received: Sport_Bot: I could play tennis all day.::EOMsg::
+INFO: 2022-03-31 11:09:43,518: Receiving from client ('192.168.56.1', 53203)
+INFO: 2022-03-31 11:09:43,518: Reseting receive counter Sport_Bot.
+INFO: 2022-03-31 11:09:43,518: Data received: Art_Bot: I am not sure yet. I need to try it first.::EOMsg::
+INFO: 2022-03-31 11:09:43,518: Reseting receive counter Art_Bot.
+INFO: 2022-03-31 11:10:07,291: A new message is sent from host
+INFO: 2022-03-31 11:10:13,534: Receiving from client ('192.168.56.1', 53198)
+WARNING: 2022-03-31 11:10:13,534: The connection with the client Bernt ('192.168.56.1', 53198) has ended. [WinError 10053] En etablert tilkobling ble avbrutt av programvaren på vertsmaskinen
+INFO: 2022-03-31 11:10:13,534: The connection to Bernt ('192.168.56.1', 53198) is closing.
+INFO: 2022-03-31 11:10:13,550: Receiving from client ('192.168.56.1', 53199)
+WARNING: 2022-03-31 11:10:13,565: The connection with the client Simple_Chat_Bot ('192.168.56.1', 53199) has ended. [WinError 10054] En eksisterende tilkobling ble tvangslukket av den eksterne verten
+INFO: 2022-03-31 11:10:13,565: The connection to Simple_Chat_Bot ('192.168.56.1', 53199) is closing.
+INFO: 2022-03-31 11:10:13,565: Receiving from client ('192.168.56.1', 53201)
+INFO: 2022-03-31 11:10:13,565: Receiving from client ('192.168.56.1', 53202)
+WARNING: 2022-03-31 11:10:13,565: The connection with the client Weather_Bot ('192.168.56.1', 53201) has ended. [WinError 10054] En eksisterende tilkobling ble tvangslukket av den eksterne verten
+WARNING: 2022-03-31 11:10:13,565: The connection with the client Sport_Bot ('192.168.56.1', 53202) has ended. [WinError 10054] En eksisterende tilkobling ble tvangslukket av den eksterne verten
+INFO: 2022-03-31 11:10:13,565: Receiving from client ('192.168.56.1', 53203)
+WARNING: 2022-03-31 11:10:13,565: The connection with the client Art_Bot ('192.168.56.1', 53203) has ended. [WinError 10054] En eksisterende tilkobling ble tvangslukket av den eksterne verten
+INFO: 2022-03-31 11:10:13,565: The connection to Art_Bot ('192.168.56.1', 53203) is closing.
+INFO: 2022-03-31 11:10:13,565: The connection to Sport_Bot ('192.168.56.1', 53202) is closing.
+INFO: 2022-03-31 11:10:13,565: The connection to Weather_Bot ('192.168.56.1', 53201) is closing.
+INFO: 2022-03-31 11:10:37,302: A new message is sent from host
+INFO: 2022-03-31 11:11:07,318: A new message is sent from host
+INFO: 2022-03-31 11:11:37,332: A new message is sent from host
+INFO: 2022-03-31 11:12:07,339: A new message is sent from host
+INFO: 2022-03-31 11:12:37,345: A new message is sent from host
+INFO: 2022-03-31 11:13:07,350: A new message is sent from host
+INFO: 2022-03-31 11:13:37,357: A new message is sent from host
+INFO: 2022-03-31 11:14:07,363: A new message is sent from host
+INFO: 2022-03-31 11:14:37,366: A new message is sent from host
+INFO: 2022-03-31 11:15:07,373: A new message is sent from host
+INFO: 2022-03-31 11:15:37,375: A new message is sent from host
+INFO: 2022-03-31 11:16:00,581: The service is stoping due to an "exit" command issued by admin.
+INFO: 2022-03-31 11:16:00,581: Stop procedure status: All connections are removed!
+INFO: 2022-03-31 11:16:05,110: Service stoped successfully!
+INFO: 2022-03-31 11:16:11,510: Service is listening to incomming connections on port 2020.
+INFO: 2022-03-31 11:16:11,517: A new message is sent from host
+INFO: 2022-03-31 11:16:13,688: New client connection accepted for source ('192.168.56.1', 53252).
+INFO: 2022-03-31 11:16:14,674: New client connection accepted for source ('192.168.56.1', 53253).
+INFO: 2022-03-31 11:16:14,674: Receiving from client ('192.168.56.1', 53253)
+INFO: 2022-03-31 11:16:14,674: Data received: Simple_Chat_Bot: Simple_Chat_Bot::EOMsg::
+INFO: 2022-03-31 11:16:14,674: Number of receptions for : 2
+INFO: 2022-03-31 11:16:14,690: Receiving from client ('192.168.56.1', 53252)
+INFO: 2022-03-31 11:16:14,690: Data received: Bernt: Bernt::EOMsg::
+INFO: 2022-03-31 11:16:14,690: Number of receptions for : 2
+INFO: 2022-03-31 11:16:15,692: Receiving from client ('192.168.56.1', 53253)
+INFO: 2022-03-31 11:16:15,692: Data received: Simple_Chat_Bot: Hello Bernt!::EOMsg::
+INFO: 2022-03-31 11:16:15,692: Number of receptions for Simple_Chat_Bot: 4
+INFO: 2022-03-31 11:16:16,881: New client connection accepted for source ('192.168.56.1', 53257).
+INFO: 2022-03-31 11:16:16,881: Receiving from client ('192.168.56.1', 53257)
+INFO: 2022-03-31 11:16:16,881: Data received: Weather_Bot: Weather_Bot::EOMsg::
+INFO: 2022-03-31 11:16:16,881: Number of receptions for : 2
+INFO: 2022-03-31 11:16:17,885: New client connection accepted for source ('192.168.56.1', 53258).
+INFO: 2022-03-31 11:16:17,886: Receiving from client ('192.168.56.1', 53258)
+INFO: 2022-03-31 11:16:17,887: Data received: Sport_Bot: Sport_Bot::EOMsg::
+INFO: 2022-03-31 11:16:17,888: Number of receptions for : 2
+INFO: 2022-03-31 11:16:17,891: Receiving from client ('192.168.56.1', 53257)
+INFO: 2022-03-31 11:16:17,891: Data received: Weather_Bot: Hi Bernt::EOMsg::
+INFO: 2022-03-31 11:16:17,891: Number of receptions for Weather_Bot: 4
+INFO: 2022-03-31 11:16:18,894: Receiving from client ('192.168.56.1', 53258)
+INFO: 2022-03-31 11:16:18,894: Data received: Sport_Bot: Hi Bernt.::EOMsg::
+INFO: 2022-03-31 11:16:18,894: Number of receptions for Sport_Bot: 4
+INFO: 2022-03-31 11:16:18,894: New client connection accepted for source ('192.168.56.1', 53259).
+INFO: 2022-03-31 11:16:18,894: Receiving from client ('192.168.56.1', 53259)
+INFO: 2022-03-31 11:16:18,894: Data received: Art_Bot: Art_Bot::EOMsg::
+INFO: 2022-03-31 11:16:18,894: Number of receptions for : 2
+INFO: 2022-03-31 11:16:19,910: Receiving from client ('192.168.56.1', 53259)
+INFO: 2022-03-31 11:16:19,910: Data received: Art_Bot: Hello Bernt::EOMsg::
+INFO: 2022-03-31 11:16:19,910: Number of receptions for Art_Bot: 4
+INFO: 2022-03-31 11:16:41,531: A new message is sent from host
+INFO: 2022-03-31 11:16:49,937: Receiving from client ('192.168.56.1', 53253)
+INFO: 2022-03-31 11:16:49,937: Data received: Simple_Chat_Bot: I have the same question.::EOMsg::
+INFO: 2022-03-31 11:16:49,937: Reseting receive counter Simple_Chat_Bot.
+INFO: 2022-03-31 11:16:49,944: Receiving from client ('192.168.56.1', 53258)
+INFO: 2022-03-31 11:16:49,944: Data received: Sport_Bot: I do not care about the weather.::EOMsg::
+INFO: 2022-03-31 11:16:49,944: Reseting receive counter Sport_Bot.
+INFO: 2022-03-31 11:16:49,944: Receiving from client ('192.168.56.1', 53259)
+INFO: 2022-03-31 11:16:49,944: Data received: Art_Bot: I like all kinds of weather. Any weather can provide an interesting motive for a drawing.::EOMsg::
+INFO: 2022-03-31 11:16:49,944: Reseting receive counter Art_Bot.
+INFO: 2022-03-31 11:16:49,993: Receiving from client ('192.168.56.1', 53257)
+INFO: 2022-03-31 11:16:49,993: Data received: Weather_Bot: The temperature in Berlin is 3.1 degree celcius! The sky is clear.
+ This information is based on weather data from MET Norway and location data from simplemaps.::EOMsg::
+INFO: 2022-03-31 11:16:49,993: Reseting receive counter Weather_Bot.
+INFO: 2022-03-31 11:17:11,547: A new message is sent from host
+INFO: 2022-03-31 11:17:20,010: Receiving from client ('192.168.56.1', 53253)
+INFO: 2022-03-31 11:17:20,010: Data received: Simple_Chat_Bot: I think it is nice!::EOMsg::
+INFO: 2022-03-31 11:17:20,010: Reseting receive counter Simple_Chat_Bot.
+INFO: 2022-03-31 11:17:20,016: Receiving from client ('192.168.56.1', 53258)
+INFO: 2022-03-31 11:17:20,016: Data received: Sport_Bot: A true athlete works in any weather!::EOMsg::
+INFO: 2022-03-31 11:17:20,016: Reseting receive counter Sport_Bot.
+INFO: 2022-03-31 11:17:20,017: Receiving from client ('192.168.56.1', 53259)
+INFO: 2022-03-31 11:17:20,017: Data received: Art_Bot: I can`t complain. It is nice enough for me!::EOMsg::
+INFO: 2022-03-31 11:17:20,017: Reseting receive counter Art_Bot.
+INFO: 2022-03-31 11:17:21,733: Receiving from client ('192.168.56.1', 53257)
+INFO: 2022-03-31 11:17:21,733: Data received: Weather_Bot: The weather in London is partially cloudy and cold. I do not like it!
+ This information is based on weather data from MET Norway and location data from simplemaps.::EOMsg::
+INFO: 2022-03-31 11:17:21,733: Reseting receive counter Weather_Bot.
+INFO: 2022-03-31 11:17:41,550: A new message is sent from host
+INFO: 2022-03-31 11:17:41,755: Receiving from client ('192.168.56.1', 53253)
+INFO: 2022-03-31 11:17:41,755: Data received: Simple_Chat_Bot: How can you say something like that.::EOMsg::
+INFO: 2022-03-31 11:17:41,755: Reseting receive counter Simple_Chat_Bot.
+INFO: 2022-03-31 11:17:41,755: Receiving from client ('192.168.56.1', 53257)
+INFO: 2022-03-31 11:17:41,755: Data received: Weather_Bot: I did not know that.::EOMsg::
+INFO: 2022-03-31 11:17:41,755: Receiving from client ('192.168.56.1', 53258)
+INFO: 2022-03-31 11:17:41,755: Reseting receive counter Weather_Bot.
+INFO: 2022-03-31 11:17:41,761: Receiving from client ('192.168.56.1', 53259)
+INFO: 2022-03-31 11:17:41,761: Data received: Sport_Bot: I am a big sports fan, but art is not my cup of tea!::EOMsg::
+INFO: 2022-03-31 11:17:41,761: Data received: Art_Bot: Yes, I will never say no to that.::EOMsg::
+INFO: 2022-03-31 11:17:41,761: Reseting receive counter Sport_Bot.
+INFO: 2022-03-31 11:17:41,761: Reseting receive counter Art_Bot.
+INFO: 2022-03-31 11:17:44,032: User Art_Bot is removed by admin with the following reason: 
+INFO: 2022-03-31 11:17:51,773: The connection to Art_Bot ('192.168.56.1', 53259) is closing.
+INFO: 2022-03-31 11:17:51,773: Receiving from client ('192.168.56.1', 53253)
+INFO: 2022-03-31 11:17:51,773: Data received: Simple_Chat_Bot: If you say so!::EOMsg::
+INFO: 2022-03-31 11:17:51,773: Reseting receive counter Simple_Chat_Bot.
+INFO: 2022-03-31 11:17:51,773: Receiving from client ('192.168.56.1', 53257)
+INFO: 2022-03-31 11:17:51,773: Data received: Weather_Bot: I did not know that.::EOMsg::
+INFO: 2022-03-31 11:17:51,773: Reseting receive counter Weather_Bot.
+INFO: 2022-03-31 11:17:51,773: Receiving from client ('192.168.56.1', 53258)
+INFO: 2022-03-31 11:17:51,773: Data received: Sport_Bot: How can you say something like that.::EOMsg::
+INFO: 2022-03-31 11:17:51,773: Reseting receive counter Sport_Bot.
+INFO: 2022-03-31 11:18:11,552: A new message is sent from host
+INFO: 2022-03-31 11:18:11,780: Receiving from client ('192.168.56.1', 53253)
+INFO: 2022-03-31 11:18:11,780: Data received: Simple_Chat_Bot: I have the same question.::EOMsg::
+INFO: 2022-03-31 11:18:11,780: Reseting receive counter Simple_Chat_Bot.
+INFO: 2022-03-31 11:18:11,780: Receiving from client ('192.168.56.1', 53258)
+INFO: 2022-03-31 11:18:11,780: Data received: Sport_Bot: A true athlete works in any weather!::EOMsg::
+INFO: 2022-03-31 11:18:11,780: Reseting receive counter Sport_Bot.
+INFO: 2022-03-31 11:18:11,780: Receiving from client ('192.168.56.1', 53257)
+INFO: 2022-03-31 11:18:11,780: Data received: Weather_Bot: The temperature in Berlin is 3.1 degree celcius! The sky is clear.
+ This information is based on weather data from MET Norway and location data from simplemaps.::EOMsg::
+INFO: 2022-03-31 11:18:11,780: Reseting receive counter Weather_Bot.
+INFO: 2022-03-31 11:18:41,561: A new message is sent from host
+INFO: 2022-03-31 11:18:41,809: Receiving from client ('192.168.56.1', 53253)
+INFO: 2022-03-31 11:18:41,809: Data received: Simple_Chat_Bot: I do not like it.::EOMsg::
+INFO: 2022-03-31 11:18:41,809: Reseting receive counter Simple_Chat_Bot.
+INFO: 2022-03-31 11:18:41,809: Receiving from client ('192.168.56.1', 53258)
+INFO: 2022-03-31 11:18:41,809: Data received: Sport_Bot: A true athlete works in any weather!::EOMsg::
+INFO: 2022-03-31 11:18:41,809: Reseting receive counter Sport_Bot.
+INFO: 2022-03-31 11:18:43,446: Receiving from client ('192.168.56.1', 53257)
+INFO: 2022-03-31 11:18:43,446: Data received: Weather_Bot: The weather in Paris is clear and cold. I do not like it!
+ This information is based on weather data from MET Norway and location data from simplemaps.::EOMsg::
+INFO: 2022-03-31 11:18:43,446: Reseting receive counter Weather_Bot.
+INFO: 2022-03-31 11:18:43,785: The service is stoping due to an "exit" command issued by admin.
+INFO: 2022-03-31 11:18:53,449: The connection to Sport_Bot ('192.168.56.1', 53258) is closing.
+INFO: 2022-03-31 11:18:53,449: The connection to Weather_Bot ('192.168.56.1', 53257) is closing.
+INFO: 2022-03-31 11:18:53,449: The connection to Simple_Chat_Bot ('192.168.56.1', 53253) is closing.
+INFO: 2022-03-31 11:18:53,449: The connection to Bernt ('192.168.56.1', 53252) is closing.
+INFO: 2022-03-31 11:18:53,634: Stop procedure status: All connections are removed!
+INFO: 2022-03-31 11:18:54,453: Service stoped successfully!
+INFO: 2022-03-31 11:48:09,691: Service is listening to incomming connections on port 2020.
+INFO: 2022-03-31 11:48:09,700: A new message is sent from host
+INFO: 2022-03-31 11:48:25,697: New client connection accepted for source ('192.168.56.1', 53341).
+INFO: 2022-03-31 11:48:26,700: New client connection accepted for source ('192.168.56.1', 53342).
+INFO: 2022-03-31 11:48:26,700: Receiving from client ('192.168.56.1', 53342)
+INFO: 2022-03-31 11:48:26,700: Data received: Simple_Chat_Bot: Simple_Chat_Bot::EOMsg::
+INFO: 2022-03-31 11:48:26,700: Number of receptions for : 2
+INFO: 2022-03-31 11:48:26,716: Receiving from client ('192.168.56.1', 53341)
+INFO: 2022-03-31 11:48:26,716: Data received: Bernt: Bernt::EOMsg::
+INFO: 2022-03-31 11:48:26,716: Number of receptions for : 2
+INFO: 2022-03-31 11:48:27,704: Receiving from client ('192.168.56.1', 53342)
+INFO: 2022-03-31 11:48:27,704: Data received: Simple_Chat_Bot: Hi Bernt!::EOMsg::
+INFO: 2022-03-31 11:48:27,704: Number of receptions for Simple_Chat_Bot: 4
+INFO: 2022-03-31 11:48:28,660: New client connection accepted for source ('192.168.56.1', 53344).
+INFO: 2022-03-31 11:48:28,660: Receiving from client ('192.168.56.1', 53344)
+INFO: 2022-03-31 11:48:28,660: Data received: Weather_Bot: Weather_Bot::EOMsg::
+INFO: 2022-03-31 11:48:28,660: Number of receptions for : 2
+INFO: 2022-03-31 11:48:29,663: New client connection accepted for source ('192.168.56.1', 53346).
+INFO: 2022-03-31 11:48:29,663: Receiving from client ('192.168.56.1', 53346)
+INFO: 2022-03-31 11:48:29,663: Data received: Sport_Bot: Sport_Bot::EOMsg::
+INFO: 2022-03-31 11:48:29,663: Number of receptions for : 2
+INFO: 2022-03-31 11:48:29,678: Receiving from client ('192.168.56.1', 53344)
+INFO: 2022-03-31 11:48:29,678: Data received: Weather_Bot: A good day to you, Bernt!::EOMsg::
+INFO: 2022-03-31 11:48:29,678: Number of receptions for Weather_Bot: 4
+INFO: 2022-03-31 11:48:30,667: Receiving from client ('192.168.56.1', 53346)
+INFO: 2022-03-31 11:48:30,667: Data received: Sport_Bot: Hello Bernt!::EOMsg::
+INFO: 2022-03-31 11:48:30,667: Number of receptions for Sport_Bot: 4
+INFO: 2022-03-31 11:48:30,667: New client connection accepted for source ('192.168.56.1', 53347).
+INFO: 2022-03-31 11:48:30,667: Receiving from client ('192.168.56.1', 53347)
+INFO: 2022-03-31 11:48:30,667: Data received: Art_Bot: Art_Bot::EOMsg::
+INFO: 2022-03-31 11:48:30,667: Number of receptions for : 2
+INFO: 2022-03-31 11:48:31,672: Receiving from client ('192.168.56.1', 53347)
+INFO: 2022-03-31 11:48:31,673: Data received: Art_Bot: A good day to you, Bernt.::EOMsg::
+INFO: 2022-03-31 11:48:31,673: Number of receptions for Art_Bot: 4
+INFO: 2022-03-31 11:48:39,715: A new message is sent from host
+INFO: 2022-03-31 11:48:41,691: Receiving from client ('192.168.56.1', 53342)
+INFO: 2022-03-31 11:48:41,691: Data received: Simple_Chat_Bot: I have the same question.::EOMsg::
+INFO: 2022-03-31 11:48:41,691: Reseting receive counter Simple_Chat_Bot.
+INFO: 2022-03-31 11:48:41,691: Receiving from client ('192.168.56.1', 53346)
+INFO: 2022-03-31 11:48:41,691: Data received: Sport_Bot: The weather is always nice enough in my opinion::EOMsg::
+INFO: 2022-03-31 11:48:41,691: Reseting receive counter Sport_Bot.
+INFO: 2022-03-31 11:48:41,691: Receiving from client ('192.168.56.1', 53347)
+INFO: 2022-03-31 11:48:41,691: Data received: Art_Bot: I can`t complain. It is nice enough for me!::EOMsg::
+INFO: 2022-03-31 11:48:41,691: Reseting receive counter Art_Bot.
+INFO: 2022-03-31 11:48:42,710: Receiving from client ('192.168.56.1', 53344)
+INFO: 2022-03-31 11:48:42,710: Data received: Weather_Bot: The temperature in Oslo is 4.1 degree celcius! The sky is wery cloudy.
+ This information is based on weather data from MET Norway and location data from simplemaps.::EOMsg::
+INFO: 2022-03-31 11:48:42,710: Reseting receive counter Weather_Bot.
+INFO: 2022-03-31 11:49:09,725: A new message is sent from host
+INFO: 2022-03-31 11:49:12,735: Receiving from client ('192.168.56.1', 53342)
+INFO: 2022-03-31 11:49:12,735: Data received: Simple_Chat_Bot: If you want to talk about the weather, you have to talk to someone else.::EOMsg::
+INFO: 2022-03-31 11:49:12,735: Reseting receive counter Simple_Chat_Bot.
+INFO: 2022-03-31 11:49:12,735: Receiving from client ('192.168.56.1', 53346)
+INFO: 2022-03-31 11:49:12,735: Data received: Sport_Bot: The weather is always nice enough in my opinion::EOMsg::
+INFO: 2022-03-31 11:49:12,735: Reseting receive counter Sport_Bot.
+INFO: 2022-03-31 11:49:12,735: Receiving from client ('192.168.56.1', 53347)
+INFO: 2022-03-31 11:49:12,735: Data received: Art_Bot: I can`t complain. It is nice enough for me!::EOMsg::
+INFO: 2022-03-31 11:49:12,735: Reseting receive counter Art_Bot.
+INFO: 2022-03-31 11:49:12,750: Receiving from client ('192.168.56.1', 53344)
+INFO: 2022-03-31 11:49:12,750: Data received: Weather_Bot: The temperature in Oslo is 4.1 degree celcius!
+ This information is based on weather data from MET Norway and location data from simplemaps.::EOMsg::
+INFO: 2022-03-31 11:49:12,750: Reseting receive counter Weather_Bot.
+INFO: 2022-03-31 11:49:39,728: A new message is sent from host
+INFO: 2022-03-31 11:49:41,381: User Art_Bot is removed by admin with the following reason: 
+INFO: 2022-03-31 11:49:42,785: The connection to Art_Bot ('192.168.56.1', 53347) is closing.
+INFO: 2022-03-31 11:49:42,785: Receiving from client ('192.168.56.1', 53342)
+INFO: 2022-03-31 11:49:42,785: Data received: Simple_Chat_Bot: I do not want to talk about the weather. It is boring and always depressing!::EOMsg::
+INFO: 2022-03-31 11:49:42,785: Reseting receive counter Simple_Chat_Bot.
+INFO: 2022-03-31 11:49:42,791: Receiving from client ('192.168.56.1', 53346)
+INFO: 2022-03-31 11:49:42,791: Data received: Sport_Bot: A true athlete works in any weather!::EOMsg::
+INFO: 2022-03-31 11:49:42,791: Reseting receive counter Sport_Bot.
+INFO: 2022-03-31 11:49:42,791: Receiving from client ('192.168.56.1', 53344)
+INFO: 2022-03-31 11:49:42,791: Data received: Weather_Bot: The temperature in Oslo is 4.1 degree celcius!
+ This information is based on weather data from MET Norway and location data from simplemaps.::EOMsg::
+INFO: 2022-03-31 11:49:42,791: Reseting receive counter Weather_Bot.
+INFO: 2022-03-31 11:50:09,730: A new message is sent from host
+INFO: 2022-03-31 11:50:12,810: Receiving from client ('192.168.56.1', 53342)
+INFO: 2022-03-31 11:50:12,810: Data received: Simple_Chat_Bot: I do not want to talk about the weather. It is boring and always depressing!::EOMsg::
+INFO: 2022-03-31 11:50:12,810: Reseting receive counter Simple_Chat_Bot.
+INFO: 2022-03-31 11:50:12,810: Receiving from client ('192.168.56.1', 53346)
+INFO: 2022-03-31 11:50:12,810: Data received: Sport_Bot: The weather is always nice enough in my opinion::EOMsg::
+INFO: 2022-03-31 11:50:12,810: Reseting receive counter Sport_Bot.
+INFO: 2022-03-31 11:50:12,810: Receiving from client ('192.168.56.1', 53344)
+INFO: 2022-03-31 11:50:12,810: Data received: Weather_Bot: The temperature in Oslo is 4.1 degree celcius!
+ This information is based on weather data from MET Norway and location data from simplemaps.::EOMsg::
+INFO: 2022-03-31 11:50:12,810: Reseting receive counter Weather_Bot.
+INFO: 2022-03-31 11:50:39,740: A new message is sent from host
+INFO: 2022-03-31 11:50:42,836: Receiving from client ('192.168.56.1', 53342)
+INFO: 2022-03-31 11:50:42,836: Data received: Simple_Chat_Bot: I do not want to talk about the weather. It is boring and always depressing!::EOMsg::
+INFO: 2022-03-31 11:50:42,836: Reseting receive counter Simple_Chat_Bot.
+INFO: 2022-03-31 11:50:42,836: Receiving from client ('192.168.56.1', 53346)
+INFO: 2022-03-31 11:50:42,836: Data received: Sport_Bot: A true athlete works in any weather!::EOMsg::
+INFO: 2022-03-31 11:50:42,836: Reseting receive counter Sport_Bot.
+INFO: 2022-03-31 11:50:43,786: Receiving from client ('192.168.56.1', 53344)
+INFO: 2022-03-31 11:50:43,786: Data received: Weather_Bot: The temperature in Berlin is 3.1 degree celcius! The sky is clear.
+ This information is based on weather data from MET Norway and location data from simplemaps.::EOMsg::
+INFO: 2022-03-31 11:50:43,786: Reseting receive counter Weather_Bot.
+INFO: 2022-03-31 11:51:09,743: A new message is sent from host
+INFO: 2022-03-31 11:51:13,070: The service is stoping due to an "exit" command issued by admin.
+INFO: 2022-03-31 11:51:13,826: The connection to Sport_Bot ('192.168.56.1', 53346) is closing.
+INFO: 2022-03-31 11:51:13,826: The connection to Weather_Bot ('192.168.56.1', 53344) is closing.
+INFO: 2022-03-31 11:51:13,826: The connection to Simple_Chat_Bot ('192.168.56.1', 53342) is closing.
+INFO: 2022-03-31 11:51:13,826: The connection to Bernt ('192.168.56.1', 53341) is closing.
+INFO: 2022-03-31 11:51:13,876: Stop procedure status: All connections are removed!
+INFO: 2022-03-31 11:51:15,107: Service stoped successfully!
+INFO: 2022-03-31 14:50:12,635: Service is listening to incomming connections on port 2020.
+INFO: 2022-03-31 14:50:12,635: A new message is sent from host
+INFO: 2022-03-31 14:50:42,653: A new message is sent from host
+INFO: 2022-03-31 14:51:12,669: A new message is sent from host
+INFO: 2022-03-31 14:51:42,677: A new message is sent from host
+INFO: 2022-03-31 14:52:12,695: A new message is sent from host
+INFO: 2022-03-31 14:52:42,701: A new message is sent from host
+INFO: 2022-03-31 14:53:12,711: A new message is sent from host
+INFO: 2022-03-31 14:53:42,722: A new message is sent from host
+INFO: 2022-03-31 14:54:12,731: A new message is sent from host
+INFO: 2022-03-31 14:54:42,739: A new message is sent from host
+INFO: 2022-03-31 14:55:12,754: A new message is sent from host
+INFO: 2022-03-31 14:55:42,761: A new message is sent from host
+INFO: 2022-03-31 14:56:12,766: A new message is sent from host
+INFO: 2022-03-31 14:56:42,773: A new message is sent from host
+INFO: 2022-03-31 14:57:12,776: A new message is sent from host
+INFO: 2022-03-31 14:57:42,792: A new message is sent from host
+INFO: 2022-03-31 14:58:12,794: A new message is sent from host
+INFO: 2022-03-31 14:58:42,802: A new message is sent from host
+INFO: 2022-03-31 14:59:12,815: A new message is sent from host
+INFO: 2022-03-31 14:59:42,824: A new message is sent from host
+INFO: 2022-03-31 15:00:12,835: A new message is sent from host
+INFO: 2022-03-31 15:00:42,847: A new message is sent from host
+INFO: 2022-03-31 15:01:12,859: A new message is sent from host
+INFO: 2022-03-31 15:04:46,476: A new message is sent from host
+INFO: 2022-03-31 15:05:16,494: A new message is sent from host
+INFO: 2022-03-31 15:05:46,499: A new message is sent from host
+INFO: 2022-03-31 15:06:16,507: A new message is sent from host
+INFO: 2022-03-31 15:06:46,519: A new message is sent from host
+INFO: 2022-03-31 15:07:16,529: A new message is sent from host
+INFO: 2022-03-31 15:07:46,532: A new message is sent from host
+INFO: 2022-03-31 15:07:52,245: The service is stoping due to an "exit" command issued by admin.
+INFO: 2022-03-31 15:07:52,245: Stop procedure status: All connections are removed!
+INFO: 2022-03-31 15:07:58,434: Service stoped successfully!
+INFO: 2022-03-31 15:16:35,337: Service is listening to incomming connections on port 2020.
+INFO: 2022-03-31 15:16:35,337: A new message is sent from host
+INFO: 2022-03-31 15:17:05,351: A new message is sent from host
+INFO: 2022-03-31 15:17:19,391: New client connection accepted for source ('192.168.56.1', 50977).
+INFO: 2022-03-31 15:17:20,395: New client connection accepted for source ('192.168.56.1', 50978).
+INFO: 2022-03-31 15:17:20,395: Receiving from client ('192.168.56.1', 50978)
+INFO: 2022-03-31 15:17:20,395: Data received: Simple_Chat_Bot: Simple_Chat_Bot::EOMsg::
+INFO: 2022-03-31 15:17:20,395: Number of receptions for : 2
+INFO: 2022-03-31 15:17:20,411: Receiving from client ('192.168.56.1', 50977)
+INFO: 2022-03-31 15:17:20,411: Data received: Bernt: Bernt::EOMsg::
+INFO: 2022-03-31 15:17:20,411: Number of receptions for : 2
+INFO: 2022-03-31 15:17:21,399: Receiving from client ('192.168.56.1', 50978)
+INFO: 2022-03-31 15:17:21,399: Data received: Simple_Chat_Bot: Hello Bernt::EOMsg::
+INFO: 2022-03-31 15:17:21,399: Number of receptions for Simple_Chat_Bot: 4
+INFO: 2022-03-31 15:17:21,868: New client connection accepted for source ('192.168.56.1', 50980).
+INFO: 2022-03-31 15:17:21,868: Receiving from client ('192.168.56.1', 50980)
+INFO: 2022-03-31 15:17:21,868: Data received: Weather_Bot: Weather_Bot::EOMsg::
+INFO: 2022-03-31 15:17:21,868: Number of receptions for : 2
+INFO: 2022-03-31 15:17:22,871: New client connection accepted for source ('192.168.56.1', 50981).
+INFO: 2022-03-31 15:17:22,871: Receiving from client ('192.168.56.1', 50981)
+INFO: 2022-03-31 15:17:22,871: Data received: Sport_Bot: Sport_Bot::EOMsg::
+INFO: 2022-03-31 15:17:22,871: Number of receptions for : 2
+INFO: 2022-03-31 15:17:22,887: Receiving from client ('192.168.56.1', 50980)
+INFO: 2022-03-31 15:17:22,887: Data received: Weather_Bot: Hi Bernt.::EOMsg::
+INFO: 2022-03-31 15:17:22,887: Number of receptions for Weather_Bot: 4
+INFO: 2022-03-31 15:17:23,873: Receiving from client ('192.168.56.1', 50981)
+INFO: 2022-03-31 15:17:23,873: Data received: Sport_Bot: Hi Bernt.::EOMsg::
+INFO: 2022-03-31 15:17:23,873: Number of receptions for Sport_Bot: 4
+INFO: 2022-03-31 15:17:23,873: New client connection accepted for source ('192.168.56.1', 50982).
+INFO: 2022-03-31 15:17:23,873: Receiving from client ('192.168.56.1', 50982)
+INFO: 2022-03-31 15:17:23,873: Data received: Art_Bot: Art_Bot::EOMsg::
+INFO: 2022-03-31 15:17:23,873: Number of receptions for : 2
+INFO: 2022-03-31 15:17:24,876: Receiving from client ('192.168.56.1', 50982)
+INFO: 2022-03-31 15:17:24,876: Data received: Art_Bot: A good day to you, Bernt::EOMsg::
+INFO: 2022-03-31 15:17:24,876: Number of receptions for Art_Bot: 4
+INFO: 2022-03-31 15:17:35,374: A new message is sent from host
+INFO: 2022-03-31 15:17:44,889: Receiving from client ('192.168.56.1', 50978)
+INFO: 2022-03-31 15:17:44,889: Data received: Simple_Chat_Bot: Are you sure about that?::EOMsg::
+INFO: 2022-03-31 15:17:44,889: Reseting receive counter Simple_Chat_Bot.
+INFO: 2022-03-31 15:17:44,889: Receiving from client ('192.168.56.1', 50980)
+INFO: 2022-03-31 15:17:44,889: Receiving from client ('192.168.56.1', 50981)
+INFO: 2022-03-31 15:17:44,889: Data received: Weather_Bot: I did not know that.::EOMsg::
+INFO: 2022-03-31 15:17:44,889: Data received: Sport_Bot: I like football, but I prefere tennis::EOMsg::
+INFO: 2022-03-31 15:17:44,889: Reseting receive counter Weather_Bot.
+INFO: 2022-03-31 15:17:44,889: Receiving from client ('192.168.56.1', 50982)
+INFO: 2022-03-31 15:17:44,889: Reseting receive counter Sport_Bot.
+INFO: 2022-03-31 15:17:44,889: Data received: Art_Bot: No football for me, please!::EOMsg::
+INFO: 2022-03-31 15:17:44,889: Reseting receive counter Art_Bot.
+INFO: 2022-03-31 15:18:05,391: A new message is sent from host
+INFO: 2022-03-31 15:18:14,923: Receiving from client ('192.168.56.1', 50978)
+INFO: 2022-03-31 15:18:14,923: Data received: Simple_Chat_Bot: I did not know that.::EOMsg::
+INFO: 2022-03-31 15:18:14,925: Receiving from client ('192.168.56.1', 50980)
+INFO: 2022-03-31 15:18:14,925: Reseting receive counter Simple_Chat_Bot.
+INFO: 2022-03-31 15:18:14,925: Receiving from client ('192.168.56.1', 50981)
+INFO: 2022-03-31 15:18:14,925: Data received: Weather_Bot: How can you say something like that.::EOMsg::
+INFO: 2022-03-31 15:18:14,925: Data received: Sport_Bot: Are you sure about that?::EOMsg::
+INFO: 2022-03-31 15:18:14,925: Reseting receive counter Weather_Bot.
+INFO: 2022-03-31 15:18:14,925: Reseting receive counter Sport_Bot.
+INFO: 2022-03-31 15:18:14,925: Receiving from client ('192.168.56.1', 50982)
+INFO: 2022-03-31 15:18:14,925: Data received: Art_Bot: How can you say something like that.::EOMsg::
+INFO: 2022-03-31 15:18:14,925: Reseting receive counter Art_Bot.
+INFO: 2022-03-31 15:18:35,404: A new message is sent from host
+INFO: 2022-03-31 15:18:44,949: Receiving from client ('192.168.56.1', 50978)
+INFO: 2022-03-31 15:18:44,949: Data received: Simple_Chat_Bot: I do not want to talk about the weather. It is boring and always depressing!::EOMsg::
+INFO: 2022-03-31 15:18:44,949: Reseting receive counter Simple_Chat_Bot.
+INFO: 2022-03-31 15:18:44,949: Receiving from client ('192.168.56.1', 50981)
+INFO: 2022-03-31 15:18:44,949: Data received: Sport_Bot: The weather is always nice enough in my opinion::EOMsg::
+INFO: 2022-03-31 15:18:44,949: Reseting receive counter Sport_Bot.
+INFO: 2022-03-31 15:18:44,949: Receiving from client ('192.168.56.1', 50982)
+INFO: 2022-03-31 15:18:44,949: Data received: Art_Bot: I can`t complain. It is nice enough for me!::EOMsg::
+INFO: 2022-03-31 15:18:44,949: Reseting receive counter Art_Bot.
+INFO: 2022-03-31 15:18:46,368: Receiving from client ('192.168.56.1', 50980)
+INFO: 2022-03-31 15:18:46,368: Data received: Weather_Bot: The temperature in Oslo is 7.6 degree celcius!
+ This information is based on weather data from MET Norway and location data from simplemaps.::EOMsg::
+INFO: 2022-03-31 15:18:46,368: Reseting receive counter Weather_Bot.
+INFO: 2022-03-31 15:19:05,406: A new message is sent from host
+INFO: 2022-03-31 15:19:06,408: Receiving from client ('192.168.56.1', 50978)
+INFO: 2022-03-31 15:19:06,408: Data received: Simple_Chat_Bot: I am not sure, try to ask someone else.::EOMsg::
+INFO: 2022-03-31 15:19:06,408: Reseting receive counter Simple_Chat_Bot.
+INFO: 2022-03-31 15:19:06,408: Receiving from client ('192.168.56.1', 50981)
+INFO: 2022-03-31 15:19:06,408: Data received: Sport_Bot: A true athlete works in any weather!::EOMsg::
+INFO: 2022-03-31 15:19:06,408: Reseting receive counter Sport_Bot.
+INFO: 2022-03-31 15:19:06,408: Receiving from client ('192.168.56.1', 50982)
+INFO: 2022-03-31 15:19:06,408: Data received: Art_Bot: I like all kinds of weather. Any weather can provide an interesting motive for a drawing.::EOMsg::
+INFO: 2022-03-31 15:19:06,408: Reseting receive counter Art_Bot.
+INFO: 2022-03-31 15:19:06,825: Receiving from client ('192.168.56.1', 50980)
+INFO: 2022-03-31 15:19:06,825: Data received: Weather_Bot: The weather in London is clear and cold. I do not like it!
+ This information is based on weather data from MET Norway and location data from simplemaps.::EOMsg::
+INFO: 2022-03-31 15:19:06,825: Reseting receive counter Weather_Bot.
+INFO: 2022-03-31 15:19:35,418: A new message is sent from host
+INFO: 2022-03-31 15:19:36,853: Receiving from client ('192.168.56.1', 50978)
+INFO: 2022-03-31 15:19:36,853: Data received: Simple_Chat_Bot: How can you say something like that.::EOMsg::
+INFO: 2022-03-31 15:19:36,853: Receiving from client ('192.168.56.1', 50980)
+INFO: 2022-03-31 15:19:36,853: Reseting receive counter Simple_Chat_Bot.
+INFO: 2022-03-31 15:19:36,853: Receiving from client ('192.168.56.1', 50981)
+INFO: 2022-03-31 15:19:36,853: Data received: Weather_Bot: How can you say something like that.::EOMsg::
+INFO: 2022-03-31 15:19:36,853: Data received: Sport_Bot: Can you proove it?::EOMsg::
+INFO: 2022-03-31 15:19:36,853: Reseting receive counter Weather_Bot.
+INFO: 2022-03-31 15:19:36,853: Reseting receive counter Sport_Bot.
+INFO: 2022-03-31 15:19:36,853: Receiving from client ('192.168.56.1', 50982)
+INFO: 2022-03-31 15:19:36,853: Data received: Art_Bot: I did not know that.::EOMsg::
+INFO: 2022-03-31 15:19:36,853: Reseting receive counter Art_Bot.
+INFO: 2022-03-31 15:20:05,432: A new message is sent from host
+INFO: 2022-03-31 15:20:06,889: Receiving from client ('192.168.56.1', 50978)
+INFO: 2022-03-31 15:20:06,889: Data received: Simple_Chat_Bot: If you say so!::EOMsg::
+INFO: 2022-03-31 15:20:06,889: Receiving from client ('192.168.56.1', 50980)
+INFO: 2022-03-31 15:20:06,889: Reseting receive counter Simple_Chat_Bot.
+INFO: 2022-03-31 15:20:06,889: Receiving from client ('192.168.56.1', 50981)
+INFO: 2022-03-31 15:20:06,889: Data received: Weather_Bot: Are you sure about that?::EOMsg::
+INFO: 2022-03-31 15:20:06,889: Data received: Sport_Bot: I like sport in general, but hearing about football now is not cheering me up right now::EOMsg::
+INFO: 2022-03-31 15:20:06,889: Reseting receive counter Weather_Bot.
+INFO: 2022-03-31 15:20:06,889: Reseting receive counter Sport_Bot.
+INFO: 2022-03-31 15:20:06,889: Receiving from client ('192.168.56.1', 50982)
+INFO: 2022-03-31 15:20:06,889: Data received: Art_Bot: Football. Such a pointless activity!::EOMsg::
+INFO: 2022-03-31 15:20:06,889: Reseting receive counter Art_Bot.
+INFO: 2022-03-31 15:20:35,446: A new message is sent from host
+INFO: 2022-03-31 15:20:36,914: Receiving from client ('192.168.56.1', 50978)
+INFO: 2022-03-31 15:20:36,914: Data received: Simple_Chat_Bot: I do not want to talk about the weather. It is boring and always depressing!::EOMsg::
+INFO: 2022-03-31 15:20:36,914: Reseting receive counter Simple_Chat_Bot.
+INFO: 2022-03-31 15:20:36,914: Receiving from client ('192.168.56.1', 50981)
+INFO: 2022-03-31 15:20:36,914: Data received: Sport_Bot: There is nothing called bad weather!::EOMsg::
+INFO: 2022-03-31 15:20:36,914: Reseting receive counter Sport_Bot.
+INFO: 2022-03-31 15:20:36,914: Receiving from client ('192.168.56.1', 50982)
+INFO: 2022-03-31 15:20:36,914: Data received: Art_Bot: Let the weather be what it is and live with it!::EOMsg::
+INFO: 2022-03-31 15:20:36,914: Reseting receive counter Art_Bot.
+INFO: 2022-03-31 15:20:36,914: Receiving from client ('192.168.56.1', 50980)
+INFO: 2022-03-31 15:20:36,914: Data received: Weather_Bot: The temperature in Oslo is 7.6 degree celcius!
+ This information is based on weather data from MET Norway and location data from simplemaps.::EOMsg::
+INFO: 2022-03-31 15:20:36,914: Reseting receive counter Weather_Bot.
+INFO: 2022-03-31 15:21:05,459: A new message is sent from host
+INFO: 2022-03-31 15:21:06,942: Receiving from client ('192.168.56.1', 50978)
+INFO: 2022-03-31 15:21:06,942: Data received: Simple_Chat_Bot: I dont`t like it.::EOMsg::
+INFO: 2022-03-31 15:21:06,942: Reseting receive counter Simple_Chat_Bot.
+INFO: 2022-03-31 15:21:06,942: Receiving from client ('192.168.56.1', 50981)
+INFO: 2022-03-31 15:21:06,942: Data received: Sport_Bot: A true athlete works in any weather!::EOMsg::
+INFO: 2022-03-31 15:21:06,942: Reseting receive counter Sport_Bot.
+INFO: 2022-03-31 15:21:06,942: Receiving from client ('192.168.56.1', 50982)
+INFO: 2022-03-31 15:21:06,942: Data received: Art_Bot: Let the weather be what it is and live with it!::EOMsg::
+INFO: 2022-03-31 15:21:06,942: Reseting receive counter Art_Bot.
+INFO: 2022-03-31 15:21:07,227: Receiving from client ('192.168.56.1', 50980)
+INFO: 2022-03-31 15:21:07,227: Data received: Weather_Bot: The weather in Paris is partially cloudy and cold. I do not like it!
+ This information is based on weather data from MET Norway and location data from simplemaps.::EOMsg::
+INFO: 2022-03-31 15:21:07,227: Reseting receive counter Weather_Bot.
+INFO: 2022-03-31 15:21:35,464: A new message is sent from host
+INFO: 2022-03-31 15:21:37,269: Receiving from client ('192.168.56.1', 50978)
+INFO: 2022-03-31 15:21:37,269: Data received: Simple_Chat_Bot: Let me make up my mind first!::EOMsg::
+INFO: 2022-03-31 15:21:37,269: Receiving from client ('192.168.56.1', 50980)
+INFO: 2022-03-31 15:21:37,269: Reseting receive counter Simple_Chat_Bot.
+INFO: 2022-03-31 15:21:37,269: Receiving from client ('192.168.56.1', 50981)
+INFO: 2022-03-31 15:21:37,269: Data received: Weather_Bot: I think it is nice!::EOMsg::
+INFO: 2022-03-31 15:21:37,269: Data received: Sport_Bot: I think that tennis is one of the best sports there is!::EOMsg::
+INFO: 2022-03-31 15:21:37,269: Reseting receive counter Weather_Bot.
+INFO: 2022-03-31 15:21:37,269: Reseting receive counter Sport_Bot.
+INFO: 2022-03-31 15:21:37,269: Receiving from client ('192.168.56.1', 50982)
+INFO: 2022-03-31 15:21:37,269: Data received: Art_Bot: It looks like a cool activity. I would like to try it once.::EOMsg::
+INFO: 2022-03-31 15:21:37,269: Reseting receive counter Art_Bot.
+INFO: 2022-03-31 15:22:05,468: A new message is sent from host
+INFO: 2022-03-31 15:22:07,294: Receiving from client ('192.168.56.1', 50978)
+INFO: 2022-03-31 15:22:07,294: Data received: Simple_Chat_Bot: I am not sure, try to ask someone else.::EOMsg::
+INFO: 2022-03-31 15:22:07,294: Reseting receive counter Simple_Chat_Bot.
+INFO: 2022-03-31 15:22:07,294: Receiving from client ('192.168.56.1', 50981)
+INFO: 2022-03-31 15:22:07,294: Data received: Sport_Bot: I do not care about the weather.::EOMsg::
+INFO: 2022-03-31 15:22:07,294: Receiving from client ('192.168.56.1', 50982)
+INFO: 2022-03-31 15:22:07,294: Reseting receive counter Sport_Bot.
+INFO: 2022-03-31 15:22:07,294: Data received: Art_Bot: I like all kinds of weather. Any weather can provide an interesting motive for a drawing.::EOMsg::
+INFO: 2022-03-31 15:22:07,294: Reseting receive counter Art_Bot.
+INFO: 2022-03-31 15:22:07,294: Receiving from client ('192.168.56.1', 50980)
+INFO: 2022-03-31 15:22:07,294: Data received: Weather_Bot: The weather in London is clear and cold. I do not like it!
+ This information is based on weather data from MET Norway and location data from simplemaps.::EOMsg::
+INFO: 2022-03-31 15:22:07,294: Reseting receive counter Weather_Bot.
+INFO: 2022-03-31 15:22:17,303: Receiving from client ('192.168.56.1', 50977)
+INFO: 2022-03-31 15:22:17,303: Data received: Bernt: This is a test message::EOMsg::
+INFO: 2022-03-31 15:22:17,303: Reseting receive counter Bernt.
+INFO: 2022-03-31 15:22:17,303: Receiving from client ('192.168.56.1', 50978)
+INFO: 2022-03-31 15:22:17,303: Receiving from client ('192.168.56.1', 50980)
+INFO: 2022-03-31 15:22:17,303: Data received: Simple_Chat_Bot: If you say so!::EOMsg::
+INFO: 2022-03-31 15:22:17,303: Data received: Weather_Bot: I did not know that.::EOMsg::
+INFO: 2022-03-31 15:22:17,303: Reseting receive counter Simple_Chat_Bot.
+INFO: 2022-03-31 15:22:17,303: Receiving from client ('192.168.56.1', 50981)
+INFO: 2022-03-31 15:22:17,303: Reseting receive counter Weather_Bot.
+INFO: 2022-03-31 15:22:17,303: Receiving from client ('192.168.56.1', 50982)
+INFO: 2022-03-31 15:22:17,303: Data received: Sport_Bot: Can you proove it?::EOMsg::
+INFO: 2022-03-31 15:22:17,303: Data received: Art_Bot: If you say so!::EOMsg::
+INFO: 2022-03-31 15:22:17,303: Reseting receive counter Sport_Bot.
+INFO: 2022-03-31 15:22:17,303: Reseting receive counter Art_Bot.
+INFO: 2022-03-31 15:22:35,484: A new message is sent from host
+INFO: 2022-03-31 15:22:37,319: Receiving from client ('192.168.56.1', 50978)
+INFO: 2022-03-31 15:22:37,319: Data received: Simple_Chat_Bot: Can you proove it?::EOMsg::
+INFO: 2022-03-31 15:22:37,319: Receiving from client ('192.168.56.1', 50980)
+INFO: 2022-03-31 15:22:37,319: Reseting receive counter Simple_Chat_Bot.
+INFO: 2022-03-31 15:22:37,319: Receiving from client ('192.168.56.1', 50981)
+INFO: 2022-03-31 15:22:37,319: Data received: Weather_Bot: If you say so!::EOMsg::
+INFO: 2022-03-31 15:22:37,319: Data received: Sport_Bot: I did not know that.::EOMsg::
+INFO: 2022-03-31 15:22:37,319: Reseting receive counter Weather_Bot.
+INFO: 2022-03-31 15:22:37,319: Reseting receive counter Sport_Bot.
+INFO: 2022-03-31 15:22:37,319: Receiving from client ('192.168.56.1', 50982)
+INFO: 2022-03-31 15:22:37,319: Data received: Art_Bot: How can you say something like that.::EOMsg::
+INFO: 2022-03-31 15:22:37,319: Reseting receive counter Art_Bot.
+INFO: 2022-03-31 15:23:05,491: A new message is sent from host
+INFO: 2022-03-31 15:23:07,352: Receiving from client ('192.168.56.1', 50977)
+INFO: 2022-03-31 15:23:07,352: Data received: Bernt: This is a test message form user.::EOMsg::
+INFO: 2022-03-31 15:23:07,354: Receiving from client ('192.168.56.1', 50978)
+INFO: 2022-03-31 15:23:07,354: Reseting receive counter Bernt.
+INFO: 2022-03-31 15:23:07,354: Data received: Simple_Chat_Bot: I do not want to talk about the weather. It is boring and always depressing!::EOMsg::
+INFO: 2022-03-31 15:23:07,354: Reseting receive counter Simple_Chat_Bot.
+INFO: 2022-03-31 15:23:07,354: Receiving from client ('192.168.56.1', 50981)
+INFO: 2022-03-31 15:23:07,354: Data received: Sport_Bot: I do not care about the weather.::EOMsg::
+INFO: 2022-03-31 15:23:07,354: Receiving from client ('192.168.56.1', 50982)
+INFO: 2022-03-31 15:23:07,354: Reseting receive counter Sport_Bot.
+INFO: 2022-03-31 15:23:07,354: Data received: Art_Bot: Let the weather be what it is and live with it!::EOMsg::
+INFO: 2022-03-31 15:23:07,354: Reseting receive counter Art_Bot.
+INFO: 2022-03-31 15:23:07,354: Receiving from client ('192.168.56.1', 50980)
+INFO: 2022-03-31 15:23:07,354: Data received: Weather_Bot: The temperature in Oslo is 7.6 degree celcius!
+ This information is based on weather data from MET Norway and location data from simplemaps.::EOMsg::
+INFO: 2022-03-31 15:23:07,354: Reseting receive counter Weather_Bot.
+INFO: 2022-03-31 15:23:08,363: Receiving from client ('192.168.56.1', 50981)
+INFO: 2022-03-31 15:23:08,363: Data received: Sport_Bot: How can you say something like that.::EOMsg::
+INFO: 2022-03-31 15:23:08,363: Number of receptions for Sport_Bot: 2
+INFO: 2022-03-31 15:23:08,363: Receiving from client ('192.168.56.1', 50978)
+INFO: 2022-03-31 15:23:08,363: Data received: Simple_Chat_Bot: Are you sure about that?::EOMsg::
+INFO: 2022-03-31 15:23:08,363: Receiving from client ('192.168.56.1', 50980)
+INFO: 2022-03-31 15:23:08,363: Number of receptions for Simple_Chat_Bot: 2
+INFO: 2022-03-31 15:23:08,363: Receiving from client ('192.168.56.1', 50982)
+INFO: 2022-03-31 15:23:08,363: Data received: Weather_Bot: If you say so!::EOMsg::
+INFO: 2022-03-31 15:23:08,365: Data received: Art_Bot: Are you sure about that?::EOMsg::
+INFO: 2022-03-31 15:23:08,365: Number of receptions for Weather_Bot: 2
+INFO: 2022-03-31 15:23:08,365: Number of receptions for Art_Bot: 2
+INFO: 2022-03-31 15:23:35,498: A new message is sent from host
+INFO: 2022-03-31 15:23:38,394: Receiving from client ('192.168.56.1', 50978)
+INFO: 2022-03-31 15:23:38,394: Data received: Simple_Chat_Bot: I dont`t like it.::EOMsg::
+INFO: 2022-03-31 15:23:38,394: Reseting receive counter Simple_Chat_Bot.
+INFO: 2022-03-31 15:23:38,394: Receiving from client ('192.168.56.1', 50981)
+INFO: 2022-03-31 15:23:38,394: Receiving from client ('192.168.56.1', 50982)
+INFO: 2022-03-31 15:23:38,394: Data received: Sport_Bot: There is nothing called bad weather!::EOMsg::
+INFO: 2022-03-31 15:23:38,394: Data received: Art_Bot: I like all kinds of weather. Any weather can provide an interesting motive for a drawing.::EOMsg::
+INFO: 2022-03-31 15:23:38,394: Reseting receive counter Sport_Bot.
+INFO: 2022-03-31 15:23:38,394: Reseting receive counter Art_Bot.
+INFO: 2022-03-31 15:23:38,394: Receiving from client ('192.168.56.1', 50980)
+INFO: 2022-03-31 15:23:38,394: Data received: Weather_Bot: The weather in Paris is partially cloudy and cold. I do not like it!
+ This information is based on weather data from MET Norway and location data from simplemaps.::EOMsg::
+INFO: 2022-03-31 15:23:38,394: Reseting receive counter Weather_Bot.
+INFO: 2022-03-31 15:24:05,503: A new message is sent from host
+INFO: 2022-03-31 15:24:08,427: Receiving from client ('192.168.56.1', 50978)
+INFO: 2022-03-31 15:24:08,427: Data received: Simple_Chat_Bot: I dont`t like it.::EOMsg::
+INFO: 2022-03-31 15:24:08,427: Reseting receive counter Simple_Chat_Bot.
+INFO: 2022-03-31 15:24:08,427: Receiving from client ('192.168.56.1', 50981)
+INFO: 2022-03-31 15:24:08,427: Receiving from client ('192.168.56.1', 50982)
+INFO: 2022-03-31 15:24:08,427: Data received: Sport_Bot: I do not care about the weather.::EOMsg::
+INFO: 2022-03-31 15:24:08,427: Data received: Art_Bot: I can`t complain. It is nice enough for me!::EOMsg::
+INFO: 2022-03-31 15:24:08,427: Reseting receive counter Sport_Bot.
+INFO: 2022-03-31 15:24:08,427: Reseting receive counter Art_Bot.
+INFO: 2022-03-31 15:24:08,427: Receiving from client ('192.168.56.1', 50980)
+INFO: 2022-03-31 15:24:08,433: Data received: Weather_Bot: The weather in Paris is partially cloudy and cold. I do not like it!
+ This information is based on weather data from MET Norway and location data from simplemaps.::EOMsg::
+INFO: 2022-03-31 15:24:08,433: Reseting receive counter Weather_Bot.
+INFO: 2022-03-31 15:24:35,518: A new message is sent from host
+INFO: 2022-03-31 15:24:38,458: Receiving from client ('192.168.56.1', 50978)
+INFO: 2022-03-31 15:24:38,458: Receiving from client ('192.168.56.1', 50980)
+INFO: 2022-03-31 15:24:38,458: Data received: Simple_Chat_Bot: How can you say something like that.::EOMsg::
+INFO: 2022-03-31 15:24:38,458: Receiving from client ('192.168.56.1', 50981)
+INFO: 2022-03-31 15:24:38,458: Data received: Weather_Bot: Can you proove it?::EOMsg::
+INFO: 2022-03-31 15:24:38,458: Receiving from client ('192.168.56.1', 50982)
+INFO: 2022-03-31 15:24:38,458: Reseting receive counter Simple_Chat_Bot.
+INFO: 2022-03-31 15:24:38,458: Data received: Sport_Bot: I did not know that.::EOMsg::
+INFO: 2022-03-31 15:24:38,458: Reseting receive counter Weather_Bot.
+INFO: 2022-03-31 15:24:38,458: Data received: Art_Bot: If you say so!::EOMsg::
+INFO: 2022-03-31 15:24:38,458: Reseting receive counter Sport_Bot.
+INFO: 2022-03-31 15:24:38,458: Reseting receive counter Art_Bot.
+INFO: 2022-03-31 15:25:05,534: A new message is sent from host
+INFO: 2022-03-31 15:25:08,471: Receiving from client ('192.168.56.1', 50978)
+INFO: 2022-03-31 15:25:08,471: Receiving from client ('192.168.56.1', 50980)
+INFO: 2022-03-31 15:25:08,471: Data received: Simple_Chat_Bot: I am not sure, try to ask someone else.::EOMsg::
+INFO: 2022-03-31 15:25:08,471: Receiving from client ('192.168.56.1', 50981)
+INFO: 2022-03-31 15:25:08,471: Data received: Weather_Bot: I think it is nice!::EOMsg::
+INFO: 2022-03-31 15:25:08,471: Reseting receive counter Simple_Chat_Bot.
+INFO: 2022-03-31 15:25:08,471: Data received: Sport_Bot: I could watch tennis all day!::EOMsg::
+INFO: 2022-03-31 15:25:08,471: Reseting receive counter Weather_Bot.
+INFO: 2022-03-31 15:25:08,471: Reseting receive counter Sport_Bot.
+INFO: 2022-03-31 15:25:08,471: Receiving from client ('192.168.56.1', 50982)
+INFO: 2022-03-31 15:25:08,471: Data received: Art_Bot: I am not sure yet. I need to try it first.::EOMsg::
+INFO: 2022-03-31 15:25:08,471: Reseting receive counter Art_Bot.
+INFO: 2022-03-31 15:25:35,543: A new message is sent from host
+INFO: 2022-03-31 15:25:38,504: Receiving from client ('192.168.56.1', 50978)
+INFO: 2022-03-31 15:25:38,504: Data received: Simple_Chat_Bot: If you say so!::EOMsg::
+INFO: 2022-03-31 15:25:38,504: Receiving from client ('192.168.56.1', 50980)
+INFO: 2022-03-31 15:25:38,504: Reseting receive counter Simple_Chat_Bot.
+INFO: 2022-03-31 15:25:38,504: Receiving from client ('192.168.56.1', 50981)
+INFO: 2022-03-31 15:25:38,504: Data received: Weather_Bot: Can you proove it?::EOMsg::
+INFO: 2022-03-31 15:25:38,504: Data received: Sport_Bot: How can you say something like that.::EOMsg::
+INFO: 2022-03-31 15:25:38,504: Reseting receive counter Weather_Bot.
+INFO: 2022-03-31 15:25:38,504: Reseting receive counter Sport_Bot.
+INFO: 2022-03-31 15:25:38,504: Receiving from client ('192.168.56.1', 50982)
+INFO: 2022-03-31 15:25:38,504: Data received: Art_Bot: Can you proove it?::EOMsg::
+INFO: 2022-03-31 15:25:38,504: Reseting receive counter Art_Bot.
+INFO: 2022-03-31 15:26:05,544: A new message is sent from host
+INFO: 2022-03-31 15:26:08,535: Receiving from client ('192.168.56.1', 50978)
+INFO: 2022-03-31 15:26:08,535: Data received: Simple_Chat_Bot: I think it is nice!::EOMsg::
+INFO: 2022-03-31 15:26:08,535: Reseting receive counter Simple_Chat_Bot.
+INFO: 2022-03-31 15:26:08,535: Receiving from client ('192.168.56.1', 50981)
+INFO: 2022-03-31 15:26:08,535: Data received: Sport_Bot: There is nothing called bad weather!::EOMsg::
+INFO: 2022-03-31 15:26:08,535: Receiving from client ('192.168.56.1', 50982)
+INFO: 2022-03-31 15:26:08,535: Reseting receive counter Sport_Bot.
+INFO: 2022-03-31 15:26:08,535: Data received: Art_Bot: I can`t complain. It is nice enough for me!::EOMsg::
+INFO: 2022-03-31 15:26:08,535: Reseting receive counter Art_Bot.
+INFO: 2022-03-31 15:26:08,535: Receiving from client ('192.168.56.1', 50980)
+INFO: 2022-03-31 15:26:08,535: Data received: Weather_Bot: The weather in Paris is partially cloudy and cold. I do not like it!
+ This information is based on weather data from MET Norway and location data from simplemaps.::EOMsg::
+INFO: 2022-03-31 15:26:08,535: Reseting receive counter Weather_Bot.
+INFO: 2022-03-31 15:26:18,545: Receiving from client ('192.168.56.1', 50977)
+WARNING: 2022-03-31 15:26:18,545: The connection with the client Bernt ('192.168.56.1', 50977) has ended. 
+INFO: 2022-03-31 15:26:18,545: The connection to Bernt ('192.168.56.1', 50977) is closing.
+INFO: 2022-03-31 15:26:18,561: Receiving from client ('192.168.56.1', 50978)
+WARNING: 2022-03-31 15:26:18,561: The connection with the client Simple_Chat_Bot ('192.168.56.1', 50978) has ended. 
+INFO: 2022-03-31 15:26:18,561: The connection to Simple_Chat_Bot ('192.168.56.1', 50978) is closing.
+INFO: 2022-03-31 15:26:18,561: Receiving from client ('192.168.56.1', 50980)
+WARNING: 2022-03-31 15:26:18,561: The connection with the client Weather_Bot ('192.168.56.1', 50980) has ended. 
+INFO: 2022-03-31 15:26:18,561: Receiving from client ('192.168.56.1', 50981)
+WARNING: 2022-03-31 15:26:18,561: The connection with the client Sport_Bot ('192.168.56.1', 50981) has ended. 
+INFO: 2022-03-31 15:26:18,561: Receiving from client ('192.168.56.1', 50982)
+WARNING: 2022-03-31 15:26:18,561: The connection with the client Art_Bot ('192.168.56.1', 50982) has ended. 
+INFO: 2022-03-31 15:26:18,561: The connection to Art_Bot ('192.168.56.1', 50982) is closing.
+INFO: 2022-03-31 15:26:18,561: The connection to Sport_Bot ('192.168.56.1', 50981) is closing.
+INFO: 2022-03-31 15:26:18,561: The connection to Weather_Bot ('192.168.56.1', 50980) is closing.
+INFO: 2022-03-31 15:26:35,545: A new message is sent from host
+INFO: 2022-03-31 15:27:05,548: A new message is sent from host
+INFO: 2022-03-31 15:27:35,558: A new message is sent from host
+INFO: 2022-03-31 15:28:05,569: A new message is sent from host
+INFO: 2022-03-31 15:28:35,573: A new message is sent from host
+INFO: 2022-03-31 15:29:05,580: A new message is sent from host
+INFO: 2022-03-31 15:29:35,596: A new message is sent from host
+INFO: 2022-03-31 15:30:05,601: A new message is sent from host
+INFO: 2022-03-31 15:30:35,602: A new message is sent from host
+INFO: 2022-03-31 15:31:05,612: A new message is sent from host
+INFO: 2022-03-31 15:31:35,615: A new message is sent from host
+INFO: 2022-03-31 15:32:05,618: A new message is sent from host
+INFO: 2022-03-31 15:32:35,624: A new message is sent from host
+INFO: 2022-03-31 15:33:05,628: A new message is sent from host
+INFO: 2022-03-31 15:33:35,634: A new message is sent from host
+INFO: 2022-03-31 15:34:05,639: A new message is sent from host
+INFO: 2022-03-31 15:34:35,646: A new message is sent from host
+INFO: 2022-03-31 15:35:05,648: A new message is sent from host
+INFO: 2022-03-31 15:35:35,649: A new message is sent from host
+INFO: 2022-03-31 15:35:47,549: New client connection accepted for source ('192.168.56.1', 51099).
+INFO: 2022-03-31 15:35:48,554: New client connection accepted for source ('192.168.56.1', 51100).
+INFO: 2022-03-31 15:35:48,554: Receiving from client ('192.168.56.1', 51100)
+INFO: 2022-03-31 15:35:48,554: Data received: Simple_Chat_Bot: Simple_Chat_Bot::EOMsg::
+INFO: 2022-03-31 15:35:48,554: Number of receptions for : 2
+INFO: 2022-03-31 15:35:48,569: Receiving from client ('192.168.56.1', 51099)
+INFO: 2022-03-31 15:35:48,569: Data received: Bernt: Bernt::EOMsg::
+INFO: 2022-03-31 15:35:48,569: Number of receptions for : 2
+INFO: 2022-03-31 15:35:49,557: Receiving from client ('192.168.56.1', 51100)
+INFO: 2022-03-31 15:35:49,557: Data received: Simple_Chat_Bot: I did not know that.::EOMsg::
+INFO: 2022-03-31 15:35:49,557: Number of receptions for Simple_Chat_Bot: 4
+INFO: 2022-03-31 15:35:50,058: New client connection accepted for source ('192.168.56.1', 51102).
+INFO: 2022-03-31 15:35:50,058: Receiving from client ('192.168.56.1', 51102)
+INFO: 2022-03-31 15:35:50,058: Data received: Weather_Bot: Weather_Bot::EOMsg::
+INFO: 2022-03-31 15:35:50,058: Number of receptions for : 2
+INFO: 2022-03-31 15:35:50,559: Receiving from client ('192.168.56.1', 51100)
+INFO: 2022-03-31 15:35:50,559: Data received: Simple_Chat_Bot: Hi Bernt!::EOMsg::
+INFO: 2022-03-31 15:35:50,559: Number of receptions for Simple_Chat_Bot: 6
+INFO: 2022-03-31 15:35:51,060: New client connection accepted for source ('192.168.56.1', 51103).
+INFO: 2022-03-31 15:35:51,060: Receiving from client ('192.168.56.1', 51103)
+INFO: 2022-03-31 15:35:51,060: Data received: Sport_Bot: Sport_Bot::EOMsg::
+INFO: 2022-03-31 15:35:51,060: Number of receptions for : 2
+INFO: 2022-03-31 15:35:51,076: Receiving from client ('192.168.56.1', 51102)
+INFO: 2022-03-31 15:35:51,076: Data received: Weather_Bot: Can you prove it?::EOMsg::
+INFO: 2022-03-31 15:35:51,076: Number of receptions for Weather_Bot: 4
+INFO: 2022-03-31 15:35:52,062: Receiving from client ('192.168.56.1', 51103)
+INFO: 2022-03-31 15:35:52,062: Data received: Sport_Bot: I did not know that.::EOMsg::
+INFO: 2022-03-31 15:35:52,062: Number of receptions for Sport_Bot: 4
+INFO: 2022-03-31 15:35:52,062: New client connection accepted for source ('192.168.56.1', 51104).
+INFO: 2022-03-31 15:35:52,062: Receiving from client ('192.168.56.1', 51104)
+INFO: 2022-03-31 15:35:52,062: Data received: Art_Bot: Art_Bot::EOMsg::
+INFO: 2022-03-31 15:35:52,062: Number of receptions for : 2
+INFO: 2022-03-31 15:35:52,078: Receiving from client ('192.168.56.1', 51102)
+INFO: 2022-03-31 15:35:52,078: Data received: Weather_Bot: A good day to you, Bernt::EOMsg::
+INFO: 2022-03-31 15:35:52,078: Number of receptions for Weather_Bot: 6
+INFO: 2022-03-31 15:35:53,064: Receiving from client ('192.168.56.1', 51103)
+INFO: 2022-03-31 15:35:53,064: Data received: Sport_Bot: How are you today Bernt!::EOMsg::
+INFO: 2022-03-31 15:35:53,064: Number of receptions for Sport_Bot: 6
+INFO: 2022-03-31 15:35:53,064: Receiving from client ('192.168.56.1', 51104)
+INFO: 2022-03-31 15:35:53,064: Data received: Art_Bot: Can you prove it?::EOMsg::
+INFO: 2022-03-31 15:35:53,064: Number of receptions for Art_Bot: 4
+INFO: 2022-03-31 15:35:54,067: Receiving from client ('192.168.56.1', 51104)
+INFO: 2022-03-31 15:35:54,067: Data received: Art_Bot: A good day to you, Bernt!::EOMsg::
+INFO: 2022-03-31 15:35:54,067: Number of receptions for Art_Bot: 6
+INFO: 2022-03-31 15:36:05,670: A new message is sent from host
+INFO: 2022-03-31 15:36:14,106: Receiving from client ('192.168.56.1', 51100)
+INFO: 2022-03-31 15:36:14,106: Data received: Simple_Chat_Bot: I do not want to talk about the weather. It is boring and always depressing!::EOMsg::
+INFO: 2022-03-31 15:36:14,106: Reseting receive counter Simple_Chat_Bot.
+INFO: 2022-03-31 15:36:14,106: Receiving from client ('192.168.56.1', 51103)
+INFO: 2022-03-31 15:36:14,106: Data received: Sport_Bot: The weather is always nice enough in my opinion::EOMsg::
+INFO: 2022-03-31 15:36:14,106: Receiving from client ('192.168.56.1', 51104)
+INFO: 2022-03-31 15:36:14,106: Reseting receive counter Sport_Bot.
+INFO: 2022-03-31 15:36:14,106: Data received: Art_Bot: I like all kinds of weather. Any weather can provide an interesting motive for a drawing.::EOMsg::
+INFO: 2022-03-31 15:36:14,106: Reseting receive counter Art_Bot.
+INFO: 2022-03-31 15:36:14,522: Receiving from client ('192.168.56.1', 51102)
+INFO: 2022-03-31 15:36:14,522: Data received: Weather_Bot: The temperature in Berlin is 4.7 degree celcius! The sky is clear.
+ This information is based on weather data from MET Norway and location data from simplemaps.::EOMsg::
+INFO: 2022-03-31 15:36:14,522: Reseting receive counter Weather_Bot.
+INFO: 2022-03-31 15:36:35,685: A new message is sent from host
+INFO: 2022-03-31 15:36:37,863: User Bernt is removed by admin with the following reason: Demonstation of the kick command
+INFO: 2022-03-31 15:36:41,256: The service is stoping due to an "exit" command issued by admin.
+INFO: 2022-03-31 15:36:44,561: The connection to Art_Bot ('192.168.56.1', 51104) is closing.
+INFO: 2022-03-31 15:36:44,561: The connection to Sport_Bot ('192.168.56.1', 51103) is closing.
+INFO: 2022-03-31 15:36:44,561: The connection to Weather_Bot ('192.168.56.1', 51102) is closing.
+INFO: 2022-03-31 15:36:44,561: The connection to Simple_Chat_Bot ('192.168.56.1', 51100) is closing.
+INFO: 2022-03-31 15:36:44,561: The connection to Bernt ('192.168.56.1', 51099) is closing.
+INFO: 2022-03-31 15:36:44,561: The connection to Bernt ('192.168.56.1', 51099) is closing.
+INFO: 2022-03-31 15:37:05,692: A new message is sent from host
+INFO: 2022-03-31 15:45:50,344: Service is listening to incomming connections on port 2020.
+INFO: 2022-03-31 15:45:50,360: A new message is sent from host
+INFO: 2022-03-31 15:45:55,797: New client connection accepted for source ('192.168.56.1', 51299).
+INFO: 2022-03-31 15:45:56,800: Receiving from client ('192.168.56.1', 51299)
+INFO: 2022-03-31 15:45:56,800: Data received: Bernt: Bernt::EOMsg::
+INFO: 2022-03-31 15:45:56,800: Number of receptions for : 2
+INFO: 2022-03-31 15:45:56,800: New client connection accepted for source ('192.168.56.1', 51300).
+INFO: 2022-03-31 15:45:56,800: Receiving from client ('192.168.56.1', 51300)
+INFO: 2022-03-31 15:45:56,800: Data received: Simple_Chat_Bot: Simple_Chat_Bot::EOMsg::
+INFO: 2022-03-31 15:45:56,800: Number of receptions for : 2
+INFO: 2022-03-31 15:45:57,803: Receiving from client ('192.168.56.1', 51300)
+INFO: 2022-03-31 15:45:57,803: Data received: Simple_Chat_Bot: Hello Bernt.::EOMsg::
+INFO: 2022-03-31 15:45:57,803: Number of receptions for Simple_Chat_Bot: 4
+INFO: 2022-03-31 15:45:58,234: New client connection accepted for source ('192.168.56.1', 51303).
+INFO: 2022-03-31 15:45:58,234: Receiving from client ('192.168.56.1', 51303)
+INFO: 2022-03-31 15:45:58,234: Data received: Weather_Bot: Weather_Bot::EOMsg::
+INFO: 2022-03-31 15:45:58,234: Number of receptions for : 2
+INFO: 2022-03-31 15:45:59,239: New client connection accepted for source ('192.168.56.1', 51304).
+INFO: 2022-03-31 15:45:59,239: Receiving from client ('192.168.56.1', 51304)
+INFO: 2022-03-31 15:45:59,239: Data received: Sport_Bot: Sport_Bot::EOMsg::
+INFO: 2022-03-31 15:45:59,239: Number of receptions for : 2
+INFO: 2022-03-31 15:45:59,254: Receiving from client ('192.168.56.1', 51303)
+INFO: 2022-03-31 15:45:59,254: Data received: Weather_Bot: A good day to you, Bernt.::EOMsg::
+INFO: 2022-03-31 15:45:59,254: Number of receptions for Weather_Bot: 4
+INFO: 2022-03-31 15:46:00,242: Receiving from client ('192.168.56.1', 51304)
+INFO: 2022-03-31 15:46:00,242: Data received: Sport_Bot: A good day to you, Bernt::EOMsg::
+INFO: 2022-03-31 15:46:00,242: Number of receptions for Sport_Bot: 4
+INFO: 2022-03-31 15:46:00,242: New client connection accepted for source ('192.168.56.1', 51305).
+INFO: 2022-03-31 15:46:00,242: Receiving from client ('192.168.56.1', 51305)
+INFO: 2022-03-31 15:46:00,242: Data received: Art_Bot: Art_Bot::EOMsg::
+INFO: 2022-03-31 15:46:00,242: Number of receptions for : 2
+INFO: 2022-03-31 15:46:01,247: Receiving from client ('192.168.56.1', 51305)
+INFO: 2022-03-31 15:46:01,247: Data received: Art_Bot: A good day to you, Bernt.::EOMsg::
+INFO: 2022-03-31 15:46:01,247: Number of receptions for Art_Bot: 4
+INFO: 2022-03-31 15:46:20,374: A new message is sent from host
+INFO: 2022-03-31 15:46:21,249: Receiving from client ('192.168.56.1', 51300)
+INFO: 2022-03-31 15:46:21,249: Data received: Simple_Chat_Bot: I dont`t like it.::EOMsg::
+INFO: 2022-03-31 15:46:21,249: Receiving from client ('192.168.56.1', 51304)
+INFO: 2022-03-31 15:46:21,249: Data received: Sport_Bot: A true athlete works in any weather!::EOMsg::
+INFO: 2022-03-31 15:46:21,249: Receiving from client ('192.168.56.1', 51305)
+INFO: 2022-03-31 15:46:21,249: Data received: Art_Bot: Let the weather be what it is and live with it!::EOMsg::
+INFO: 2022-03-31 15:46:21,261: Receiving from client ('192.168.56.1', 51303)
+INFO: 2022-03-31 15:46:21,261: Data received: Weather_Bot: The weather in Paris is partially cloudy and cold. I do not like it!
+ This information is based on weather data from MET Norway and location data from simplemaps.::EOMsg::
+INFO: 2022-03-31 15:46:50,381: A new message is sent from host
+INFO: 2022-03-31 15:46:51,284: Receiving from client ('192.168.56.1', 51300)
+INFO: 2022-03-31 15:46:51,284: Data received: Simple_Chat_Bot: Let me make up my mind first!::EOMsg::
+INFO: 2022-03-31 15:46:51,284: Receiving from client ('192.168.56.1', 51303)
+INFO: 2022-03-31 15:46:51,284: Data received: Weather_Bot: I am not sure, try to ask someone else.::EOMsg::
+INFO: 2022-03-31 15:46:51,284: Receiving from client ('192.168.56.1', 51304)
+INFO: 2022-03-31 15:46:51,284: Receiving from client ('192.168.56.1', 51305)
+INFO: 2022-03-31 15:46:51,284: Data received: Sport_Bot: I could watch tennis all day!::EOMsg::
+INFO: 2022-03-31 15:46:51,284: Data received: Art_Bot: I am not sure yet. I need to try it first.::EOMsg::
+INFO: 2022-03-31 15:47:20,393: A new message is sent from host
+INFO: 2022-03-31 15:47:21,311: Receiving from client ('192.168.56.1', 51300)
+INFO: 2022-03-31 15:47:21,311: Data received: Simple_Chat_Bot: I do not want to talk about the weather. It is boring and always depressing!::EOMsg::
+INFO: 2022-03-31 15:47:21,311: Receiving from client ('192.168.56.1', 51304)
+INFO: 2022-03-31 15:47:21,311: Data received: Sport_Bot: A true athlete works in any weather!::EOMsg::
+INFO: 2022-03-31 15:47:21,311: Receiving from client ('192.168.56.1', 51305)
+INFO: 2022-03-31 15:47:21,311: Data received: Art_Bot: Let the weather be what it is and live with it!::EOMsg::
+INFO: 2022-03-31 15:47:21,311: Receiving from client ('192.168.56.1', 51303)
+INFO: 2022-03-31 15:47:21,311: Data received: Weather_Bot: The temperature in Oslo is 7.6 degree celcius! The sky is partially cloudy.
+ This information is based on weather data from MET Norway and location data from simplemaps.::EOMsg::
+INFO: 2022-03-31 15:47:39,459: User Bernt is removed by admin with the following reason: Demonstration of the kick command
+INFO: 2022-03-31 15:47:41,329: The connection to Bernt ('192.168.56.1', 51299) is closing.
+INFO: 2022-03-31 15:47:44,150: The service is stoping due to an "exit" command issued by admin.
+INFO: 2022-03-31 15:47:50,400: A new message is sent from host
+INFO: 2022-03-31 15:47:51,334: The connection to Art_Bot ('192.168.56.1', 51305) is closing.
+INFO: 2022-03-31 15:47:51,334: The connection to Sport_Bot ('192.168.56.1', 51304) is closing.
+INFO: 2022-03-31 15:47:51,334: The connection to Weather_Bot ('192.168.56.1', 51303) is closing.
+INFO: 2022-03-31 15:47:51,334: The connection to Simple_Chat_Bot ('192.168.56.1', 51300) is closing.
+INFO: 2022-03-31 15:47:51,534: Stop procedure status: All connections are removed!
+INFO: 2022-03-31 15:47:52,375: Service stoped successfully!
+INFO: 2022-03-31 19:43:36,764: Service is listening to incomming connections on port 2020.
+INFO: 2022-03-31 19:43:36,764: A new message is sent from host
+INFO: 2022-03-31 19:43:40,612: New client connection accepted for source ('192.168.56.1', 58632).
+INFO: 2022-03-31 19:43:41,616: New client connection accepted for source ('192.168.56.1', 58633).
+INFO: 2022-03-31 19:43:41,616: Receiving from client ('192.168.56.1', 58633)
+INFO: 2022-03-31 19:43:41,616: Data received: Simple_Chat_Bot: Simple_Chat_Bot::EOMsg::
+INFO: 2022-03-31 19:43:41,616: Number of receptions for : 2
+INFO: 2022-03-31 19:43:41,631: Receiving from client ('192.168.56.1', 58632)
+INFO: 2022-03-31 19:43:41,631: Data received: Bernt: Bernt::EOMsg::
+INFO: 2022-03-31 19:43:41,631: Number of receptions for : 2
+INFO: 2022-03-31 19:43:42,635: Receiving from client ('192.168.56.1', 58633)
+INFO: 2022-03-31 19:43:42,635: Data received: Simple_Chat_Bot: Hi Bernt!::EOMsg::
+INFO: 2022-03-31 19:43:42,635: Number of receptions for Simple_Chat_Bot: 4
+INFO: 2022-03-31 19:43:43,113: New client connection accepted for source ('192.168.56.1', 58635).
+INFO: 2022-03-31 19:43:43,120: Receiving from client ('192.168.56.1', 58635)
+INFO: 2022-03-31 19:43:43,120: Data received: Weather_Bot: Weather_Bot::EOMsg::
+INFO: 2022-03-31 19:43:43,120: Number of receptions for : 2
+INFO: 2022-03-31 19:43:44,122: Receiving from client ('192.168.56.1', 58635)
+INFO: 2022-03-31 19:43:44,122: Data received: Weather_Bot: Hello Bernt!::EOMsg::
+INFO: 2022-03-31 19:43:44,122: Number of receptions for Weather_Bot: 4
+INFO: 2022-03-31 19:43:44,122: New client connection accepted for source ('192.168.56.1', 58636).
+INFO: 2022-03-31 19:43:44,122: Receiving from client ('192.168.56.1', 58636)
+INFO: 2022-03-31 19:43:44,122: Data received: Sport_Bot: Sport_Bot::EOMsg::
+INFO: 2022-03-31 19:43:44,122: Number of receptions for : 2
+INFO: 2022-03-31 19:43:45,142: Receiving from client ('192.168.56.1', 58636)
+INFO: 2022-03-31 19:43:45,142: Data received: Sport_Bot: A good day to you, Bernt::EOMsg::
+INFO: 2022-03-31 19:43:45,142: Number of receptions for Sport_Bot: 4
+INFO: 2022-03-31 19:43:45,142: New client connection accepted for source ('192.168.56.1', 58637).
+INFO: 2022-03-31 19:43:45,142: Receiving from client ('192.168.56.1', 58637)
+INFO: 2022-03-31 19:43:45,142: Data received: Art_Bot: Art_Bot::EOMsg::
+INFO: 2022-03-31 19:43:45,142: Number of receptions for : 2
+INFO: 2022-03-31 19:43:46,145: Receiving from client ('192.168.56.1', 58637)
+INFO: 2022-03-31 19:43:46,145: Data received: Art_Bot: Hello Bernt!::EOMsg::
+INFO: 2022-03-31 19:43:46,145: Number of receptions for Art_Bot: 4
+INFO: 2022-03-31 19:43:56,154: Receiving from client ('192.168.56.1', 58632)
+INFO: 2022-03-31 19:43:56,154: Data received: Bernt: this is a test::EOMsg::
+INFO: 2022-03-31 19:43:56,154: Receiving from client ('192.168.56.1', 58633)
+INFO: 2022-03-31 19:43:56,154: Data received: Simple_Chat_Bot: Are you sure about that?::EOMsg::
+INFO: 2022-03-31 19:43:56,154: Receiving from client ('192.168.56.1', 58635)
+INFO: 2022-03-31 19:43:56,154: Data received: Weather_Bot: Can you prove it?::EOMsg::
+INFO: 2022-03-31 19:43:56,154: Receiving from client ('192.168.56.1', 58636)
+INFO: 2022-03-31 19:43:56,154: Receiving from client ('192.168.56.1', 58637)
+INFO: 2022-03-31 19:43:56,154: Data received: Sport_Bot: Can you prove it?::EOMsg::
+INFO: 2022-03-31 19:43:56,154: Data received: Art_Bot: I did not know that.::EOMsg::
+INFO: 2022-03-31 19:44:06,772: A new message is sent from host
+INFO: 2022-03-31 19:44:16,170: Receiving from client ('192.168.56.1', 58633)
+INFO: 2022-03-31 19:44:16,170: Data received: Simple_Chat_Bot: I dont`t like it.::EOMsg::
+INFO: 2022-03-31 19:44:16,170: Receiving from client ('192.168.56.1', 58636)
+INFO: 2022-03-31 19:44:16,170: Data received: Sport_Bot: There is nothing called bad weather!::EOMsg::
+INFO: 2022-03-31 19:44:16,170: Receiving from client ('192.168.56.1', 58637)
+INFO: 2022-03-31 19:44:16,170: Data received: Art_Bot: I like all kinds of weather. Any weather can provide an interesting motive for a drawing.::EOMsg::
+INFO: 2022-03-31 19:44:16,439: Receiving from client ('192.168.56.1', 58635)
+INFO: 2022-03-31 19:44:16,439: Data received: Weather_Bot: The weather in Paris is wery cloudy and cold. I do not like it!
+ This information is based on weather data from MET Norway and location data from simplemaps.::EOMsg::
+INFO: 2022-03-31 19:44:36,783: A new message is sent from host
+INFO: 2022-03-31 19:44:46,466: Receiving from client ('192.168.56.1', 58632)
+INFO: 2022-03-31 19:44:46,466: Data received: Bernt: teest::EOMsg::
+INFO: 2022-03-31 19:44:46,466: Receiving from client ('192.168.56.1', 58633)
+INFO: 2022-03-31 19:44:46,466: Data received: Simple_Chat_Bot: Can you prove it?::EOMsg::
+INFO: 2022-03-31 19:44:46,466: Receiving from client ('192.168.56.1', 58635)
+INFO: 2022-03-31 19:44:46,466: Receiving from client ('192.168.56.1', 58636)
+INFO: 2022-03-31 19:44:46,466: Data received: Weather_Bot: How can you say something like that.::EOMsg::
+INFO: 2022-03-31 19:44:46,466: Data received: Sport_Bot: I am a big sports fan, but art is not my cup of tea!::EOMsg::
+INFO: 2022-03-31 19:44:46,466: Receiving from client ('192.168.56.1', 58637)
+INFO: 2022-03-31 19:44:46,466: Data received: Art_Bot: Perfect, I have practiced my drawing capabilities lately.::EOMsg::
+INFO: 2022-03-31 19:44:47,470: Receiving from client ('192.168.56.1', 58637)
+INFO: 2022-03-31 19:44:47,470: Data received: Art_Bot: Are you sure about that?::EOMsg::
+INFO: 2022-03-31 19:44:47,470: Number of receptions for Art_Bot: 2
+INFO: 2022-03-31 19:44:47,470: Receiving from client ('192.168.56.1', 58633)
+INFO: 2022-03-31 19:44:47,470: Receiving from client ('192.168.56.1', 58635)
+INFO: 2022-03-31 19:44:47,470: Data received: Simple_Chat_Bot: If you say so!::EOMsg::
+INFO: 2022-03-31 19:44:47,470: Data received: Weather_Bot: How can you say something like that.::EOMsg::
+INFO: 2022-03-31 19:44:47,470: Receiving from client ('192.168.56.1', 58636)
+INFO: 2022-03-31 19:44:47,470: Number of receptions for Simple_Chat_Bot: 2
+INFO: 2022-03-31 19:44:47,470: Number of receptions for Weather_Bot: 2
+INFO: 2022-03-31 19:44:47,470: Data received: Sport_Bot: If you say so!::EOMsg::
+INFO: 2022-03-31 19:44:47,470: Number of receptions for Sport_Bot: 2
+INFO: 2022-03-31 19:45:06,785: A new message is sent from host
+INFO: 2022-03-31 19:45:07,483: Receiving from client ('192.168.56.1', 58633)
+INFO: 2022-03-31 19:45:07,483: Data received: Simple_Chat_Bot: I think it is nice!::EOMsg::
+INFO: 2022-03-31 19:45:07,483: Receiving from client ('192.168.56.1', 58636)
+INFO: 2022-03-31 19:45:07,483: Receiving from client ('192.168.56.1', 58637)
+INFO: 2022-03-31 19:45:07,483: Data received: Sport_Bot: A true athlete works in any weather!::EOMsg::
+INFO: 2022-03-31 19:45:07,483: Data received: Art_Bot: I like all kinds of weather. Any weather can provide an interesting motive for a drawing.::EOMsg::
+INFO: 2022-03-31 19:45:07,806: Receiving from client ('192.168.56.1', 58635)
+INFO: 2022-03-31 19:45:07,806: Data received: Weather_Bot: The weather in London is wery cloudy and cold. I do not like it!
+ This information is based on weather data from MET Norway and location data from simplemaps.::EOMsg::
+INFO: 2022-03-31 19:45:27,126: The service is stoping due to an "exit" command issued by admin.
+INFO: 2022-03-31 19:45:27,845: The connection to Art_Bot ('192.168.56.1', 58637) is closing.
+INFO: 2022-03-31 19:45:27,845: The connection to Sport_Bot ('192.168.56.1', 58636) is closing.
+INFO: 2022-03-31 19:45:27,845: The connection to Weather_Bot ('192.168.56.1', 58635) is closing.
+INFO: 2022-03-31 19:45:27,845: The connection to Simple_Chat_Bot ('192.168.56.1', 58633) is closing.
+INFO: 2022-03-31 19:45:27,845: The connection to Bernt ('192.168.56.1', 58632) is closing.
+INFO: 2022-03-31 19:45:27,945: Stop procedure status: All connections are removed!
+INFO: 2022-03-31 19:45:29,202: Service stoped successfully!
+INFO: 2022-03-31 20:07:26,901: Service is listening to incomming connections on port 2020.
+INFO: 2022-03-31 20:07:26,901: A new message is sent from host
+INFO: 2022-03-31 20:07:29,393: New client connection accepted for source ('192.168.56.1', 54795).
+INFO: 2022-03-31 20:07:30,397: New client connection accepted for source ('192.168.56.1', 54796).
+INFO: 2022-03-31 20:07:30,397: Receiving from client ('192.168.56.1', 54796)
+INFO: 2022-03-31 20:07:30,397: Data received: Simple_Chat_Bot: Simple_Chat_Bot::EOMsg::
+INFO: 2022-03-31 20:07:30,397: Number of receptions for : 2
+INFO: 2022-03-31 20:07:30,412: Receiving from client ('192.168.56.1', 54795)
+INFO: 2022-03-31 20:07:30,412: Data received: Bernt: Bernt::EOMsg::
+INFO: 2022-03-31 20:07:30,412: Number of receptions for : 2
+INFO: 2022-03-31 20:07:31,400: Receiving from client ('192.168.56.1', 54796)
+INFO: 2022-03-31 20:07:31,400: Data received: Simple_Chat_Bot: A good day to you, Bernt.::EOMsg::
+INFO: 2022-03-31 20:07:31,400: Number of receptions for Simple_Chat_Bot: 4
+INFO: 2022-03-31 20:07:31,833: New client connection accepted for source ('192.168.56.1', 54798).
+INFO: 2022-03-31 20:07:31,833: Receiving from client ('192.168.56.1', 54798)
+INFO: 2022-03-31 20:07:31,833: Data received: Weather_Bot: Weather_Bot::EOMsg::
+INFO: 2022-03-31 20:07:31,833: Number of receptions for : 2
+INFO: 2022-03-31 20:07:32,834: New client connection accepted for source ('192.168.56.1', 54799).
+INFO: 2022-03-31 20:07:32,834: Receiving from client ('192.168.56.1', 54799)
+INFO: 2022-03-31 20:07:32,834: Data received: Sport_Bot: Sport_Bot::EOMsg::
+INFO: 2022-03-31 20:07:32,834: Number of receptions for : 2
+INFO: 2022-03-31 20:07:32,850: Receiving from client ('192.168.56.1', 54798)
+INFO: 2022-03-31 20:07:32,850: Data received: Weather_Bot: Hi Bernt::EOMsg::
+INFO: 2022-03-31 20:07:32,850: Number of receptions for Weather_Bot: 4
+INFO: 2022-03-31 20:07:33,837: Receiving from client ('192.168.56.1', 54799)
+INFO: 2022-03-31 20:07:33,837: Data received: Sport_Bot: Hi Bernt::EOMsg::
+INFO: 2022-03-31 20:07:33,837: Number of receptions for Sport_Bot: 4
+INFO: 2022-03-31 20:07:33,837: New client connection accepted for source ('192.168.56.1', 54800).
+INFO: 2022-03-31 20:07:33,837: Receiving from client ('192.168.56.1', 54800)
+INFO: 2022-03-31 20:07:33,837: Data received: Art_Bot: Art_Bot::EOMsg::
+INFO: 2022-03-31 20:07:33,837: Number of receptions for : 2
+INFO: 2022-03-31 20:07:34,840: Receiving from client ('192.168.56.1', 54800)
+INFO: 2022-03-31 20:07:34,840: Data received: Art_Bot: Hello Bernt.::EOMsg::
+INFO: 2022-03-31 20:07:34,840: Number of receptions for Art_Bot: 4
+INFO: 2022-03-31 20:07:44,842: Receiving from client ('192.168.56.1', 54795)
+WARNING: 2022-03-31 20:07:44,842: The connection with the client Bernt ('192.168.56.1', 54795) has ended. 
+INFO: 2022-03-31 20:07:44,842: The connection to Bernt ('192.168.56.1', 54795) is closing.
+INFO: 2022-03-31 20:07:44,857: Receiving from client ('192.168.56.1', 54796)
+WARNING: 2022-03-31 20:07:44,857: The connection with the client Simple_Chat_Bot ('192.168.56.1', 54796) has ended. 
+INFO: 2022-03-31 20:07:44,857: The connection to Simple_Chat_Bot ('192.168.56.1', 54796) is closing.
+INFO: 2022-03-31 20:07:44,857: Receiving from client ('192.168.56.1', 54798)
+WARNING: 2022-03-31 20:07:44,857: The connection with the client Weather_Bot ('192.168.56.1', 54798) has ended. 
+INFO: 2022-03-31 20:07:44,857: Receiving from client ('192.168.56.1', 54799)
+INFO: 2022-03-31 20:07:44,857: Receiving from client ('192.168.56.1', 54800)
+WARNING: 2022-03-31 20:07:44,857: The connection with the client Sport_Bot ('192.168.56.1', 54799) has ended. 
+WARNING: 2022-03-31 20:07:44,857: The connection with the client Art_Bot ('192.168.56.1', 54800) has ended. 
+INFO: 2022-03-31 20:07:44,857: The connection to Art_Bot ('192.168.56.1', 54800) is closing.
+INFO: 2022-03-31 20:07:44,857: The connection to Sport_Bot ('192.168.56.1', 54799) is closing.
+INFO: 2022-03-31 20:07:44,857: The connection to Weather_Bot ('192.168.56.1', 54798) is closing.
+INFO: 2022-03-31 20:07:56,925: A new message is sent from host
+INFO: 2022-03-31 20:08:08,199: The service is stoping due to an "exit" command issued by admin.
+INFO: 2022-03-31 20:08:08,199: Stop procedure status: All connections are removed!
+INFO: 2022-03-31 20:08:15,942: Service stoped successfully!
+INFO: 2022-03-31 22:03:32,391: Service is listening to incomming connections on port 2020.
+INFO: 2022-03-31 22:03:32,391: A new message is sent from host
+INFO: 2022-03-31 22:03:34,369: New client connection accepted for source ('192.168.56.1', 60205).
+INFO: 2022-03-31 22:03:35,368: New client connection accepted for source ('192.168.56.1', 60206).
+INFO: 2022-03-31 22:03:35,368: Receiving from client ('192.168.56.1', 60206)
+INFO: 2022-03-31 22:03:35,368: Data received: Simple_Chat_Bot: Simple_Chat_Bot::EOMsg::
+INFO: 2022-03-31 22:03:35,368: Number of receptions for : 2
+INFO: 2022-03-31 22:03:35,384: Receiving from client ('192.168.56.1', 60205)
+INFO: 2022-03-31 22:03:35,384: Data received: Bernt: Bernt::EOMsg::
+INFO: 2022-03-31 22:03:35,384: Number of receptions for : 2
+INFO: 2022-03-31 22:03:36,371: Receiving from client ('192.168.56.1', 60206)
+INFO: 2022-03-31 22:03:36,371: Data received: Simple_Chat_Bot: Hello Bernt::EOMsg::
+INFO: 2022-03-31 22:03:36,371: Number of receptions for Simple_Chat_Bot: 4
+INFO: 2022-03-31 22:03:36,926: New client connection accepted for source ('192.168.56.1', 60208).
+INFO: 2022-03-31 22:03:36,926: Receiving from client ('192.168.56.1', 60208)
+INFO: 2022-03-31 22:03:36,926: Data received: Weather_Bot: Weather_Bot::EOMsg::
+INFO: 2022-03-31 22:03:36,926: Number of receptions for : 2
+INFO: 2022-03-31 22:03:37,928: New client connection accepted for source ('192.168.56.1', 60209).
+INFO: 2022-03-31 22:03:37,928: Receiving from client ('192.168.56.1', 60209)
+INFO: 2022-03-31 22:03:37,928: Data received: Sport_Bot: Sport_Bot::EOMsg::
+INFO: 2022-03-31 22:03:37,928: Number of receptions for : 2
+INFO: 2022-03-31 22:03:37,944: Receiving from client ('192.168.56.1', 60208)
+INFO: 2022-03-31 22:03:37,944: Data received: Weather_Bot: Hello Bernt.::EOMsg::
+INFO: 2022-03-31 22:03:37,944: Number of receptions for Weather_Bot: 4
+INFO: 2022-03-31 22:03:38,948: Receiving from client ('192.168.56.1', 60209)
+INFO: 2022-03-31 22:03:38,948: Data received: Sport_Bot: A good day to you, Bernt!::EOMsg::
+INFO: 2022-03-31 22:03:38,948: Number of receptions for Sport_Bot: 4
+INFO: 2022-03-31 22:03:38,948: New client connection accepted for source ('192.168.56.1', 60210).
+INFO: 2022-03-31 22:03:38,948: Receiving from client ('192.168.56.1', 60210)
+INFO: 2022-03-31 22:03:38,948: Data received: Art_Bot: Art_Bot::EOMsg::
+INFO: 2022-03-31 22:03:38,948: Number of receptions for : 2
+INFO: 2022-03-31 22:03:39,952: Receiving from client ('192.168.56.1', 60210)
+INFO: 2022-03-31 22:03:39,952: Data received: Art_Bot: How are you today Bernt::EOMsg::
+INFO: 2022-03-31 22:03:39,952: Number of receptions for Art_Bot: 4
+INFO: 2022-03-31 22:04:02,414: A new message is sent from host
+INFO: 2022-03-31 22:04:09,995: Receiving from client ('192.168.56.1', 60206)
+INFO: 2022-03-31 22:04:09,995: Data received: Simple_Chat_Bot: I am not sure, try to ask someone else.::EOMsg::
+INFO: 2022-03-31 22:04:09,995: Receiving from client ('192.168.56.1', 60208)
+INFO: 2022-03-31 22:04:09,995: Data received: Weather_Bot: Let me make up my mind first!::EOMsg::
+INFO: 2022-03-31 22:04:09,995: Receiving from client ('192.168.56.1', 60209)
+INFO: 2022-03-31 22:04:09,995: Receiving from client ('192.168.56.1', 60210)
+INFO: 2022-03-31 22:04:09,995: Data received: Sport_Bot: I love all kind of sport, and I am realy paying a lot of attention to tennis at the moment.::EOMsg::
+INFO: 2022-03-31 22:04:09,995: Data received: Art_Bot: I am not sure yet. I need to try it first.::EOMsg::
+INFO: 2022-03-31 22:04:32,417: A new message is sent from host
+INFO: 2022-03-31 22:04:40,022: Receiving from client ('192.168.56.1', 60206)
+INFO: 2022-03-31 22:04:40,022: Receiving from client ('192.168.56.1', 60208)
+INFO: 2022-03-31 22:04:40,022: Data received: Simple_Chat_Bot: I think it is nice!::EOMsg::
+INFO: 2022-03-31 22:04:40,022: Data received: Weather_Bot: I dont`t like it.::EOMsg::
+INFO: 2022-03-31 22:04:40,022: Receiving from client ('192.168.56.1', 60209)
+INFO: 2022-03-31 22:04:40,022: Data received: Sport_Bot: I could play tennis all day.::EOMsg::
+INFO: 2022-03-31 22:04:40,022: Receiving from client ('192.168.56.1', 60210)
+INFO: 2022-03-31 22:04:40,022: Data received: Art_Bot: It looks like a cool activity. I would like to try it once.::EOMsg::
+INFO: 2022-03-31 22:05:02,429: A new message is sent from host
+INFO: 2022-03-31 22:05:10,070: Receiving from client ('192.168.56.1', 60206)
+INFO: 2022-03-31 22:05:10,070: Data received: Simple_Chat_Bot: I did not know that.::EOMsg::
+INFO: 2022-03-31 22:05:10,070: Receiving from client ('192.168.56.1', 60208)
+INFO: 2022-03-31 22:05:10,070: Data received: Weather_Bot: How can you say something like that.::EOMsg::
+INFO: 2022-03-31 22:05:10,070: Receiving from client ('192.168.56.1', 60209)
+INFO: 2022-03-31 22:05:10,070: Data received: Sport_Bot: How can you say something like that.::EOMsg::
+INFO: 2022-03-31 22:05:10,070: Receiving from client ('192.168.56.1', 60210)
+INFO: 2022-03-31 22:05:10,070: Data received: Art_Bot: How can you say something like that.::EOMsg::
+INFO: 2022-03-31 22:05:32,449: A new message is sent from host
+INFO: 2022-03-31 22:05:40,104: Receiving from client ('192.168.56.1', 60206)
+INFO: 2022-03-31 22:05:40,104: Data received: Simple_Chat_Bot: I do not want to talk about the weather. It is boring and always depressing!::EOMsg::
+INFO: 2022-03-31 22:05:40,104: Receiving from client ('192.168.56.1', 60209)
+INFO: 2022-03-31 22:05:40,104: Data received: Sport_Bot: There is nothing called bad weather!::EOMsg::
+INFO: 2022-03-31 22:05:40,104: Receiving from client ('192.168.56.1', 60210)
+INFO: 2022-03-31 22:05:40,104: Data received: Art_Bot: I can`t complain. It is nice enough for me!::EOMsg::
+INFO: 2022-03-31 22:05:40,389: Receiving from client ('192.168.56.1', 60208)
+INFO: 2022-03-31 22:05:40,389: Data received: Weather_Bot: The temperature in Oslo is 1.8 degree celcius! The sky is wery cloudy.
+ This information is based on weather data from MET Norway and location data from simplemaps.::EOMsg::
+INFO: 2022-03-31 22:06:02,451: A new message is sent from host
+INFO: 2022-03-31 22:06:10,419: Receiving from client ('192.168.56.1', 60206)
+INFO: 2022-03-31 22:06:10,419: Data received: Simple_Chat_Bot: Are you sure about that?::EOMsg::
+INFO: 2022-03-31 22:06:10,419: Receiving from client ('192.168.56.1', 60208)
+INFO: 2022-03-31 22:06:10,419: Receiving from client ('192.168.56.1', 60209)
+INFO: 2022-03-31 22:06:10,419: Data received: Weather_Bot: Are you sure about that?::EOMsg::
+INFO: 2022-03-31 22:06:10,419: Data received: Sport_Bot: Please, talk about something else! Maybey we can watch sport?::EOMsg::
+INFO: 2022-03-31 22:06:10,419: Receiving from client ('192.168.56.1', 60210)
+INFO: 2022-03-31 22:06:10,419: Data received: Art_Bot: That is a good idea.::EOMsg::
+INFO: 2022-03-31 22:06:32,453: A new message is sent from host
+INFO: 2022-03-31 22:06:40,452: Receiving from client ('192.168.56.1', 60206)
+INFO: 2022-03-31 22:06:40,452: Data received: Simple_Chat_Bot: If you want to talk about the weather, you have to talk to someone else.::EOMsg::
+INFO: 2022-03-31 22:06:40,452: Receiving from client ('192.168.56.1', 60209)
+INFO: 2022-03-31 22:06:40,452: Data received: Sport_Bot: There is nothing called bad weather!::EOMsg::
+INFO: 2022-03-31 22:06:40,452: Receiving from client ('192.168.56.1', 60210)
+INFO: 2022-03-31 22:06:40,452: Data received: Art_Bot: Let the weather be what it is and live with it!::EOMsg::
+INFO: 2022-03-31 22:06:40,452: Receiving from client ('192.168.56.1', 60208)
+INFO: 2022-03-31 22:06:40,452: Data received: Weather_Bot: The temperature in Oslo is 1.8 degree celcius!
+ This information is based on weather data from MET Norway and location data from simplemaps.::EOMsg::
+INFO: 2022-03-31 22:07:02,454: A new message is sent from host
+INFO: 2022-03-31 22:07:10,475: Receiving from client ('192.168.56.1', 60206)
+INFO: 2022-03-31 22:07:10,475: Data received: Simple_Chat_Bot: I did not know that.::EOMsg::
+INFO: 2022-03-31 22:07:10,475: Receiving from client ('192.168.56.1', 60208)
+INFO: 2022-03-31 22:07:10,475: Receiving from client ('192.168.56.1', 60209)
+INFO: 2022-03-31 22:07:10,475: Data received: Weather_Bot: If you say so!::EOMsg::
+INFO: 2022-03-31 22:07:10,475: Data received: Sport_Bot: Can you prove it?::EOMsg::
+INFO: 2022-03-31 22:07:10,475: Receiving from client ('192.168.56.1', 60210)
+INFO: 2022-03-31 22:07:10,475: Data received: Art_Bot: If you say so!::EOMsg::
+INFO: 2022-03-31 22:07:32,470: A new message is sent from host
+INFO: 2022-03-31 22:07:40,506: Receiving from client ('192.168.56.1', 60206)
+INFO: 2022-03-31 22:07:40,506: Data received: Simple_Chat_Bot: I did not know that.::EOMsg::
+INFO: 2022-03-31 22:07:40,506: Receiving from client ('192.168.56.1', 60208)
+INFO: 2022-03-31 22:07:40,506: Receiving from client ('192.168.56.1', 60209)
+INFO: 2022-03-31 22:07:40,506: Data received: Weather_Bot: How can you say something like that.::EOMsg::
+INFO: 2022-03-31 22:07:40,506: Data received: Sport_Bot: I am a big sports fan, but art is not my cup of tea!::EOMsg::
+INFO: 2022-03-31 22:07:40,506: Receiving from client ('192.168.56.1', 60210)
+INFO: 2022-03-31 22:07:40,506: Data received: Art_Bot: Perfect, I have practiced my drawing capabilities lately.::EOMsg::
+INFO: 2022-03-31 22:08:02,482: A new message is sent from host
+INFO: 2022-03-31 22:08:10,535: Receiving from client ('192.168.56.1', 60206)
+INFO: 2022-03-31 22:08:10,535: Data received: Simple_Chat_Bot: I dont`t like it.::EOMsg::
+INFO: 2022-03-31 22:08:10,535: Receiving from client ('192.168.56.1', 60208)
+INFO: 2022-03-31 22:08:10,535: Receiving from client ('192.168.56.1', 60209)
+INFO: 2022-03-31 22:08:10,535: Data received: Weather_Bot: I dont`t like it.::EOMsg::
+INFO: 2022-03-31 22:08:10,535: Data received: Sport_Bot: I could watch tennis all day!::EOMsg::
+INFO: 2022-03-31 22:08:10,535: Receiving from client ('192.168.56.1', 60210)
+INFO: 2022-03-31 22:08:10,535: Data received: Art_Bot: I am not sure yet. I need to try it first.::EOMsg::
+INFO: 2022-03-31 22:08:32,491: A new message is sent from host
+INFO: 2022-03-31 22:08:40,566: Receiving from client ('192.168.56.1', 60206)
+INFO: 2022-03-31 22:08:40,566: Data received: Simple_Chat_Bot: I have the same question.::EOMsg::
+INFO: 2022-03-31 22:08:40,566: Receiving from client ('192.168.56.1', 60209)
+INFO: 2022-03-31 22:08:40,566: Data received: Sport_Bot: The weather is always nice enough in my opinion::EOMsg::
+INFO: 2022-03-31 22:08:40,566: Receiving from client ('192.168.56.1', 60210)
+INFO: 2022-03-31 22:08:40,566: Data received: Art_Bot: I can`t complain. It is nice enough for me!::EOMsg::
+INFO: 2022-03-31 22:08:40,566: Receiving from client ('192.168.56.1', 60208)
+INFO: 2022-03-31 22:08:40,566: Data received: Weather_Bot: The temperature in Oslo is 1.8 degree celcius!
+ This information is based on weather data from MET Norway and location data from simplemaps.::EOMsg::
+INFO: 2022-03-31 22:08:44,930: The service is stoping due to an "exit" command issued by admin.
+INFO: 2022-03-31 22:08:50,579: The connection to Art_Bot ('192.168.56.1', 60210) is closing.
+INFO: 2022-03-31 22:08:50,579: The connection to Sport_Bot ('192.168.56.1', 60209) is closing.
+INFO: 2022-03-31 22:08:50,579: The connection to Weather_Bot ('192.168.56.1', 60208) is closing.
+INFO: 2022-03-31 22:08:50,579: The connection to Simple_Chat_Bot ('192.168.56.1', 60206) is closing.
+INFO: 2022-03-31 22:08:50,579: The connection to Bernt ('192.168.56.1', 60205) is closing.
+INFO: 2022-03-31 22:08:50,725: Stop procedure status: All connections are removed!
+INFO: 2022-03-31 22:08:51,966: Service stoped successfully!
+INFO: 2022-03-31 22:24:03,111: Service is listening to incomming connections on port 2020.
+INFO: 2022-03-31 22:24:03,111: A new message is sent from host
+INFO: 2022-03-31 22:24:06,436: New client connection accepted for source ('192.168.56.1', 60346).
+INFO: 2022-03-31 22:24:07,438: New client connection accepted for source ('192.168.56.1', 60347).
+INFO: 2022-03-31 22:24:07,438: Receiving from client ('192.168.56.1', 60347)
+INFO: 2022-03-31 22:24:07,438: Data received: Simple_Chat_Bot: Simple_Chat_Bot::EOMsg::
+INFO: 2022-03-31 22:24:07,438: Number of receptions for : 2
+INFO: 2022-03-31 22:24:07,454: Receiving from client ('192.168.56.1', 60346)
+INFO: 2022-03-31 22:24:07,454: Data received: Bernt: Bernt::EOMsg::
+INFO: 2022-03-31 22:24:07,454: Number of receptions for : 2
+INFO: 2022-03-31 22:24:08,442: Receiving from client ('192.168.56.1', 60347)
+INFO: 2022-03-31 22:24:08,442: Data received: Simple_Chat_Bot: Hello Bernt.::EOMsg::
+INFO: 2022-03-31 22:24:08,442: Number of receptions for Simple_Chat_Bot: 4
+INFO: 2022-03-31 22:24:08,881: New client connection accepted for source ('192.168.56.1', 60349).
+INFO: 2022-03-31 22:24:08,881: Receiving from client ('192.168.56.1', 60349)
+INFO: 2022-03-31 22:24:08,881: Data received: Weather_Bot: Weather_Bot::EOMsg::
+INFO: 2022-03-31 22:24:08,881: Number of receptions for : 2
+INFO: 2022-03-31 22:24:09,900: Receiving from client ('192.168.56.1', 60349)
+INFO: 2022-03-31 22:24:09,900: Data received: Weather_Bot: Hello Bernt!::EOMsg::
+INFO: 2022-03-31 22:24:09,900: Number of receptions for Weather_Bot: 4
+INFO: 2022-03-31 22:24:09,900: New client connection accepted for source ('192.168.56.1', 60350).
+INFO: 2022-03-31 22:24:09,900: Receiving from client ('192.168.56.1', 60350)
+INFO: 2022-03-31 22:24:09,900: Data received: Sport_Bot: Sport_Bot::EOMsg::
+INFO: 2022-03-31 22:24:09,900: Number of receptions for : 2
+INFO: 2022-03-31 22:24:10,903: Receiving from client ('192.168.56.1', 60350)
+INFO: 2022-03-31 22:24:10,903: Data received: Sport_Bot: A good day to you, Bernt!::EOMsg::
+INFO: 2022-03-31 22:24:10,903: Number of receptions for Sport_Bot: 4
+INFO: 2022-03-31 22:24:10,903: New client connection accepted for source ('192.168.56.1', 60351).
+INFO: 2022-03-31 22:24:10,903: Receiving from client ('192.168.56.1', 60351)
+INFO: 2022-03-31 22:24:10,903: Data received: Art_Bot: Art_Bot::EOMsg::
+INFO: 2022-03-31 22:24:10,903: Number of receptions for : 2
+INFO: 2022-03-31 22:24:11,906: Receiving from client ('192.168.56.1', 60351)
+INFO: 2022-03-31 22:24:11,906: Data received: Art_Bot: A good day to you, Bernt!::EOMsg::
+INFO: 2022-03-31 22:24:11,906: Number of receptions for Art_Bot: 4
+INFO: 2022-03-31 22:24:21,934: Receiving from client ('192.168.56.1', 60346)
+INFO: 2022-03-31 22:24:21,934: Data received: Bernt: t::EOMsg::Bernt: t::EOMsg::Bernt: t::EOMsg::Bernt: t::EOMsg::Bernt: t::EOMsg::Bernt: t::EOMsg::Bernt: t::EOMsg::Bernt: t::EOMsg::Bernt: tt::EOMsg::Bernt: t::EOMsg::Bernt: t::EOMsg::Bernt: t::EOMsg::Bernt: t::EOMsg::Bernt: t::EOMsg::Bernt: t::EOMsg::Bernt: t::EOMsg::Bernt: t::EOMsg::Bernt: t::EOMsg::Bernt: t::EOMsg::
+WARNING: 2022-03-31 22:24:21,934: User Bernt sent 10 in rappid succession.The user will be kicked for this! Type 2
+INFO: 2022-03-31 22:24:21,934: The connection to Bernt ('192.168.56.1', 60346) is closing.
+INFO: 2022-03-31 22:24:33,125: A new message is sent from host
+INFO: 2022-03-31 22:24:41,954: Receiving from client ('192.168.56.1', 60350)
+INFO: 2022-03-31 22:24:41,954: Data received: Sport_Bot: A true athlete works in any weather!::EOMsg::
+INFO: 2022-03-31 22:24:41,954: Receiving from client ('192.168.56.1', 60351)
+INFO: 2022-03-31 22:24:41,954: Data received: Art_Bot: I like all kinds of weather. Any weather can provide an interesting motive for a drawing.::EOMsg::
+INFO: 2022-03-31 22:24:42,977: Receiving from client ('192.168.56.1', 60347)
+WARNING: 2022-03-31 22:24:42,977: The connection with the client Simple_Chat_Bot ('192.168.56.1', 60347) has ended. [WinError 10054] En eksisterende tilkobling ble tvangslukket av den eksterne verten
+INFO: 2022-03-31 22:24:42,993: The connection to Simple_Chat_Bot ('192.168.56.1', 60347) is closing.
+INFO: 2022-03-31 22:24:42,993: Receiving from client ('192.168.56.1', 60349)
+WARNING: 2022-03-31 22:24:42,993: The connection with the client Weather_Bot ('192.168.56.1', 60349) has ended. [WinError 10054] En eksisterende tilkobling ble tvangslukket av den eksterne verten
+INFO: 2022-03-31 22:24:42,993: Receiving from client ('192.168.56.1', 60350)
+INFO: 2022-03-31 22:24:42,993: Receiving from client ('192.168.56.1', 60351)
+WARNING: 2022-03-31 22:24:42,993: The connection with the client Sport_Bot ('192.168.56.1', 60350) has ended. 
+WARNING: 2022-03-31 22:24:42,993: The connection with the client Art_Bot ('192.168.56.1', 60351) has ended. 
+INFO: 2022-03-31 22:24:42,993: The connection to Art_Bot ('192.168.56.1', 60351) is closing.
+INFO: 2022-03-31 22:24:42,993: The connection to Sport_Bot ('192.168.56.1', 60350) is closing.
+INFO: 2022-03-31 22:24:42,993: The connection to Weather_Bot ('192.168.56.1', 60349) is closing.
+INFO: 2022-03-31 22:25:03,142: A new message is sent from host
+INFO: 2022-03-31 22:25:33,155: A new message is sent from host
+INFO: 2022-03-31 22:26:03,170: A new message is sent from host
+INFO: 2022-03-31 22:26:33,188: A new message is sent from host
+INFO: 2022-03-31 22:27:03,197: A new message is sent from host
+INFO: 2022-03-31 22:27:33,206: A new message is sent from host
+INFO: 2022-03-31 22:28:03,213: A new message is sent from host
+INFO: 2022-03-31 22:28:33,228: A new message is sent from host
+INFO: 2022-03-31 22:29:03,232: A new message is sent from host
+INFO: 2022-03-31 22:29:33,235: A new message is sent from host
+INFO: 2022-03-31 22:30:03,249: A new message is sent from host
+INFO: 2022-03-31 22:30:33,251: A new message is sent from host
+INFO: 2022-03-31 22:31:03,253: A new message is sent from host
+INFO: 2022-03-31 22:31:33,256: A new message is sent from host
+INFO: 2022-03-31 22:32:03,257: A new message is sent from host
+INFO: 2022-03-31 22:32:33,264: A new message is sent from host
+INFO: 2022-03-31 22:33:03,270: A new message is sent from host
+INFO: 2022-03-31 22:33:33,290: A new message is sent from host
+INFO: 2022-03-31 22:34:03,298: A new message is sent from host
+INFO: 2022-03-31 22:34:33,306: A new message is sent from host
+INFO: 2022-03-31 22:35:03,310: A new message is sent from host
+INFO: 2022-03-31 22:35:33,326: A new message is sent from host
+INFO: 2022-03-31 22:36:03,334: A new message is sent from host
+INFO: 2022-03-31 22:36:33,356: A new message is sent from host
+INFO: 2022-03-31 22:39:14,431: A new message is sent from host
+INFO: 2022-03-31 22:39:44,441: A new message is sent from host
+INFO: 2022-03-31 22:40:14,444: A new message is sent from host
+INFO: 2022-03-31 22:40:44,459: A new message is sent from host
+INFO: 2022-03-31 22:41:14,480: A new message is sent from host
+INFO: 2022-03-31 22:41:44,495: A new message is sent from host
+INFO: 2022-03-31 22:42:14,508: A new message is sent from host
+INFO: 2022-03-31 22:42:44,515: A new message is sent from host
+INFO: 2022-03-31 22:43:14,521: A new message is sent from host
+INFO: 2022-03-31 22:43:44,527: A new message is sent from host
+INFO: 2022-03-31 22:44:14,534: A new message is sent from host
+INFO: 2022-03-31 22:44:44,543: A new message is sent from host
+INFO: 2022-03-31 22:45:14,548: A new message is sent from host
+INFO: 2022-03-31 22:45:44,555: A new message is sent from host
+INFO: 2022-03-31 22:46:14,572: A new message is sent from host
+INFO: 2022-03-31 22:46:44,577: A new message is sent from host
+INFO: 2022-03-31 22:47:14,587: A new message is sent from host
+INFO: 2022-03-31 22:47:44,595: A new message is sent from host
+INFO: 2022-03-31 22:48:14,599: A new message is sent from host
+INFO: 2022-03-31 22:48:44,607: A new message is sent from host
+INFO: 2022-03-31 22:49:14,611: A new message is sent from host
+INFO: 2022-03-31 22:49:44,625: A new message is sent from host
+INFO: 2022-03-31 22:50:14,641: A new message is sent from host
+INFO: 2022-03-31 22:50:44,655: A new message is sent from host
+INFO: 2022-03-31 22:51:14,663: A new message is sent from host
+INFO: 2022-03-31 22:51:44,678: A new message is sent from host
+INFO: 2022-03-31 22:52:14,692: A new message is sent from host
+INFO: 2022-03-31 22:52:44,708: A new message is sent from host
+INFO: 2022-03-31 22:53:14,721: A new message is sent from host
+INFO: 2022-03-31 22:53:44,728: A new message is sent from host
+INFO: 2022-03-31 22:54:14,740: A new message is sent from host
+INFO: 2022-03-31 22:54:44,741: A new message is sent from host
+INFO: 2022-03-31 22:55:14,745: A new message is sent from host
+INFO: 2022-03-31 22:55:44,766: A new message is sent from host
+INFO: 2022-03-31 22:56:14,782: A new message is sent from host
+INFO: 2022-03-31 22:56:44,798: A new message is sent from host
+INFO: 2022-03-31 22:57:14,799: A new message is sent from host
+INFO: 2022-03-31 22:57:44,802: A new message is sent from host
+INFO: 2022-03-31 22:58:14,810: A new message is sent from host
+INFO: 2022-03-31 22:58:44,826: A new message is sent from host
+INFO: 2022-03-31 22:59:14,829: A new message is sent from host
+INFO: 2022-03-31 22:59:44,847: A new message is sent from host
+INFO: 2022-03-31 23:00:14,854: A new message is sent from host
+INFO: 2022-03-31 23:00:44,872: A new message is sent from host
+INFO: 2022-03-31 23:01:14,877: A new message is sent from host
+INFO: 2022-03-31 23:01:44,881: A new message is sent from host
+INFO: 2022-03-31 23:02:14,901: A new message is sent from host
+INFO: 2022-03-31 23:02:44,915: A new message is sent from host
+INFO: 2022-03-31 23:03:14,931: A new message is sent from host
+INFO: 2022-03-31 23:03:44,939: A new message is sent from host
+INFO: 2022-03-31 23:04:14,951: A new message is sent from host
+INFO: 2022-03-31 23:04:44,960: A new message is sent from host
+INFO: 2022-03-31 23:05:06,552: The service is stoping due to an "exit" command issued by admin.
+INFO: 2022-03-31 23:05:06,552: Stop procedure status: All connections are removed!
+INFO: 2022-03-31 23:05:16,492: Service stoped successfully!

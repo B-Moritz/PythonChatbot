@@ -16,6 +16,7 @@ If this file, client.py, is executed with
 import socket
 import select
 # The module used to parse commandline arguments
+# https://docs.python.org/3/library/argparse.html#const
 import argparse
 # Regex library
 import re
@@ -96,7 +97,7 @@ class MsgAnalysis:
                         and are connected to a certain tag.
     """
     
-    # Regex pattern used to detect messages which are to complicated. 
+    # Regex pattern used to detect messages which are too complicated. 
     # A message is for example too complicated if it contains several sentences.
     complicationDetection = re.compile(".*: .*[\.\?\!\:][A-Za-z0-9\s]+")
     # A regex pattern used to determine if the message is asking a question.
@@ -348,7 +349,7 @@ class ChatUser(threading.Thread):
                     socketList, # Check the inbound buffer of the socket
                     writableList, # Check if the send buffer is not full when there are messages to be sent
                     socketList, # Check for error
-                    10 # timeout in seconds
+                    5 # timeout in seconds
                 )
                 # The usage of select and handeling receive, connect and sending is based on the following sources:
                     # https://medium.com/vaidikkapoor/understanding-non-blocking-i-o-with-python-part-1-ec31a2e2db9b
@@ -613,12 +614,16 @@ class ChatBot(ChatUser, threading.Thread):
                                  "I dont`t like it.", 
                                  "Let me make up my mind first!"]
         
+        self.generalQuestionResponse = ["I don`t know.", 
+                                        "You need to ask someone else!", 
+                                        "Give me a moment to find out."]
+        
         # Responses sent if the message is a statement
         self.statementResponses = ["If you say so!", 
                                    "I did not know that.", 
                                    "How can you say something like that.", 
                                    "Are you sure about that?", 
-                                   "Can you proove it?"]
+                                   "Can you prove it?"]
         
         # Responses when the message is about the weather
         self.weatherResponse = ["I do not want to talk about the weather. It is boring and always depressing!", 
@@ -784,7 +789,9 @@ class ChatBot(ChatUser, threading.Thread):
                 # If the question only contians a location then 
                 # Return a random location response.
                 return(random.choice(self.locationResponse))
-                
+            else:
+                # Return a general response to the question
+                return(random.choice(self.generalQuestionResponse))
         elif Tags.statement in msgObj.tags:
             # Is the message a statement/suggestion?
             # A random statement response is returned.
@@ -811,7 +818,7 @@ class WeatherBot(ChatBot):
                 
     def getBotResponse(self, msgObj):
         """
-        This method geterates a response to the message provided as argument.
+        This method generates a response to the message provided as argument.
         The response is specific for the Weatherbot. 
 
         Parameters
@@ -823,8 +830,8 @@ class WeatherBot(ChatBot):
 
         Returns
         -------
-        The method returns a string, which is the response to the message in 
-        the provided MsgAnalysis object.
+        The method returns a string, which is the response to the message 
+        provided as argument to this method.
 
         """
         if Tags.question in msgObj.tags:
@@ -916,7 +923,10 @@ class WeatherBot(ChatBot):
                         #print("Location was not found in list") # Used for debug
                         # The location was not identified as a city.
                         return(random.choice(self.unknownLocation))
-                         
+            else: 
+                # Return a general response to the question
+                return(random.choice(self.generalQuestionResponse))
+            
         elif Tags.statement in msgObj.tags:
             #print("identified as statement/suggestion")
             return(random.choice(self.statementResponses))
@@ -925,26 +935,50 @@ class WeatherBot(ChatBot):
             return(random.choice(self.generalResponse))
                  
 class SportBot(ChatBot):
-    
+    """
+    This class contians the methods used to create the response of the Sportbot. 
+    It inherits from the ChatBot class. The bot can be used by first 
+    instantiating an object of the class. The destination address and port should 
+    be given as argumen to the constructor. The object will be a threading object 
+    and the thread can be started with the method start(). The method initiateClosure 
+    can be called to stop the bot.
+    """
     def __init__(self, dest, port, username="Sport_Bot"):
         ChatBot.__init__(self, dest, port, username)
         
+        # The unique response to some activities
         self.activityReplies = {"tennis" : ["Yes, I love tennis!", "I would like to play tennis."], 
                            "football" : ["I like football, but I prefere tennis", "I like sport in general," + 
                                          " but hearing about football now is not cheering me up right now"], 
                            "drawing" : ["I am a big sports fan, but art is not my cup of tea!", "Please, talk about something else! Maybey we can watch sport?"]}
         
+        # Opinions used to respond to requests for an opinion about an activity
         self.opinionOnActivities = {Tags.sport : ["I love all kind of sport, and I am realy paying a lot of attention to {} at the moment.",  
                                              "I think that {} is one of the best sports there is!", 
                                              "I could watch {} all day!", "I could play {} all day."], 
                                Tags.art : ["I am not very interested in art. Sorry. But we could talk about sports!", "I dont like art.", 
                                            "I prefere the art of creating the perfect stop-ball in tennis."]} 
-        
+        # Response to weather messages 
         self.weatherOpinion = ["I do not care about the weather.", "A true athlete works in any weather!", "The weather is always nice enough in my opinion", 
                         "There is nothing called bad weather!"]
         
     def getBotResponse(self, msgObj):
-        
+        """
+        This method generates a response to the message provided as argument.
+        The response is specific for the Sportbot. 
+
+        Parameters
+        ----------
+        msgObj : MsgAnalysis
+            An object with the message that should be responded to.
+            The object should contian the result of classsification process
+            (see docstring of MsgAnalysis). 
+
+        Returns
+        -------
+        The method returns a string, which is the response to the message 
+        provided as argument to this method.
+        """
         if Tags.question in msgObj.tags:
             # Is the message a question?
             if Tags.opinion in msgObj.tags:
@@ -977,6 +1011,10 @@ class SportBot(ChatBot):
                     msgObj.activity = "drawing"
                 return(random.choice(self.activityReplies[msgObj.activity]))
                 
+            else: 
+                # Return a general response to the question
+                return(random.choice(self.generalQuestionResponse))
+            
         elif Tags.statement in msgObj.tags:
             # Is the message a statement or a request for an activity?
             if Tags.requestActivity in msgObj.tags:
@@ -992,25 +1030,52 @@ class SportBot(ChatBot):
             return(random.choice(self.generalResponse))
         
 class ArtBot(ChatBot):
+    """
+    This class contians the methods used to create the response of the Artbot. 
+    It inherits from the ChatBot class. The bot can be used by first 
+    instantiating an object of the class. The destination address and port should 
+    be given as argumen to the constructor. The object will be a threading object 
+    and the thread can be started with the method start(). The method initiateClosure 
+    can be called to stop the bot.
+    """
     
     def __init__(self, dest, port, username="Art_Bot"):
         ChatBot.__init__(self, dest, port, username)
         
+        # Unique responses to activities for the Artbo
         self.activityReplies = {"tennis" : ["Tennis! Sounds interesting. What is it?", "I would like to trie, but you would have to teach me!", "No, I am not interested"], 
                            "football" : ["No football for me, please!", "I don`t like football. Can we talk about something else?", "Football. Such a pointless activity!"], 
                            "drawing" : ["Yes, I will never say no to that.", "That is a good idea.", "Perfect, I have practiced my drawing capabilities lately."]}
         
+        # Responses for requests about opinions on an activity
         self.opinionOnActivities = {"football" : ["I do not like football. I think that it is compleatly mental to kick around a ball all day, while you can spend your time crating real art.", 
                                                   "I do not have much symphaty with that sport.", "Lets talk about something relevant!"], 
                                     "tennis" : ["I am not sure yet. I need to try it first.", "It looks like a cool activity. I would like to try it once."], 
                                "drawing" : ["I love to create art with the pencile.", "It is my faivorit activity.", 
                                            "With all my hart, i like to paint and draw!"]} 
         
+        # Response to weather messages.
         self.weatherOpinion = ["I like all kinds of weather. Any weather can provide an interesting motive for a drawing.", 
                                "Let the weather be what it is and live with it!", "I can`t complain. It is nice enough for me!"]
         
     def getBotResponse(self, msgObj):
-        
+        """
+        This method generates a response to the message provided as argument.
+        The response is specific for the Artbot. 
+
+        Parameters
+        ----------
+        msgObj : MsgAnalysis
+            An object with the message that should be responded to.
+            The object should contian the result of classsification process
+            (see docstring of MsgAnalysis). 
+
+        Returns
+        -------
+        The method returns a string, which is the response to the message 
+        provided as argument to this method.
+
+        """
         if Tags.question in msgObj.tags:
             # Is the message a question?
             if Tags.opinion in msgObj.tags:
@@ -1037,6 +1102,10 @@ class ArtBot(ChatBot):
                     msgObj.activity = "drawing"
                 return(random.choice(self.activityReplies[msgObj.activity]))
                 
+            else: 
+                # Return a general response to the question
+                return(random.choice(self.generalQuestionResponse))
+            
         elif Tags.statement in msgObj.tags:
             # Is the message a statement or a request for an activity?
             if Tags.requestActivity in msgObj.tags:
@@ -1059,13 +1128,13 @@ if __name__ == "__main__":
     # Adding a commandline parameter -d for the destination address. The user can provide an address to the 
     # chat server as a string.
     parser.add_argument("-d", "--Dest", nargs='?', default=socket.gethostbyname(socket.gethostname())
-                        , metavar="DESTINATION", type=str, help="The IPv4 address of the server")
+                        , metavar="DESTINATION", type=str, help="The IPv4 address of the server. String. Default: localhost")
     # Adding a commandline parameter for the destination port. 
     parser.add_argument("-p", "--Port", nargs='?', default=2020, metavar="PORT", type=int, 
-                        help="Portnumber that the server is listening on.")
+                        help="Portnumber that the server is listening on. Must be an Integer. Default: 2020")
     # Adding a commandline paramter to add a curstom username to the user client. The default value is "Chat_User"
     parser.add_argument("-u", "--Username", nargs='?', default="Chat_User", metavar="USERNAME", type=str, 
-                        help="Username displayed with messages sent from the client.")
+                        help="Username displayed with messages sent from the client. String. Default: Chat_user")
     
     argParsed = parser.parse_args()
     # Create a thread for the client user connection
@@ -1079,6 +1148,7 @@ if __name__ == "__main__":
     
     time.sleep(1)
     try:
+        # try to import the YrInterface module.
         import YrInterface as yr
         
         # Start the weatherBot. 

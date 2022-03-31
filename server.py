@@ -61,6 +61,7 @@ import logging
 # Importing a module used to implement and run threads
 import threading
 # Importing a module which parses arguments and adds help information
+# https://docs.python.org/3/library/argparse.html#const
 import argparse
 # Importing the regex library
 import re
@@ -316,9 +317,9 @@ class SimpleChatServer:
         # The server starts listening on the given port. 
         # The number of unaccepted connections to the server before the server refuses any new connections, is 5.
         self.serverSocket.listen(5)
-        # The server should be non-blokking
+        # The server should be non-blocking
         self.serverSocket.setblocking(0)
-        # The server socket is added to the check readable list so select can check if there ar new connections 
+        # The server socket is added to the check readable list so select can check if there are new connections 
         # Which the server socket can accept.
         self.checkReadable.insert(0, self.serverSocket) 
         
@@ -715,7 +716,6 @@ class SimpleChatServer:
             self.closeNext.append(curChatUser.clientSocket)
             return
         else:        
-            logging.info(f"Reseting receive counter {curChatUser.username}.")
             # Adding a new timestamp for the last receive time attribute:
             curChatUser.lastRecvTime = datetime.now()
             # Reset counter
@@ -983,7 +983,8 @@ class SimpleChatServer:
         # Add all sockets to the close next list and add the reason for the disconection.
         for curChatUser in self.chatUsers:
             curChatUser.kickReason = reason
-            self.closeNext.append(curChatUser.clientSocket)
+            if not curChatUser.clientSocket in self.closeNext:
+                self.closeNext.append(curChatUser.clientSocket)
                     
         while len(self.chatUsers) > 0:
             # Wait until all connections are removed
@@ -1040,10 +1041,11 @@ class SimpleChatServer:
 if __name__=="__main__":
     
     #Handle command line argument
-    parser = argparse.ArgumentParser(description="This program starts a sigle threaded chat service.")
+    parser = argparse.ArgumentParser(description="This program starts a single threaded chat service.")
     # Define the commandline argument for port
     parser.add_argument('-p', '--Port', nargs='?', default=2020, metavar="PORT",
-                        type=int, help="The port number associated with the service")
+                        type=int, help="The port number that the server listens on. " +
+                        "\nAn integer between 0 and 65535. Default: 2020")
     # Parse the given arguments
     args = parser.parse_args()
     
